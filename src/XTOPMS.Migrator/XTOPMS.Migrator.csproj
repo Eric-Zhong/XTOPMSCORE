@@ -10,6 +10,9 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Logs\Logs.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="appsettings.json;log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -20,5 +23,8 @@
   <ItemGroup>
     <ProjectReference Include="..\XTOPMS.Core\XTOPMS.Core.csproj" />
     <ProjectReference Include="..\XTOPMS.EntityFrameworkCore\XTOPMS.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logs\" />
   </ItemGroup>
 </Project>
