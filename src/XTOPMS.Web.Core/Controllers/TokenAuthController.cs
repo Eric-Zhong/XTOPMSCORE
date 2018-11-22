@@ -52,21 +52,54 @@ namespace XTOPMS.Controllers
         [HttpPost]
         public async Task<AuthenticateResultModel> Authenticate([FromBody] AuthenticateModel model)
         {
-            var loginResult = await GetLoginResultAsync(
-                model.UserNameOrEmailAddress,
-                model.Password,
-                GetTenancyNameOrNull()
-            );
+            // Add this for fix XTOPMS system api
+            bool success = true;
+            string resp_message = "";
+            string[] authority = new string[] {"guest"};
 
-            var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
-
-            return new AuthenticateResultModel
+            AuthenticateResultModel result = new AuthenticateResultModel
             {
-                AccessToken = accessToken,
-                EncryptedAccessToken = GetEncrpyedAccessToken(accessToken),
-                ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds,
-                UserId = loginResult.User.Id
+                UserId = 0,
+                Success = success,
+                Authority = authority,
+                AccessToken = "",
+                EncryptedAccessToken = "",
+                ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
             };
+
+            try{
+                var loginResult = await GetLoginResultAsync(
+                    model.UserNameOrEmailAddress,
+                    model.Password,
+                    GetTenancyNameOrNull()
+                );
+
+                var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
+
+                // TODO: write some code to get current user's roles.
+                authority = authority.Append<String>("admin").ToArray(); // add a admin role.
+
+                // Initiate result model
+                result.UserId = loginResult.User.Id;
+                result.AccessToken = accessToken;
+                result.EncryptedAccessToken = GetEncrpyedAccessToken(accessToken);
+                result.Success = success;
+                result.Authority = authority;
+
+                return result;
+            }
+            catch(UserFriendlyException exc)
+            {
+                result.Success = false;
+                result.Error = exc.Details;
+            }
+            catch(Exception exc)
+            {
+                result.Success = false;
+                result.Error = exc.Message;
+            }
+
+            return result;
         }
 
         [HttpGet]
