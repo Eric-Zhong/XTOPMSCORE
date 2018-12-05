@@ -21,7 +21,7 @@
 using System;
 using Abp.Domain.Repositories;
 
-namespace XTOPMS.User
+namespace XTOPMS.Entities
 {
     public interface IUserProfileRepository: IRepository<UserProfile, long>
     {

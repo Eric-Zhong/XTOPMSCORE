@@ -21,7 +21,7 @@
 using System;
 using Abp.Domain.Entities.Auditing;
 
-namespace XTOPMS.User
+namespace XTOPMS.Entities
 {
     /// <summary>
     /// 用户属性

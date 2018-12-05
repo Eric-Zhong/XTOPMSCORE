@@ -83,7 +83,7 @@ namespace XTOPMS.Web.Host.Startup
                     f => f.UseAbpLog4Net().WithConfig("log4net.config")
                 )
             );
-        }
+        } 
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {

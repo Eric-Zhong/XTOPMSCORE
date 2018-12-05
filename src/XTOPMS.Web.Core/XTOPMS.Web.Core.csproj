@@ -18,14 +18,14 @@
   <ItemGroup>
     <ProjectReference Include="..\XTOPMS.Application\XTOPMS.Application.csproj" />
     <ProjectReference Include="..\XTOPMS.EntityFrameworkCore\XTOPMS.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Abp.AspNetCore\Abp.AspNetCore.csproj" />
+    <ProjectReference Include="..\Abp.AspNetCore.SignalR\Abp.AspNetCore.SignalR.csproj" />
+    <ProjectReference Include="..\Abp.ZeroCore\Abp.ZeroCore.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.1.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
-    <PackageReference Include="Abp.AspNetCore" Version="3.9.0" />
-    <PackageReference Include="Abp.ZeroCore" Version="3.9.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.4" />
-    <PackageReference Include="Abp.AspNetCore.SignalR" Version="3.9.0" />
   </ItemGroup>
 </Project>

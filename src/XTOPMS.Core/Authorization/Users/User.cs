@@ -1,5 +1,6 @@
 ﻿using System;
 using Abp.Authorization.Users;
+using Abp.Domain.Entities;
 using Abp.Extensions;
 
 namespace XTOPMS.Authorization.Users
