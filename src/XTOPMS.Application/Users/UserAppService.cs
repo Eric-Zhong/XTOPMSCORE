@@ -19,7 +19,6 @@ using XTOPMS.Users.Dto;
 
 namespace XTOPMS.Users
 {
-    // 判断当前用户是否有权限访问此 AppService
     [AbpAuthorize(PermissionNames.Pages_Users)]
     public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedResultRequestDto, CreateUserDto, UserDto>, IUserAppService
     {

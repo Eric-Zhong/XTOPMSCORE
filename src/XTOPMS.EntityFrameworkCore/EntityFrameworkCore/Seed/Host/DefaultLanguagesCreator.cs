@@ -44,13 +44,7 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Host
         {
             foreach (var language in InitialLanguages)
             {
-                try
-                {
-                    AddLanguageIfNotExists(language);
-                }
-                catch{
-                    continue;
-                }
+                AddLanguageIfNotExists(language);
             }
         }
 
@@ -60,6 +54,7 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Host
             {
                 return;
             }
+
             _context.Languages.Add(language);
             _context.SaveChanges();
         }

@@ -25,12 +25,7 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Host
             var defaultEdition = _context.Editions.IgnoreQueryFilters().FirstOrDefault(e => e.Name == EditionManager.DefaultEditionName);
             if (defaultEdition == null)
             {
-                // 定义一个默认的 Edition 信息
-                defaultEdition = new Edition {
-                    // Id = 1,
-                    Name = EditionManager.DefaultEditionName, 
-                    DisplayName = EditionManager.DefaultEditionName };
-                    
+                defaultEdition = new Edition { Name = EditionManager.DefaultEditionName, DisplayName = EditionManager.DefaultEditionName };
                 _context.Editions.Add(defaultEdition);
                 _context.SaveChanges();
 
