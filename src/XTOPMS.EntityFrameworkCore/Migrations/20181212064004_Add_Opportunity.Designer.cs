@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XTOPMS.EntityFrameworkCore;
 
 namespace XTOPMS.Migrations
 {
     [DbContext(typeof(XTOPMSDbContext))]
-    partial class XTOPMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181212064004_Add_Opportunity")]
+    partial class Add_Opportunity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -892,14 +894,8 @@ namespace XTOPMS.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("Address")
-                        .HasMaxLength(256);
-
                     b.Property<string>("AuthenticationSource")
                         .HasMaxLength(64);
-
-                    b.Property<string>("Avatar")
-                        .HasMaxLength(255);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -919,14 +915,6 @@ namespace XTOPMS.Migrations
 
                     b.Property<string>("EmailConfirmationCode")
                         .HasMaxLength(328);
-
-                    b.Property<string>("EmployeeNumber")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ExtensionData");
-
-                    b.Property<string>("IdCard")
-                        .HasMaxLength(50);
 
                     b.Property<bool>("IsActive");
 
@@ -960,8 +948,6 @@ namespace XTOPMS.Migrations
                         .IsRequired()
                         .HasMaxLength(256);
 
-                    b.Property<long?>("OrganizationUnitId");
-
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(128);
@@ -969,26 +955,17 @@ namespace XTOPMS.Migrations
                     b.Property<string>("PasswordResetCode")
                         .HasMaxLength(328);
 
-                    b.Property<string>("Phone")
-                        .HasMaxLength(256);
-
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(32);
 
                     b.Property<string>("SecurityStamp")
                         .HasMaxLength(128);
 
-                    b.Property<string>("Signature")
-                        .HasMaxLength(256);
-
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(64);
 
                     b.Property<int?>("TenantId");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(255);
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -1007,6 +984,50 @@ namespace XTOPMS.Migrations
                     b.HasIndex("TenantId", "NormalizedUserName");
 
                     b.ToTable("AbpUsers");
+                });
+
+            modelBuilder.Entity("XTOPMS.Entities.Opportunity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("Amount");
+
+                    b.Property<long>("City");
+
+                    b.Property<long>("CompanyId");
+
+                    b.Property<long>("Country");
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<long?>("CreatorUserId");
+
+                    b.Property<long>("Currency");
+
+                    b.Property<long?>("DeleterUserId");
+
+                    b.Property<DateTime?>("DeletionTime");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime");
+
+                    b.Property<long?>("LastModifierUserId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<long>("PlantId");
+
+                    b.Property<long>("Province");
+
+                    b.Property<long>("Region");
+
+                    b.Property<long>("SalesId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("XTOPMS_Opportunity");
                 });
 
             modelBuilder.Entity("XTOPMS.MultiTenancy.Tenant", b =>
@@ -1056,421 +1077,6 @@ namespace XTOPMS.Migrations
                     b.HasIndex("TenancyName");
 
                     b.ToTable("AbpTenants");
-                });
-
-            modelBuilder.Entity("XTOPMS.Opportunities.Opportunity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<decimal>("Amount");
-
-                    b.Property<long>("City");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(256);
-
-                    b.Property<long>("Country");
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<long?>("CreatorUserId");
-
-                    b.Property<long>("Currency");
-
-                    b.Property<long?>("DeleterUserId");
-
-                    b.Property<DateTime?>("DeletionTime");
-
-                    b.Property<string>("ErpId")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("ExtensionData");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime");
-
-                    b.Property<long?>("LastModifierUserId");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<long?>("OrganizationUnitId");
-
-                    b.Property<long>("Province");
-
-                    b.Property<long>("Region");
-
-                    b.Property<long>("SalesId");
-
-                    b.Property<int?>("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("XTOPMS_Opportunity");
-                });
-
-            modelBuilder.Entity("XTOPMS.Projects.Project", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<long?>("CreatorUserId");
-
-                    b.Property<long?>("DeleterUserId");
-
-                    b.Property<DateTime?>("DeletionTime");
-
-                    b.Property<string>("ErpId")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("ExtensionData");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime");
-
-                    b.Property<long?>("LastModifierUserId");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<long?>("OrganizationUnitId");
-
-                    b.Property<long?>("SalesAgreement");
-
-                    b.Property<int?>("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("XTOPMS_Project");
-                });
-
-            modelBuilder.Entity("XTOPMS.Quotations.Quotation", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<long?>("CreatorUserId");
-
-                    b.Property<long?>("DeleterUserId");
-
-                    b.Property<DateTime?>("DeletionTime");
-
-                    b.Property<string>("ErpId")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("ExtensionData");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime");
-
-                    b.Property<long?>("LastModifierUserId");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<long?>("OpportunityId");
-
-                    b.Property<long?>("OrganizationUnitId");
-
-                    b.Property<int?>("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("XTOPMS_Quotation");
-                });
-
-            modelBuilder.Entity("XTOPMS.SalesAgreements.SalesAgreement", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<long?>("CreatorUserId");
-
-                    b.Property<long?>("DeleterUserId");
-
-                    b.Property<DateTime?>("DeletionTime");
-
-                    b.Property<string>("ErpId")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("ExtensionData");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime");
-
-                    b.Property<long?>("LastModifierUserId");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<long?>("OpportunityId");
-
-                    b.Property<long?>("OrganizationUnitId");
-
-                    b.Property<int?>("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("XTOPMS_SalesAgreement");
-                });
-
-            modelBuilder.Entity("XTOPMS.StockKeepingUnits.SKU", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<long?>("CreatorUserId");
-
-                    b.Property<long?>("DeleterUserId");
-
-                    b.Property<DateTime?>("DeletionTime");
-
-                    b.Property<string>("ErpId")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("ExtensionData");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime");
-
-                    b.Property<long?>("LastModifierUserId");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<long?>("OrganizationUnitId");
-
-                    b.Property<decimal>("Price");
-
-                    b.Property<long>("ProductId");
-
-                    b.Property<int>("Stock");
-
-                    b.Property<int?>("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("XTOPMS_SKU");
-                });
-
-            modelBuilder.Entity("XTOPMS.StockKeepingUnits.SKUCategory", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<long?>("CreatorUserId");
-
-                    b.Property<long?>("DeleterUserId");
-
-                    b.Property<DateTime?>("DeletionTime");
-
-                    b.Property<string>("EditType")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ErpId")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("ExtensionData");
-
-                    b.Property<string>("FullName")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<bool>("IsSalesProperty");
-
-                    b.Property<DateTime?>("LastModificationTime");
-
-                    b.Property<long?>("LastModifierUserId");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<long?>("OrganizationUnitId");
-
-                    b.Property<long>("ParentId");
-
-                    b.Property<int?>("TenantId");
-
-                    b.Property<string>("WBS")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("XTOPMS_SKUCategory");
-                });
-
-            modelBuilder.Entity("XTOPMS.StockKeepingUnits.SKUCategoryValue", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<long?>("CreatorUserId");
-
-                    b.Property<long?>("DeleterUserId");
-
-                    b.Property<DateTime?>("DeletionTime");
-
-                    b.Property<string>("ErpId")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("ExtensionData");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime");
-
-                    b.Property<long?>("LastModifierUserId");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<long?>("OrganizationUnitId");
-
-                    b.Property<long>("SkuCategoryId");
-
-                    b.Property<int?>("TenantId");
-
-                    b.Property<string>("WBS")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("XTOPMS_SKUCategoryValue");
-                });
-
-            modelBuilder.Entity("XTOPMS.StockKeepingUnits.SKUProperty", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<long?>("CreatorUserId");
-
-                    b.Property<long?>("DeleterUserId");
-
-                    b.Property<DateTime?>("DeletionTime");
-
-                    b.Property<string>("ErpId")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("ExtensionData");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime");
-
-                    b.Property<long?>("LastModifierUserId");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<long?>("OrganizationUnitId");
-
-                    b.Property<long>("Sku");
-
-                    b.Property<int?>("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("XTOPMS_SKUProperty");
-                });
-
-            modelBuilder.Entity("XTOPMS.Tasks.Task", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<long?>("CreatorUserId");
-
-                    b.Property<long?>("DeleterUserId");
-
-                    b.Property<DateTime?>("DeletionTime");
-
-                    b.Property<string>("ErpId")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("ExtensionData");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime");
-
-                    b.Property<long?>("LastModifierUserId");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<long?>("OrganizationUnitId");
-
-                    b.Property<int?>("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("XTOPMS_Task");
                 });
 
             modelBuilder.Entity("Abp.Application.Features.EditionFeatureSetting", b =>

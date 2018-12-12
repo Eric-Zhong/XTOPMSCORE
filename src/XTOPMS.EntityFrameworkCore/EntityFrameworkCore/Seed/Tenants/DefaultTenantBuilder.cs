@@ -23,7 +23,7 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Tenants
         private void CreateDefaultTenant()
         {
             // Default tenant
-
+            // Default tenant name is "default"
             var defaultTenant = _context.Tenants.IgnoreQueryFilters().FirstOrDefault(t => t.TenancyName == AbpTenantBase.DefaultTenantName);
             if (defaultTenant == null)
             {

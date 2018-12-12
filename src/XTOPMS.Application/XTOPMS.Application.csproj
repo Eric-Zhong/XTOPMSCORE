@@ -13,4 +13,8 @@
   <ItemGroup>
     <ProjectReference Include="..\XTOPMS.Core\XTOPMS.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Opportunities\" />
+    <Folder Include="Opportunities\Dto\" />
+  </ItemGroup>
 </Project>

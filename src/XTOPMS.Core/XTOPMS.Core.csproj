@@ -21,5 +21,20 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.1.1" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.1" />
+    <PackageReference Include="IdGen" Version="2.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\" />
+    <Folder Include="Opportunities\" />
+    <Folder Include="SalesAgreements\" />
+    <Folder Include="Quotations\" />
+    <Folder Include="Projects\" />
+    <Folder Include="Tasks\" />
+    <Folder Include="Batches\" />
+    <Folder Include="Materials\" />
+    <Folder Include="Products\" />
+    <Folder Include="BillOfMaterials\" />
+    <Folder Include="Stocks\" />
+    <Folder Include="StockKeepingUnits\" />
   </ItemGroup>
 </Project>

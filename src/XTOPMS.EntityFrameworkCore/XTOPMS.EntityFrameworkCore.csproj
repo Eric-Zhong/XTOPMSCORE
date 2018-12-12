@@ -22,7 +22,6 @@
     <Compile Remove="Migrations\20180927062608_Upgrade_ABP_3.8.3.cs" />
     <Compile Remove="Migrations\20181013103914_Upgraded_To_Abp_v3_9_0.Designer.cs" />
     <Compile Remove="Migrations\20181013103914_Upgraded_To_Abp_v3_9_0.cs" />
-    <Compile Remove="Migrations\XTOPMSDbContextModelSnapshot.cs" />
     <Compile Remove="Migrations\20170621153937_Added_Description_And_IsActive_To_Role.Designer.cs" />
     <Compile Remove="Migrations\20170621153937_Added_Description_And_IsActive_To_Role.cs" />
     <Compile Remove="Migrations\20170703134115_Remove_IsActive_From_Role.Designer.cs" />
@@ -36,6 +35,7 @@
     <Compile Remove="Migrations\20170608053244_Upgraded_To_Abp_2_1_0.Designer.cs" />
     <Compile Remove="Migrations\20170608053244_Upgraded_To_Abp_2_1_0.cs" />
     <Compile Remove="Migrations\20181121025222_Initiate_MySQL.cs" />
+    <Compile Remove="Migrations\20181121025222_Initiate_MySQL.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.4" />

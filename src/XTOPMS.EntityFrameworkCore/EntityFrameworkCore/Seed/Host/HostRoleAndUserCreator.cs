@@ -29,11 +29,17 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Host
         private void CreateHostRoleAndUsers()
         {
             // Admin role for host
-
+            // 如果初始化中没有发现为 host 分配 admin 角色时，需要创建一个 admin 角色
             var adminRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.Admin);
             if (adminRoleForHost == null)
             {
-                adminRoleForHost = _context.Roles.Add(new Role(null, StaticRoleNames.Host.Admin, StaticRoleNames.Host.Admin) { IsStatic = true, IsDefault = true }).Entity;
+                adminRoleForHost = _context.Roles.Add(
+                    new Role(null, StaticRoleNames.Host.Admin, StaticRoleNames.Host.Admin) { 
+                        IsStatic = true, 
+                        IsDefault = true 
+                    }
+                ).Entity;
+
                 _context.SaveChanges();
             }
 
@@ -76,7 +82,7 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Host
                     UserName = AbpUserBase.AdminUserName,
                     Name = "admin",
                     Surname = "admin",
-                    EmailAddress = "admin@aspnetboilerplate.com",
+                    EmailAddress = "admin@xtopms.com",
                     IsEmailConfirmed = true,
                     IsActive = true
                 };
