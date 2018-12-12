@@ -8,4 +8,6 @@
 查看迁移列表  dotnet ef migrations list   
 查看数据库上下文信息  dotnet ef dbcontext info
 
-将数据库
+
+
+>dotnet ef migrations add <Name>
