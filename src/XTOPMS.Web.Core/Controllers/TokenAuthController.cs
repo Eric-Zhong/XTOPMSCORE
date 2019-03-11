@@ -52,9 +52,9 @@ namespace XTOPMS.Controllers
         [HttpPost]
         public async Task<AuthenticateResultModel> Authenticate([FromBody] AuthenticateModel model)
         {
+            string tenancyName = string.Equals("XTOPMS", model.TenancyName, StringComparison.OrdinalIgnoreCase) ? null : model.TenancyName;
             // Add this for fix XTOPMS system api
             bool success = true;
-            string resp_message = "";
             string[] authority = new string[] {"guest"};
 
             AuthenticateResultModel result = new AuthenticateResultModel
@@ -71,7 +71,7 @@ namespace XTOPMS.Controllers
                 var loginResult = await GetLoginResultAsync(
                     model.UserNameOrEmailAddress,
                     model.Password,
-                    GetTenancyNameOrNull()
+                    tenancyName // GetTenancyNameOrNull()
                 );
 
                 var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));

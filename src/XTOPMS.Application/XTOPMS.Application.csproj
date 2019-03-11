@@ -16,5 +16,10 @@
   <ItemGroup>
     <Folder Include="Opportunities\" />
     <Folder Include="Opportunities\Dto\" />
+    <Folder Include="Organizations\" />
+    <Folder Include="Organizations\Dto\" />
+    <Folder Include="Dto\" />
+    <Folder Include="Documents\" />
+    <Folder Include="Documents\Dto\" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 ﻿//
-//  OpportunityAppService.cs
+//  OrganizationCategoryEnum.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -19,18 +19,13 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using Abp.Application.Services;
-using XTOPMS.Opportunities.Dto;
-
-
-namespace XTOPMS.Opportunities
+namespace XTOPMS.Organizations
 {
-    public class OpportunityAppService : AsyncCrudAppService<Opportunity, OpportunityDto, long>
+    public enum OrganizationCategoryEnum
     {
-        public OpportunityAppService(
-            IOpportunityRepository _repository
-        ): base(_repository)
-        {
-        }
+        Company = 0,
+        Department = 1,
+        Group = 2,
+        BusinessUnit = 3
     }
 }

@@ -1,7 +1,7 @@
 ﻿https://blog.csdn.net/sd7o95o/article/details/78771269
 
 迁移命令描述  CMD命令   PMC命令
-创建迁移：migrationname为迁移名称 dotnet ef migrations add migrationname  add-migration migrationname
+创建迁移：migrationname为迁移名称 dotnet ef migrations add migrationname add-migration migrationname
 移除迁移(删除最近的一次迁移) dotnet ef migrations remove remove-migration
 应用最新的迁移(使迁移文件应用到数据库)    dotnet ef database update   update-database
 应用指定的迁移 dotnet ef database update migrationname update-database migrationname

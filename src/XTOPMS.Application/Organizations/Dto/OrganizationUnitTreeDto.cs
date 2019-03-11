@@ -1,5 +1,5 @@
 ﻿//
-//  OpportunityAppService.cs
+//  OrganizationUnitTreeDto.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -19,18 +19,13 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using Abp.Application.Services;
-using XTOPMS.Opportunities.Dto;
+using System.Collections.Generic;
 
-
-namespace XTOPMS.Opportunities
+namespace XTOPMS.Organizations.Dto
 {
-    public class OpportunityAppService : AsyncCrudAppService<Opportunity, OpportunityDto, long>
+    public class OrganizationUnitTreeDto: OrganizationUnitDto
     {
-        public OpportunityAppService(
-            IOpportunityRepository _repository
-        ): base(_repository)
-        {
-        }
+        public int ChildrenCount { get; set; }
+        public List<OrganizationUnitTreeDto> Children { get; set; }
     }
 }

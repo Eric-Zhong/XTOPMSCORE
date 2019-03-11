@@ -11,6 +11,7 @@ using XTOPMS.SalesAgreements;
 using XTOPMS.StockKeepingUnits;
 using XTOPMS.Opportunities;
 using XTOPMS.Tasks;
+using XTOPMS.Documents;
 
 namespace XTOPMS.EntityFrameworkCore
 {
@@ -29,10 +30,18 @@ namespace XTOPMS.EntityFrameworkCore
         public DbSet<SKUProperty> SKUProperty { get; set; }
         public DbSet<SKUCategory> SKUCategory { get; set; }
         public DbSet<SKUCategoryValue> SKUCategoryValue { get; set; }
+        public DbSet<Document> Document { get; set; }
 
         public XTOPMSDbContext(DbContextOptions<XTOPMSDbContext> options)
             : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Change default table prefix name.
+            // modelBuilder.ChangeAbpTablePrefix<Tenant, Role, User>("Xtopms");
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

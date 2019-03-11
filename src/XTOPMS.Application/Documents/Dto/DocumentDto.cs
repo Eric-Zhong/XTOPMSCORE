@@ -1,10 +1,10 @@
 ﻿//
-//  Opportunity.cs
+//  DocumentDto.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
 //
-//  Copyright (c) 2018 
+//  Copyright (c) 2019 
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
@@ -19,30 +19,29 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using Abp.Domain.Entities.Auditing;
 
-namespace XTOPMS.Opportunities.Dto
+namespace XTOPMS.Documents.Dto
 {
-    [AutoMapFrom(typeof(Opportunity))]
-    public class OpportunityDto : EntityDto<long>
+    [AutoMapFrom(typeof(Document))]
+    public class DocumentDto: EntityDto<long>
     {
+        public long FileId { get; set; }
+        public string BizCode { get; set; }
+        public string BizId { get; set; }
+        public string CategoryCode { get; set; }
+        public string CategoryName { get; set; }
+        public string OrginalName { get; set; }
+        public string FileName { get; set; }
+        public string Extension { get; set; }
+        public string ContentType { get; set; }
+        public long Size { get; set; }
+        public string FilePath { get; set; }
+        public string RelativePath { get; set; }
 
-        public string Name { get; set; }
-        public long CompanyId { get; set; }
-        public long PlantId { get; set; }
-        public long SalesId { get; set; }
-        public decimal Amount { get; set; }
-        public long Currency { get; set; }
-        public long Country { get; set; }
-        public long Province { get; set; }
-        public long City { get; set; }
-        public long Region { get; set; }
-
-        public OpportunityDto()
-        {
-        }
+        public bool Success { get; set; }
+        public string Message { get; set; }
+        public string Error { get; set; }
     }
 }

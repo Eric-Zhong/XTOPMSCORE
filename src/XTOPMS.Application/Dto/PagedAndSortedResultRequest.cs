@@ -1,5 +1,5 @@
 ﻿//
-//  OpportunityAppService.cs
+//  PagedAndSortedResultRequestDto.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -18,19 +18,16 @@
 //
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-using System;
-using Abp.Application.Services;
-using XTOPMS.Opportunities.Dto;
 
 
-namespace XTOPMS.Opportunities
+using Abp.Application.Services.Dto;
+
+namespace XTOPMS.Application.Dto
 {
-    public class OpportunityAppService : AsyncCrudAppService<Opportunity, OpportunityDto, long>
+    public class PagedAndSortedResultRequest : IPagedAndSortedResultRequest
     {
-        public OpportunityAppService(
-            IOpportunityRepository _repository
-        ): base(_repository)
-        {
-        }
+        public int SkipCount { get; set; }
+        public int MaxResultCount { get; set; }
+        public string Sorting { get; set; }
     }
 }

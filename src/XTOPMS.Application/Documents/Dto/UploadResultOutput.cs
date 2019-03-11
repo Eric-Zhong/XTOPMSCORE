@@ -1,10 +1,10 @@
 ﻿//
-//  OpportunityAppService.cs
+//  UpdateResult.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
 //
-//  Copyright (c) 2018 
+//  Copyright (c) 2019 
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
@@ -19,18 +19,14 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using Abp.Application.Services;
-using XTOPMS.Opportunities.Dto;
+using System.Collections.Generic;
 
-
-namespace XTOPMS.Opportunities
+namespace XTOPMS.Documents.Dto
 {
-    public class OpportunityAppService : AsyncCrudAppService<Opportunity, OpportunityDto, long>
+    public class UploadResultOutput
     {
-        public OpportunityAppService(
-            IOpportunityRepository _repository
-        ): base(_repository)
-        {
-        }
+        public bool Success { get; set; }
+        public int FileCount { get; set; }
+        public List<DocumentDto> Files { get; set; }
     }
 }

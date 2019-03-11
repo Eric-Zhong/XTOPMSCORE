@@ -1,5 +1,5 @@
 ﻿//
-//  OpportunityAppService.cs
+//  Organization.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -19,17 +19,18 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using Abp.Application.Services;
-using XTOPMS.Opportunities.Dto;
+using System.ComponentModel.DataAnnotations;
+using Abp.Organizations;
 
-
-namespace XTOPMS.Opportunities
+namespace XTOPMS.Organizations
 {
-    public class OpportunityAppService : AsyncCrudAppService<Opportunity, OpportunityDto, long>
+    public class Organization: OrganizationUnit
     {
-        public OpportunityAppService(
-            IOpportunityRepository _repository
-        ): base(_repository)
+        public OrganizationCategoryEnum Category { get; set; }
+        [StringLength(256)]
+        public string ErpCode { get; set; }
+
+        public Organization()
         {
         }
     }
