@@ -28,7 +28,7 @@ namespace XTOPMS.StockKeepingUnits
     [Table("XTOPMS_SKUCategoryValue")]
     public class SKUCategoryValue: XTOPMSEntity
     {
-        [StringLength(256)]
+        [StringLength(255)]
         public string WBS { get; set; }
         public long SkuCategoryId { get; set; }
 

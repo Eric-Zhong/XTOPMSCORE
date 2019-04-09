@@ -12,9 +12,6 @@
     <RootNamespace>XTOPMS</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Localization\SourceFiles\*.xml" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Abp.AutoMapper" Version="4.0.1" />
     <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="4.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
@@ -42,5 +39,10 @@
     <Folder Include="MSOffice\Project2013\" />
     <Folder Include="Organizations\" />
     <Folder Include="Documents\" />
+    <Folder Include="Customers\" />
+    <Folder Include="Localization\SourceFiles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Localization\SourceFiles\XTOPMS.xml" />
   </ItemGroup>
 </Project>

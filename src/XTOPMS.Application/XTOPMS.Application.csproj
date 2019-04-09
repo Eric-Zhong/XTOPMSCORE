@@ -21,5 +21,8 @@
     <Folder Include="Dto\" />
     <Folder Include="Documents\" />
     <Folder Include="Documents\Dto\" />
+    <Folder Include="Testing\" />
+    <Folder Include="Customers\" />
+    <Folder Include="Customers\Dto\" />
   </ItemGroup>
 </Project>

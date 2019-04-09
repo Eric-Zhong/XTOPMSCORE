@@ -33,5 +33,10 @@ namespace XTOPMS.Models.TokenAuth
             get;
             set;
         }
+
+        public ReturnCodeEnum Code
+        {
+            get; set;
+        }
     }
 }

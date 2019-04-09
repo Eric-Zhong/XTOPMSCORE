@@ -31,10 +31,10 @@ namespace XTOPMS.StockKeepingUnits
     [Table("XTOPMS_SKUCategory")]
     public class SKUCategory: XTOPMSEntity
     {
-        [StringLength(256)]
+        [StringLength(255)]
         public string WBS { get; set; }
         public long ParentId { get; set; }
-        [StringLength(256)]
+        [StringLength(255)]
         public string FullName { get; set; }
         public bool IsSalesProperty { get; set; }
         /// <summary>

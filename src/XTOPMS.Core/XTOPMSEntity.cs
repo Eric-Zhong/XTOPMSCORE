@@ -26,20 +26,47 @@ using Abp.Organizations;
 
 namespace XTOPMS
 {
-    public class XTOPMSEntity : FullAuditedEntity<long>, IMayHaveTenant, IMayHaveOrganizationUnit, IExtendableObject, IPassivable
+    public class XTOPMSEntity : FullAuditedEntity<long>, IMustHaveTenant, IMayHaveOrganizationUnit, IExtendableObject, IPassivable
     {
         public long? OrganizationUnitId { get; set; }
-        public int? TenantId { get; set; }
+        public int TenantId { get; set; }
         public string ExtensionData { get; set; }
         public bool IsActive { get; set; }
 
         // Common property
-        [StringLength(256)]
+
+        /// <summary>
+        /// 名称
+        /// </summary>
+        /// <value>The name.</value>
+        [StringLength(255)]
         public string Name { get; set; }
-        [StringLength(256)]
+
+        /// <summary>
+        /// 编号
+        /// </summary>
+        /// <value>The code.</value>
+        [StringLength(255)]
         public string Code { get; set; }
-        [StringLength(256)]
+
+        /// <summary>
+        /// 企业 ERP 中的唯一编号
+        /// </summary>
+        /// <value>The erp identifier.</value>
+        [StringLength(255)]
         public string ErpId { get; set; }
+
+        /// <summary>
+        /// 状态标记
+        /// </summary>
+        /// <value>The status.</value>
+        public int Status { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        /// <value>The comment.</value>
+        public string Comment { get; set; }
 
         public XTOPMSEntity()
         {

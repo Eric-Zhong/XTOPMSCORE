@@ -11,6 +11,16 @@ namespace XTOPMS.Authorization.Roles
         {
             public const string Admin = "Admin";
             public const string User = "User";
+
+            // XTOPMS Roles
+            public const string Sales = "Sales";
+            public const string Tender = "Tender";
+            public const string ProjectManager = "ProjectManager";
+            public const string Engineer = "Engineer";
+            public const string Commercial = "Commercial";
+            public const string SupplyChain = "SupplyChain";
+            public const string Service = "Service";
+            public const string Finance = "Finance";
         }
     }
 }

@@ -13,6 +13,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="App_Data\Logs\Logs.txt" />
+    <None Remove="App_Data\Logs\Logs.txt.1" />
+    <None Remove="App_Data\Logs\Logs.txt.2" />
+    <None Remove="App_Data\Logs\Logs.txt.3" />
+    <None Remove="App_Data\Logs\Logs.txt.4" />
+    <None Remove="App_Data\Logs\Logs.txt.5" />
+    <None Remove="App_Data\Logs\Logs.txt.6" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Dockerfile">
@@ -53,8 +59,5 @@
     <EmbeddedResource Include="wwwroot\swagger\ui\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\Logs\" />
   </ItemGroup>
 </Project>

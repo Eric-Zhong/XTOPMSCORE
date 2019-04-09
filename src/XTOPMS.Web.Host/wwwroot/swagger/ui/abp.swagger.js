@@ -39,6 +39,14 @@ var abp = abp || {};
             return false;
         }
 
+        // 2019-04-08 ABP 这个默认的登录验证有问题，只使用Http Header "Abp.TenantId",其实后端代码根本取不到值。
+        // Begin
+        var tenancyName = document.getElementById('tenancyName').value;
+        if (!tenancyName) {
+            tenancyName = 'XTOPMS';
+        }
+        // End
+
         var xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = function () {
@@ -58,7 +66,7 @@ var abp = abp || {};
         xhr.open('POST', '/api/TokenAuth/Authenticate', true);
         xhr.setRequestHeader('Abp.TenantId', tenantId);
         xhr.setRequestHeader('Content-type', 'application/json');
-        xhr.send("{" + "usernameOrEmailAddress:'" + usernameOrEmailAddress + "'," + "password:'" + password + "'}");
+        xhr.send("{" + "usernameOrEmailAddress:'" + usernameOrEmailAddress + "'," + "password:'" + password + "',tenancyName:'" + tenancyName + "'}");
     };
 
     abp.swagger.login = function (callback) {

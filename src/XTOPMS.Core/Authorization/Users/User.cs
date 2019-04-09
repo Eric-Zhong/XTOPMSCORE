@@ -44,11 +44,11 @@ namespace XTOPMS.Authorization.Users
         public string Avatar { get; set; }
         [StringLength(255)]
         public string Title { get; set; }
-        [StringLength(256)]
+        [StringLength(255)]
         public string Signature { get; set; }
-        [StringLength(256)]
+        [StringLength(255)]
         public string Phone { get; set; }
-        [StringLength(256)]
+        [StringLength(255)]
         public string Address { get; set; }
         public string ExtensionData { get; set; }
         public long? OrganizationUnitId { get; set; }

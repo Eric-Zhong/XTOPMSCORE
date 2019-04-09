@@ -12,6 +12,7 @@ using XTOPMS.StockKeepingUnits;
 using XTOPMS.Opportunities;
 using XTOPMS.Tasks;
 using XTOPMS.Documents;
+using XTOPMS.Customers;
 
 namespace XTOPMS.EntityFrameworkCore
 {
@@ -31,6 +32,7 @@ namespace XTOPMS.EntityFrameworkCore
         public DbSet<SKUCategory> SKUCategory { get; set; }
         public DbSet<SKUCategoryValue> SKUCategoryValue { get; set; }
         public DbSet<Document> Document { get; set; }
+        public DbSet<Customer> Customer { get; set; }
 
         public XTOPMSDbContext(DbContextOptions<XTOPMSDbContext> options)
             : base(options)

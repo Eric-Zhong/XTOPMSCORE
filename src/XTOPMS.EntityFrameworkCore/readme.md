@@ -1,13 +1,46 @@
-﻿https://blog.csdn.net/sd7o95o/article/details/78771269
-
-迁移命令描述  CMD命令   PMC命令
-创建迁移：migrationname为迁移名称 dotnet ef migrations add migrationname add-migration migrationname
-移除迁移(删除最近的一次迁移) dotnet ef migrations remove remove-migration
-应用最新的迁移(使迁移文件应用到数据库)    dotnet ef database update   update-database
-应用指定的迁移 dotnet ef database update migrationname update-database migrationname
-查看迁移列表  dotnet ef migrations list   
-查看数据库上下文信息  dotnet ef dbcontext info
+﻿# 查看数据库上下文
+``` shell
+dotnet ef dbcontext info
+```
 
 
+# 清理数据库
+``` shell
+dotnet ef database drop
+```
 
->dotnet ef migrations add <Name>
+# 更新数据库
+``` shell
+dotnet ef database update
+```
+
+# 更新数据库
+``` shell
+dotnet ef database update
+```
+
+# 查看Migration列表
+``` shell
+dotnet ef migrations list
+```
+
+# 创建Migration
+``` shell
+dotnet ef migrations add <Name>
+```
+
+
+# 删除Migration
+``` shell
+dotnet ef migrations remove <Name>
+```
+
+# 执行ABP中的SEED
+通过命令行执行完数据库创建之后，只要运行（F5）这套程序之后，Seed 中定义的初始化的数据，就会创建到数据库中。  
+用这个方法，可以初始化好系统运行所需要的必要数据。
+
+
+# 参考资料
+有关命令行的操作，可以参考这里的描述：
+https://blog.csdn.net/sd7o95o/article/details/78771269  
+  

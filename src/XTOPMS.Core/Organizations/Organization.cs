@@ -27,8 +27,6 @@ namespace XTOPMS.Organizations
     public class Organization: OrganizationUnit
     {
         public OrganizationCategoryEnum Category { get; set; }
-        [StringLength(256)]
-        public string ErpCode { get; set; }
 
         public Organization()
         {

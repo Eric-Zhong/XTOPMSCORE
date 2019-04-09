@@ -85,17 +85,64 @@ namespace XTOPMS.Controllers
                 result.EncryptedAccessToken = GetEncrpyedAccessToken(accessToken);
                 result.Success = success;
                 result.Authority = authority;
+                result.Code = ReturnCodeEnum.Success;
 
                 return result;
             }
             catch(UserFriendlyException exc)
             {
                 result.Success = false;
+                result.Code = ReturnCodeEnum.ERROR_UNKNOW_REASON;
                 result.Error = exc.Details;
             }
-            catch(Exception exc)
+            catch (MySql.Data.MySqlClient.MySqlException mySqlException)
+            {
+                /*
+                MySql.Data.MySqlClient.MySqlException(0x80004005): Unable to connect to any of the specified MySQL hosts.
+                at MySqlConnector.Core.ServerSession.ConnectAsync(ConnectionSettings cs, ILoadBalancer loadBalancer, IOBehavior ioBehavior, CancellationToken cancellationToken) 
+                in C:\projects\mysqlconnector\src\MySqlConnector\Core\ServerSession.cs:line 322
+                at MySqlConnector.Core.ConnectionPool.GetSessionAsync(MySqlConnection connection, IOBehavior ioBehavior, CancellationToken cancellationToken) 
+                in C:\projects\mysqlconnector\src\MySqlConnector\Core\ConnectionPool.cs:line 112
+                at MySqlConnector.Core.ConnectionPool.GetSessionAsync(MySqlConnection connection, IOBehavior ioBehavior, CancellationToken cancellationToken) 
+                in C:\projects\mysqlconnector\src\MySqlConnector\Core\ConnectionPool.cs:line 141
+                at MySql.Data.MySqlClient.MySqlConnection.CreateSessionAsync(Nullable`1 ioBehavior, CancellationToken cancellationToken) 
+                in C:\projects\mysqlconnector\src\MySqlConnector\MySql.Data.MySqlClient\MySqlConnection.cs:line 431
+                at MySql.Data.MySqlClient.MySqlConnection.OpenAsync(Nullable`1 ioBehavior, CancellationToken cancellationToken) 
+                in C:\projects\mysqlconnector\src\MySqlConnector\MySql.Data.MySqlClient\MySqlConnection.cs:line 175
+                at MySql.Data.MySqlClient.MySqlConnection.Open() in C:\projects\mysqlconnector\src\MySqlConnector\MySql.Data.MySqlClient\MySqlConnection.cs:line 161
+                at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnection(Boolean errorsExpected)
+                at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.Open(Boolean errorsExpected)
+                at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.BeginTransaction(IsolationLevel isolationLevel)
+                at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.Execute[TState, TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+                at Abp.EntityFrameworkCore.Uow.DbContextEfCoreTransactionStrategy.CreateDbContext[TDbContext](String connectionString, IDbContextResolver dbContextResolver)
+                in D:\Github\aspnetboilerplate\src\Abp.EntityFrameworkCore\EntityFrameworkCore\Uow\DbContextEfCoreTransactionStrategy.cs:line 38
+                at Abp.EntityFrameworkCore.Uow.EfCoreUnitOfWork.GetOrCreateDbContext[TDbContext](Nullable`1 multiTenancySide, String name)
+                in D:\Github\aspnetboilerplate\src\Abp.EntityFrameworkCore\EntityFrameworkCore\Uow\EfCoreUnitOfWork.cs:line 120
+                at Abp.EntityFrameworkCore.Repositories.EfCoreRepositoryBase`3.get_Table()
+                in D:\Github\aspnetboilerplate\src\Abp.EntityFrameworkCore\EntityFrameworkCore\Repositories\EfCoreRepositoryBaseOfTEntityAndTPrimaryKey.cs:line 39
+                at Abp.EntityFrameworkCore.Repositories.EfCoreRepositoryBase`3.GetAllIncluding(Expression`1[] propertySelectors)
+                in D:\Github\aspnetboilerplate\src\Abp.EntityFrameworkCore\EntityFrameworkCore\Repositories\EfCoreRepositoryBaseOfTEntityAndTPrimaryKey.cs:line 88
+                at Abp.EntityFrameworkCore.Repositories.EfCoreRepositoryBase`3.FirstOrDefaultAsync(Expression`1 predicate)
+                in D:\Github\aspnetboilerplate\src\Abp.EntityFrameworkCore\EntityFrameworkCore\Repositories\EfCoreRepositoryBaseOfTEntityAndTPrimaryKey.cs:line 123
+                at Abp.Threading.InternalAsyncHelper.AwaitTaskWithPostActionAndFinallyAndGetResult[T](Task`1 actualReturnValue, Func`1 postAction, Action`1 finalAction)
+                at Abp.Authorization.AbpLogInManager`3.LoginAsyncInternal(String userNameOrEmailAddress, String plainPassword, String tenancyName, Boolean shouldLockout)
+                at Abp.Authorization.AbpLogInManager`3.LoginAsync(String userNameOrEmailAddress, String plainPassword, String tenancyName, Boolean shouldLockout)
+                at Abp.Threading.InternalAsyncHelper.AwaitTaskWithPostActionAndFinallyAndGetResult[T](Task`1 actualReturnValue, Func`1 postAction, Action`1 finalAction)
+                at XTOPMS.Controllers.TokenAuthController.GetLoginResultAsync(String usernameOrEmailAddress, String password, String tenancyName)
+                in / Work / Dotnet / XTOPMSCORE_master / src / XTOPMS.Web.Core / Controllers / TokenAuthController.cs:line 218
+                at XTOPMS.Controllers.TokenAuthController.Authenticate(AuthenticateModel model)
+                in / Work / Dotnet / XTOPMSCORE_master / src / XTOPMS.Web.Core / Controllers / TokenAuthController.cs:line 71
+                */
+
+                result.Success = false;
+                result.Code = ReturnCodeEnum.ERROR_DATABASE_CANNOT_CONNECT;
+                result.Error = mySqlException.Message;
+
+            }
+            catch (Exception exc)
             {
                 result.Success = false;
+                result.Code = ReturnCodeEnum.ERROR_UNKNOW_REASON;
                 result.Error = exc.Message;
             }
 

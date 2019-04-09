@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XTOPMS.EntityFrameworkCore;
 
 namespace XTOPMS.Migrations
 {
     [DbContext(typeof(XTOPMSDbContext))]
-    partial class XTOPMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190330184237_Add_Customer")]
+    partial class Add_Customer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1023,9 +1025,6 @@ namespace XTOPMS.Migrations
                     b.Property<string>("BankName")
                         .HasMaxLength(255);
 
-                    b.Property<string>("Category")
-                        .HasMaxLength(1000);
-
                     b.Property<string>("Code")
                         .HasMaxLength(255);
 
@@ -1066,28 +1065,18 @@ namespace XTOPMS.Migrations
 
                     b.Property<long?>("OrganizationUnitId");
 
-                    b.Property<long>("ParentCompanyId");
-
                     b.Property<string>("Person")
                         .HasMaxLength(100);
 
                     b.Property<string>("Phone")
                         .HasMaxLength(100);
 
-                    b.Property<int>("Rate");
-
-                    b.Property<string>("RateReason")
-                        .HasMaxLength(255);
-
                     b.Property<string>("RegionData")
                         .HasMaxLength(255);
 
-                    b.Property<string>("ShortName")
-                        .HasMaxLength(100);
-
                     b.Property<int>("Status");
 
-                    b.Property<int>("TenantId");
+                    b.Property<int?>("TenantId");
 
                     b.HasKey("Id");
 
@@ -1156,7 +1145,7 @@ namespace XTOPMS.Migrations
 
                     b.Property<int>("Status");
 
-                    b.Property<int>("TenantId");
+                    b.Property<int?>("TenantId");
 
                     b.HasKey("Id");
 
@@ -1264,7 +1253,7 @@ namespace XTOPMS.Migrations
 
                     b.Property<int>("Status");
 
-                    b.Property<int>("TenantId");
+                    b.Property<int?>("TenantId");
 
                     b.HasKey("Id");
 
@@ -1311,7 +1300,7 @@ namespace XTOPMS.Migrations
 
                     b.Property<int>("Status");
 
-                    b.Property<int>("TenantId");
+                    b.Property<int?>("TenantId");
 
                     b.HasKey("Id");
 
@@ -1358,7 +1347,7 @@ namespace XTOPMS.Migrations
 
                     b.Property<int>("Status");
 
-                    b.Property<int>("TenantId");
+                    b.Property<int?>("TenantId");
 
                     b.HasKey("Id");
 
@@ -1405,7 +1394,7 @@ namespace XTOPMS.Migrations
 
                     b.Property<int>("Status");
 
-                    b.Property<int>("TenantId");
+                    b.Property<int?>("TenantId");
 
                     b.HasKey("Id");
 
@@ -1456,7 +1445,7 @@ namespace XTOPMS.Migrations
 
                     b.Property<int>("Stock");
 
-                    b.Property<int>("TenantId");
+                    b.Property<int?>("TenantId");
 
                     b.HasKey("Id");
 
@@ -1511,7 +1500,7 @@ namespace XTOPMS.Migrations
 
                     b.Property<int>("Status");
 
-                    b.Property<int>("TenantId");
+                    b.Property<int?>("TenantId");
 
                     b.Property<string>("WBS")
                         .HasMaxLength(255);
@@ -1561,7 +1550,7 @@ namespace XTOPMS.Migrations
 
                     b.Property<int>("Status");
 
-                    b.Property<int>("TenantId");
+                    b.Property<int?>("TenantId");
 
                     b.Property<string>("WBS")
                         .HasMaxLength(255);
@@ -1611,7 +1600,7 @@ namespace XTOPMS.Migrations
 
                     b.Property<int>("Status");
 
-                    b.Property<int>("TenantId");
+                    b.Property<int?>("TenantId");
 
                     b.HasKey("Id");
 
@@ -1656,7 +1645,7 @@ namespace XTOPMS.Migrations
 
                     b.Property<int>("Status");
 
-                    b.Property<int>("TenantId");
+                    b.Property<int?>("TenantId");
 
                     b.HasKey("Id");
 

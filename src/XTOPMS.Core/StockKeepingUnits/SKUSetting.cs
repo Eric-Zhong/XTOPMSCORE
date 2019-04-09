@@ -30,9 +30,9 @@ namespace XTOPMS.StockKeepingUnits
         public long SkuCategoryId { get; set; }
         public long SkuCategoryValueId { get; set; }
         public bool IsCustomize { get; set; }
-        [StringLength(256)]
+        [StringLength(255)]
         public string CustomizeName { get; set; }
-        [StringLength(256)]
+        [StringLength(255)]
         public string CustomizeSetting { get; set; }
 
         public SKUSetting()
