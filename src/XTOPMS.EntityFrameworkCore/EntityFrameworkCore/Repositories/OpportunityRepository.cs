@@ -21,7 +21,6 @@
 using System;
 using Abp.Domain.Repositories;
 using Abp.EntityFrameworkCore;
-using XTOPMS.Migrations;
 using XTOPMS.Opportunities;
 
 namespace XTOPMS.EntityFrameworkCore.Repositories

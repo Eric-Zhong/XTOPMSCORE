@@ -30,6 +30,7 @@ namespace XTOPMS.Customers.Dto
     {
         public string ParentCompanyId { get; set; }
         public string CompanyCode { get; set; }
+        public string Category { get; set; }
         public string ShortName { get; set; }
         public string BankName { get; set; }
         public string BankAccount { get; set; }
@@ -41,8 +42,5 @@ namespace XTOPMS.Customers.Dto
         public string Address { get; set; }
         public int Rate { get; set; }
         public string RateReason { get; set; }
-        public CustomerDto() 
-        {
-        }
     }
 }

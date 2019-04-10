@@ -23,24 +23,32 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using Abp.Domain.Entities.Auditing;
+using XTOPMS.Dto;
 
 namespace XTOPMS.Opportunities.Dto
 {
-    [AutoMapFrom(typeof(Opportunity))]
-    public class OpportunityDto : EntityDto<long>
+    [AutoMap(typeof(Opportunity))]
+    public class OpportunityDto : XTOPMSEntityDto<long>
     {
-
-        public string Name { get; set; }
-        public long CompanyId { get; set; }
-        public long PlantId { get; set; }
+        public long? OwnerId { get; set; }
+        public string OwnerName { get; set; }
+        public string OwnerShortName { get; set; }
+        public long? GeneralContractorId { get; set; }
+        public string GeneralContractorName { get; set; }
+        public string GeneralContractorShortName { get; set; }
+        public long? AgencyId { get; set; }
+        public string AgencyName { get; set; }
+        public string AgencyShortName { get; set; }
         public long SalesId { get; set; }
+        public long SalesName { get; set; }
         public decimal Amount { get; set; }
-        public long Currency { get; set; }
-        public long Country { get; set; }
-        public long Province { get; set; }
-        public long City { get; set; }
-        public long Region { get; set; }
-
+        public string Currency { get; set; }
+        public string Region { get; set; }
+        public string Country { get; set; }
+        public string Province { get; set; }
+        public string City { get; set; }
+        public string ScheduleData { get; set; }
+        public string GeographicData { get; set; }
         public OpportunityDto()
         {
         }

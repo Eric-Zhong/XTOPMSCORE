@@ -1,14 +1,10 @@
-﻿/*
- * 使用 create database XTOPMSDb default charset utf8 collate utf8_general_ci; 创建数据库后，创建索引时会报错。
- * 只能去掉了一些 Index 的定义。
- */
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace XTOPMS.Migrations
 {
-    public partial class Initiate_MySQL : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -353,7 +349,16 @@ namespace XTOPMS.Migrations
                     LastLoginTime = table.Column<DateTime>(nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: false),
                     NormalizedEmailAddress = table.Column<string>(maxLength: 256, nullable: false),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 128, nullable: true)
+                    ConcurrencyStamp = table.Column<string>(maxLength: 128, nullable: true),
+                    EmployeeNumber = table.Column<string>(maxLength: 50, nullable: true),
+                    IdCard = table.Column<string>(maxLength: 50, nullable: true),
+                    Avatar = table.Column<string>(maxLength: 255, nullable: true),
+                    Title = table.Column<string>(maxLength: 255, nullable: true),
+                    Signature = table.Column<string>(maxLength: 255, nullable: true),
+                    Phone = table.Column<string>(maxLength: 255, nullable: true),
+                    Address = table.Column<string>(maxLength: 255, nullable: true),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -376,6 +381,366 @@ namespace XTOPMS.Migrations
                         principalTable: "AbpUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "XTOPMS_Customer",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    ErpId = table.Column<string>(maxLength: 255, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    ParentCompanyId = table.Column<long>(nullable: false),
+                    CompanyCode = table.Column<string>(maxLength: 100, nullable: true),
+                    ShortName = table.Column<string>(maxLength: 100, nullable: true),
+                    Category = table.Column<string>(maxLength: 1000, nullable: true),
+                    BankName = table.Column<string>(maxLength: 255, nullable: true),
+                    BankAccount = table.Column<string>(maxLength: 100, nullable: true),
+                    Person = table.Column<string>(maxLength: 100, nullable: true),
+                    Phone = table.Column<string>(maxLength: 100, nullable: true),
+                    Fax = table.Column<string>(maxLength: 100, nullable: true),
+                    Email = table.Column<string>(maxLength: 100, nullable: true),
+                    RegionData = table.Column<string>(maxLength: 255, nullable: true),
+                    Address = table.Column<string>(maxLength: 255, nullable: true),
+                    Rate = table.Column<int>(nullable: false),
+                    RateReason = table.Column<string>(maxLength: 255, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XTOPMS_Customer", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "XTOPMS_Document",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    ErpId = table.Column<string>(maxLength: 255, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    FileId = table.Column<string>(nullable: true),
+                    BizCode = table.Column<string>(nullable: true),
+                    BizId = table.Column<string>(nullable: true),
+                    CategoryCode = table.Column<string>(nullable: true),
+                    CategoryName = table.Column<string>(nullable: true),
+                    OrginalName = table.Column<string>(nullable: true),
+                    FileName = table.Column<string>(nullable: true),
+                    Extension = table.Column<string>(nullable: true),
+                    ContentType = table.Column<string>(nullable: true),
+                    Size = table.Column<long>(nullable: false),
+                    FilePath = table.Column<string>(nullable: true),
+                    RelativePath = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XTOPMS_Document", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "XTOPMS_Opportunity",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    ErpId = table.Column<string>(maxLength: 255, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    OwnerId = table.Column<long>(nullable: true),
+                    GeneralContractorId = table.Column<long>(nullable: true),
+                    AgencyId = table.Column<long>(nullable: true),
+                    SalesId = table.Column<long>(nullable: false),
+                    Amount = table.Column<decimal>(nullable: false),
+                    Currency = table.Column<string>(maxLength: 50, nullable: true),
+                    Region = table.Column<string>(maxLength: 50, nullable: true),
+                    Country = table.Column<string>(maxLength: 50, nullable: true),
+                    Province = table.Column<string>(maxLength: 50, nullable: true),
+                    City = table.Column<string>(maxLength: 50, nullable: true),
+                    ScheduleData = table.Column<string>(maxLength: 4000, nullable: true),
+                    GeographicData = table.Column<string>(maxLength: 4000, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XTOPMS_Opportunity", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "XTOPMS_Project",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    ErpId = table.Column<string>(maxLength: 255, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    SalesAgreement = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XTOPMS_Project", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "XTOPMS_Quotation",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    ErpId = table.Column<string>(maxLength: 255, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    OpportunityId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XTOPMS_Quotation", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "XTOPMS_SalesAgreement",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    ErpId = table.Column<string>(maxLength: 255, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    OpportunityId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XTOPMS_SalesAgreement", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "XTOPMS_SKU",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    ErpId = table.Column<string>(maxLength: 255, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    ProductId = table.Column<long>(nullable: false),
+                    Price = table.Column<decimal>(nullable: false),
+                    Stock = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XTOPMS_SKU", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "XTOPMS_SKUCategory",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    ErpId = table.Column<string>(maxLength: 255, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    WBS = table.Column<string>(maxLength: 255, nullable: true),
+                    ParentId = table.Column<long>(nullable: false),
+                    FullName = table.Column<string>(maxLength: 255, nullable: true),
+                    IsSalesProperty = table.Column<bool>(nullable: false),
+                    EditType = table.Column<string>(maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XTOPMS_SKUCategory", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "XTOPMS_SKUCategoryValue",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    ErpId = table.Column<string>(maxLength: 255, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    WBS = table.Column<string>(maxLength: 255, nullable: true),
+                    SkuCategoryId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XTOPMS_SKUCategoryValue", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "XTOPMS_SKUProperty",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    ErpId = table.Column<string>(maxLength: 255, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    Sku = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XTOPMS_SKUProperty", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "XTOPMS_Task",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    ErpId = table.Column<string>(maxLength: 255, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XTOPMS_Task", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -754,13 +1119,10 @@ namespace XTOPMS.Migrations
                 table: "AbpEntityChangeSets",
                 columns: new[] { "TenantId", "CreationTime" });
 
-            // 超出 MySQL 最大限制，会报错：ERROR 1071 (42000): Specified key was too long; max key length is 767 bytes
-            /*
             migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChangeSets_TenantId_Reason",
                 table: "AbpEntityChangeSets",
                 columns: new[] { "TenantId", "Reason" });
-            */
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChangeSets_TenantId_UserId",
@@ -787,12 +1149,10 @@ namespace XTOPMS.Migrations
                 table: "AbpLanguages",
                 columns: new[] { "TenantId", "Name" });
 
-            /*
             migrationBuilder.CreateIndex(
                 name: "IX_AbpLanguageTexts_TenantId_Source_LanguageName_Key",
                 table: "AbpLanguageTexts",
-                columns: new[] { "TenantId", "Source", "LanguageName", "Key" }); 
-            */
+                columns: new[] { "TenantId", "Source", "LanguageName", "Key" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpNotificationSubscriptions_NotificationName_EntityTypeName~",
@@ -834,12 +1194,11 @@ namespace XTOPMS.Migrations
                 table: "AbpRoleClaims",
                 column: "RoleId");
 
-            /*
             migrationBuilder.CreateIndex(
                 name: "IX_AbpRoleClaims_TenantId_ClaimType",
                 table: "AbpRoleClaims",
                 columns: new[] { "TenantId", "ClaimType" });
-            */
+
             migrationBuilder.CreateIndex(
                 name: "IX_AbpRoles_CreatorUserId",
                 table: "AbpRoles",
@@ -865,10 +1224,10 @@ namespace XTOPMS.Migrations
                 table: "AbpSettings",
                 column: "UserId");
 
-            //migrationBuilder.CreateIndex(
-                //name: "IX_AbpSettings_TenantId_Name",
-                //table: "AbpSettings",
-                //columns: new[] { "TenantId", "Name" });
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpSettings_TenantId_Name",
+                table: "AbpSettings",
+                columns: new[] { "TenantId", "Name" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpTenantNotifications_TenantId",
@@ -900,50 +1259,50 @@ namespace XTOPMS.Migrations
                 table: "AbpTenants",
                 column: "TenancyName");
 
-            //migrationBuilder.CreateIndex(
-                //name: "IX_AbpUserAccounts_EmailAddress",
-                //table: "AbpUserAccounts",
-                //column: "EmailAddress");
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserAccounts_EmailAddress",
+                table: "AbpUserAccounts",
+                column: "EmailAddress");
 
-            //migrationBuilder.CreateIndex(
-                //name: "IX_AbpUserAccounts_UserName",
-                //table: "AbpUserAccounts",
-                //column: "UserName");
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserAccounts_UserName",
+                table: "AbpUserAccounts",
+                column: "UserName");
 
-            //migrationBuilder.CreateIndex(
-                //name: "IX_AbpUserAccounts_TenantId_EmailAddress",
-                //table: "AbpUserAccounts",
-                //columns: new[] { "TenantId", "EmailAddress" });
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserAccounts_TenantId_EmailAddress",
+                table: "AbpUserAccounts",
+                columns: new[] { "TenantId", "EmailAddress" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserAccounts_TenantId_UserId",
                 table: "AbpUserAccounts",
                 columns: new[] { "TenantId", "UserId" });
 
-            //migrationBuilder.CreateIndex(
-                //name: "IX_AbpUserAccounts_TenantId_UserName",
-                //table: "AbpUserAccounts",
-                //columns: new[] { "TenantId", "UserName" });
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserAccounts_TenantId_UserName",
+                table: "AbpUserAccounts",
+                columns: new[] { "TenantId", "UserName" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_UserId",
                 table: "AbpUserClaims",
                 column: "UserId");
 
-            //migrationBuilder.CreateIndex(
-                //name: "IX_AbpUserClaims_TenantId_ClaimType",
-                //table: "AbpUserClaims",
-                //columns: new[] { "TenantId", "ClaimType" });
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserClaims_TenantId_ClaimType",
+                table: "AbpUserClaims",
+                columns: new[] { "TenantId", "ClaimType" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserLoginAttempts_UserId_TenantId",
                 table: "AbpUserLoginAttempts",
                 columns: new[] { "UserId", "TenantId" });
 
-            //migrationBuilder.CreateIndex(
-                //name: "IX_AbpUserLoginAttempts_TenancyName_UserNameOrEmailAddress_Resu~",
-                //table: "AbpUserLoginAttempts",
-                //columns: new[] { "TenancyName", "UserNameOrEmailAddress", "Result" });
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserLoginAttempts_TenancyName_UserNameOrEmailAddress_Resu~",
+                table: "AbpUserLoginAttempts",
+                columns: new[] { "TenancyName", "UserNameOrEmailAddress", "Result" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserLogins_UserId",
@@ -955,10 +1314,10 @@ namespace XTOPMS.Migrations
                 table: "AbpUserLogins",
                 columns: new[] { "TenantId", "UserId" });
 
-            //migrationBuilder.CreateIndex(
-                //name: "IX_AbpUserLogins_TenantId_LoginProvider_ProviderKey",
-                //table: "AbpUserLogins",
-                //columns: new[] { "TenantId", "LoginProvider", "ProviderKey" });
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserLogins_TenantId_LoginProvider_ProviderKey",
+                table: "AbpUserLogins",
+                columns: new[] { "TenantId", "LoginProvider", "ProviderKey" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserNotifications_UserId_State_CreationTime",
@@ -1005,15 +1364,15 @@ namespace XTOPMS.Migrations
                 table: "AbpUsers",
                 column: "LastModifierUserId");
 
-            //migrationBuilder.CreateIndex(
-                //name: "IX_AbpUsers_TenantId_NormalizedEmailAddress",
-                //table: "AbpUsers",
-                //columns: new[] { "TenantId", "NormalizedEmailAddress" });
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUsers_TenantId_NormalizedEmailAddress",
+                table: "AbpUsers",
+                columns: new[] { "TenantId", "NormalizedEmailAddress" });
 
-            //migrationBuilder.CreateIndex(
-                //name: "IX_AbpUsers_TenantId_NormalizedUserName",
-                //table: "AbpUsers",
-                //columns: new[] { "TenantId", "NormalizedUserName" });
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUsers_TenantId_NormalizedUserName",
+                table: "AbpUsers",
+                columns: new[] { "TenantId", "NormalizedUserName" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserTokens_UserId",
@@ -1093,6 +1452,39 @@ namespace XTOPMS.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "XTOPMS_Customer");
+
+            migrationBuilder.DropTable(
+                name: "XTOPMS_Document");
+
+            migrationBuilder.DropTable(
+                name: "XTOPMS_Opportunity");
+
+            migrationBuilder.DropTable(
+                name: "XTOPMS_Project");
+
+            migrationBuilder.DropTable(
+                name: "XTOPMS_Quotation");
+
+            migrationBuilder.DropTable(
+                name: "XTOPMS_SalesAgreement");
+
+            migrationBuilder.DropTable(
+                name: "XTOPMS_SKU");
+
+            migrationBuilder.DropTable(
+                name: "XTOPMS_SKUCategory");
+
+            migrationBuilder.DropTable(
+                name: "XTOPMS_SKUCategoryValue");
+
+            migrationBuilder.DropTable(
+                name: "XTOPMS_SKUProperty");
+
+            migrationBuilder.DropTable(
+                name: "XTOPMS_Task");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityChanges");

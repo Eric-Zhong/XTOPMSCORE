@@ -36,6 +36,21 @@
     <Compile Remove="Migrations\20170608053244_Upgraded_To_Abp_2_1_0.cs" />
     <Compile Remove="Migrations\20181121025222_Initiate_MySQL.cs" />
     <Compile Remove="Migrations\20181121025222_Initiate_MySQL.Designer.cs" />
+    <Compile Remove="Migrations\20181212064004_Add_Opportunity.Designer.cs" />
+    <Compile Remove="Migrations\20181212064004_Add_Opportunity.cs" />
+    <Compile Remove="Migrations\20181212004109_Initiate_MySQL_Database.cs" />
+    <Compile Remove="Migrations\20181212095200_Contract_Quot_Prj_Task.Designer.cs" />
+    <Compile Remove="Migrations\20181212164943_Add_SKU_Category_Setting.Designer.cs" />
+    <Compile Remove="Migrations\20181212164943_Add_SKU_Category_Setting.cs" />
+    <Compile Remove="Migrations\20190219145606_Add_Document.Designer.cs" />
+    <Compile Remove="Migrations\20190219145606_Add_Document.cs" />
+    <Compile Remove="Migrations\20190330184237_Add_Customer.Designer.cs" />
+    <Compile Remove="Migrations\20190330184237_Add_Customer.cs" />
+    <Compile Remove="Migrations\20190406170244_Update_Customer.Designer.cs" />
+    <Compile Remove="Migrations\20190406170244_Update_Customer.cs" />
+    <Compile Remove="Migrations\20190407134827_MustHaveTenant.Designer.cs" />
+    <Compile Remove="Migrations\20190407134827_MustHaveTenant.cs" />
+    <Compile Remove="Migrations\XTOPMSDbContextModelSnapshot.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.4" />

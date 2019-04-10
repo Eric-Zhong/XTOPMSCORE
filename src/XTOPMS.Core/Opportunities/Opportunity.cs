@@ -28,13 +28,49 @@ namespace XTOPMS.Opportunities
     [Table("XTOPMS_Opportunity")]
     public class Opportunity : XTOPMSEntity
     {
+        /// <summary>
+        /// 业主
+        /// </summary>
+        /// <value>The owner.</value>
+        public long? OwnerId { get; set; }
+        /// <summary>
+        /// 总包方
+        /// </summary>
+        /// <value>The general contractor identifier.</value>
+        public long? GeneralContractorId { get; set; }
+        /// <summary>
+        /// 总包方
+        /// </summary>
+        /// <value>The general contractor identifier.</value>
+        public long? AgencyId { get; set; }
+        /// <summary>
+        /// 对项目负责的本方销售代表
+        /// </summary>
+        /// <value>The sales identifier.</value>
         public long SalesId { get; set; }
         public decimal Amount { get; set; }
-        public long Currency { get; set; }
-        public long Country { get; set; }
-        public long Province { get; set; }
-        public long City { get; set; }
-        public long Region { get; set; }
+        [StringLength(50)]
+        public string Currency { get; set; }
+        [StringLength(50)]
+        public string Region { get; set; }
+        [StringLength(50)]
+        public string Country { get; set; }
+        [StringLength(50)]
+        public string Province { get; set; }
+        [StringLength(50)]
+        public string City { get; set; }
+        /// <summary>
+        /// 进度数据，计划用在前端界面显示时所显示的进度信息。
+        /// </summary>
+        /// <value>JSON String</value>
+        [StringLength(4000)]
+        public string ScheduleData { get; set; }
+        /// <summary>
+        /// 地理坐标位置信息
+        /// </summary>
+        /// <value>The geographic data.</value>
+        [StringLength(4000)]
+        public string GeographicData { get; set; }
 
         public Opportunity()
         {

@@ -1217,22 +1217,27 @@ namespace XTOPMS.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<long?>("AgencyId");
+
                     b.Property<decimal>("Amount");
 
-                    b.Property<long>("City");
+                    b.Property<string>("City")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Code")
                         .HasMaxLength(255);
 
                     b.Property<string>("Comment");
 
-                    b.Property<long>("Country");
+                    b.Property<string>("Country")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("CreationTime");
 
                     b.Property<long?>("CreatorUserId");
 
-                    b.Property<long>("Currency");
+                    b.Property<string>("Currency")
+                        .HasMaxLength(50);
 
                     b.Property<long?>("DeleterUserId");
 
@@ -1242,6 +1247,11 @@ namespace XTOPMS.Migrations
                         .HasMaxLength(255);
 
                     b.Property<string>("ExtensionData");
+
+                    b.Property<long?>("GeneralContractorId");
+
+                    b.Property<string>("GeographicData")
+                        .HasMaxLength(4000);
 
                     b.Property<bool>("IsActive");
 
@@ -1256,11 +1266,18 @@ namespace XTOPMS.Migrations
 
                     b.Property<long?>("OrganizationUnitId");
 
-                    b.Property<long>("Province");
+                    b.Property<long?>("OwnerId");
 
-                    b.Property<long>("Region");
+                    b.Property<string>("Province")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Region")
+                        .HasMaxLength(50);
 
                     b.Property<long>("SalesId");
+
+                    b.Property<string>("ScheduleData")
+                        .HasMaxLength(4000);
 
                     b.Property<int>("Status");
 

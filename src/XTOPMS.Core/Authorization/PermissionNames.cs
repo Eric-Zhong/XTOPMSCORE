@@ -16,5 +16,14 @@
         public const string API_Customer_Delete = "API.Customer.Delete";
         #endregion
 
+        #region Opportunity
+        public const string Pages_Opportunity_Index = "Pages.Opportunity.Index";
+        public const string API_Opportunity_Get = "API.Opportunity.Get";
+        public const string API_Opportunity_GetAll = "API.Opportunity.GetAll";
+        public const string API_Opportunity_Create = "API.Opportunity.Create";
+        public const string API_Opportunity_Update = "API.Opportunity.Update";
+        public const string API_Opportunity_Delete = "API.Opportunity.Delete";
+        #endregion
+
     }
 }

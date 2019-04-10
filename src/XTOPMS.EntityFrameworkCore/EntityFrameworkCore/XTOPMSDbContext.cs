@@ -3,7 +3,6 @@ using Abp.Zero.EntityFrameworkCore;
 using XTOPMS.Authorization.Roles;
 using XTOPMS.Authorization.Users;
 using XTOPMS.MultiTenancy;
-using XTOPMS.Migrations;
 using XTOPMS.Quotations;
 using System.Diagnostics.Contracts;
 using XTOPMS.Projects;
