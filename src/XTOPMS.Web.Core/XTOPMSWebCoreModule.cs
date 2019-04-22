@@ -12,14 +12,15 @@ using Abp.Zero.Configuration;
 using XTOPMS.Authentication.JwtBearer;
 using XTOPMS.Configuration;
 using XTOPMS.EntityFrameworkCore;
+using Abp.Hangfire.Configuration;
 
 namespace XTOPMS
 {
     [DependsOn(
-         typeof(XTOPMSApplicationModule),
-         typeof(XTOPMSEntityFrameworkModule),
-         typeof(AbpAspNetCoreModule)
-        ,typeof(AbpAspNetCoreSignalRModule)
+         typeof(XTOPMSApplicationModule)
+        , typeof(XTOPMSEntityFrameworkModule)
+        , typeof(AbpAspNetCoreModule)
+        , typeof(AbpAspNetCoreSignalRModule)
      )]
     public class XTOPMSWebCoreModule : AbpModule
     {
@@ -47,6 +48,12 @@ namespace XTOPMS
                  );
 
             ConfigureTokenAuth();
+
+            // HangFire - Enable backgroup process component.
+            // 20190419 - Eric. 好多地方都可以配置，不知道重复定义会有什么问题。
+            // I don't know the best prestic for setting this hangfire.
+            // Configuration.BackgroundJobs.UseHangfire();
+
         }
 
         private void ConfigureTokenAuth()

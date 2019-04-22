@@ -76,12 +76,4 @@ namespace XTOPMS.Opportunities
         {
         }
     }
-
-
-
-    public interface IOpportunityRepository : IRepository<Opportunity, long>
-    {
-    }
-
-
 }

@@ -9,6 +9,7 @@ using Abp.MultiTenancy;
 using XTOPMS.Authorization;
 using XTOPMS.Authorization.Roles;
 using XTOPMS.Authorization.Users;
+using System;
 
 namespace XTOPMS.EntityFrameworkCore.Seed.Tenants
 {
@@ -31,6 +32,7 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Tenants
 
         private Role CreateSystemRole(string roleName)
         {
+            Console.WriteLine(roleName);
             var role = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == _tenantId && r.Name == roleName);
             if (role == null)
             {
@@ -43,6 +45,8 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Tenants
 
         private void CreateRolesAndUsers()
         {
+            Console.WriteLine("Start create role.");
+
             // Admin role
             var adminRole = CreateSystemRole(StaticRoleNames.Tenants.Admin);
             // Common user
@@ -58,6 +62,7 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Tenants
             CreateSystemRole(StaticRoleNames.Tenants.SupplyChain);
             CreateSystemRole(StaticRoleNames.Tenants.Tender);
 
+            Console.WriteLine("Finish create role.");
 
             // Grant all permissions to admin role
             var grantedPermissions = _context.Permissions.IgnoreQueryFilters()
@@ -111,6 +116,7 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Tenants
         // create some user for testing
         private void CreateSomeUser(Role userRole)
         {
+            Console.WriteLine("Start create user.");
             string[] users = new string[] {
                 "Sales","Tender","PM","Engineer", "Designer", "SupplyChain", "Service", "Finance"
             };
@@ -119,10 +125,12 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Tenants
             {
                 CreateSystemUser(_tenantId, userRole.Id, user);
             }
+            Console.WriteLine("Finish create user.");
         }
 
         private void CreateSystemUser(int tenantId, int roleId, string username)
         {
+            Console.WriteLine(username);    // Output user name.
             var adminUser = _context.Users.First(t => t.Id == 1);
             var user = _context.Users.IgnoreQueryFilters().FirstOrDefault(u => u.TenantId == tenantId && u.UserName == username);
             if (user == null)

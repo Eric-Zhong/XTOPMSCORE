@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using XTOPMS.Configuration;
+using Abp.Hangfire.Configuration;
 
 namespace XTOPMS.Web.Host.Startup
 {
@@ -18,6 +19,16 @@ namespace XTOPMS.Web.Host.Startup
             _env = env;
             _appConfiguration = env.GetAppConfiguration();
         }
+
+
+        public override void PreInitialize()
+        {
+            base.PreInitialize();
+            // HangFire - Enable backgroup process component.
+            // 20190419 - Eric.
+            Configuration.BackgroundJobs.UseHangfire();
+        }
+
 
         public override void Initialize()
         {

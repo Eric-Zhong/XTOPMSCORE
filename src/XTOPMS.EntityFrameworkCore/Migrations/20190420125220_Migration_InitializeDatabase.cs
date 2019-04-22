@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace XTOPMS.Migrations
 {
-    public partial class Initialize : Migration
+    public partial class Migration_InitializeDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -381,6 +381,43 @@ namespace XTOPMS.Migrations
                         principalTable: "AbpUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Alibaba_AccessToken",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorUserId = table.Column<long>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierUserId = table.Column<long>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    OrganizationUnitId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    ExtensionData = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    ErpId = table.Column<string>(maxLength: 255, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    App_Key = table.Column<string>(maxLength: 50, nullable: true),
+                    App_Secret = table.Column<string>(maxLength: 50, nullable: true),
+                    AliId = table.Column<string>(maxLength: 50, nullable: true),
+                    Resource_Owner = table.Column<string>(maxLength: 50, nullable: true),
+                    MemberId = table.Column<string>(maxLength: 50, nullable: true),
+                    Access_Token = table.Column<string>(maxLength: 50, nullable: true),
+                    Expires_In = table.Column<DateTime>(nullable: false),
+                    Refresh_Token = table.Column<string>(maxLength: 50, nullable: true),
+                    Refresh_Token_Timeout = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Alibaba_AccessToken", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -1452,6 +1489,9 @@ namespace XTOPMS.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Alibaba_AccessToken");
 
             migrationBuilder.DropTable(
                 name: "XTOPMS_Customer");

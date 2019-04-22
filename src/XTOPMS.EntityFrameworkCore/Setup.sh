@@ -1,2 +1,2 @@
-﻿dotnet ef database drop
-dotnet ef database update
+﻿dotnet ef database drop -f -v
+dotnet ef database update -v

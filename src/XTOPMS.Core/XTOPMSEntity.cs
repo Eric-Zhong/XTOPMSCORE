@@ -26,7 +26,28 @@ using Abp.Organizations;
 
 namespace XTOPMS
 {
-    public class XTOPMSEntity : FullAuditedEntity<long>, IMustHaveTenant, IMayHaveOrganizationUnit, IExtendableObject, IPassivable
+
+    public interface IXTOPMSEntity
+    {
+        long? OrganizationUnitId { get; set; }
+        int TenantId { get; set; }
+        string ExtensionData { get; set; }
+        bool IsActive { get; set; }
+        string Name { get; set; }
+        string Code { get; set; }
+        string ErpId { get; set; }
+        int Status { get; set; }
+        string Comment { get; set; }
+    }
+
+
+    public class XTOPMSEntity : 
+        FullAuditedEntity<long>,
+        IXTOPMSEntity,
+        IMustHaveTenant, 
+        IMayHaveOrganizationUnit, 
+        IExtendableObject, 
+        IPassivable
     {
         public long? OrganizationUnitId { get; set; }
         public int TenantId { get; set; }

@@ -9,8 +9,8 @@ using XTOPMS.EntityFrameworkCore;
 namespace XTOPMS.Migrations
 {
     [DbContext(typeof(XTOPMSDbContext))]
-    [Migration("20190410090612_Initialize")]
-    partial class Initialize
+    [Migration("20190420125220_Migration_InitializeDatabase")]
+    partial class Migration_InitializeDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -828,6 +828,76 @@ namespace XTOPMS.Migrations
                     b.HasIndex("TenantId", "Code");
 
                     b.ToTable("AbpOrganizationUnits");
+                });
+
+            modelBuilder.Entity("XTOPMS.Alibaba.AccessToken", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Access_Token")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("AliId")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("App_Key")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("App_Secret")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<long?>("CreatorUserId");
+
+                    b.Property<long?>("DeleterUserId");
+
+                    b.Property<DateTime?>("DeletionTime");
+
+                    b.Property<string>("ErpId")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("Expires_In");
+
+                    b.Property<string>("ExtensionData");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime");
+
+                    b.Property<long?>("LastModifierUserId");
+
+                    b.Property<string>("MemberId")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255);
+
+                    b.Property<long?>("OrganizationUnitId");
+
+                    b.Property<string>("Refresh_Token")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("Refresh_Token_Timeout");
+
+                    b.Property<string>("Resource_Owner")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("Status");
+
+                    b.Property<int>("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Alibaba_AccessToken");
                 });
 
             modelBuilder.Entity("XTOPMS.Authorization.Roles.Role", b =>

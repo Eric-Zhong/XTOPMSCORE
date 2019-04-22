@@ -16,6 +16,12 @@ using XTOPMS.Configuration;
 using XTOPMS.Identity;
 
 using Abp.AspNetCore.SignalR.Hubs;
+using Hangfire;
+using Hangfire.MySql;
+using Hangfire.MySql.Core;
+using System.Data;
+using Abp.Hangfire;
+using XTOPMS.Alibaba;
 
 namespace XTOPMS.Web.Host.Startup
 {
@@ -76,6 +82,33 @@ namespace XTOPMS.Web.Host.Startup
                 });
             });
 
+
+            // HangFire - Enable backgroup process component.
+            // 20190419 - Eric.
+            services.AddHangfire(config =>
+            {
+
+                string connectionString = _appConfiguration.GetConnectionString("Default");
+
+                config.UseStorage(
+                    new MySqlStorage(
+                        connectionString,
+                        new MySqlStorageOptions
+                        {
+                            TransactionIsolationLevel = IsolationLevel.ReadCommitted,
+                            QueuePollInterval = TimeSpan.FromSeconds(15),
+                            JobExpirationCheckInterval = TimeSpan.FromHours(1),
+                            CountersAggregateInterval = TimeSpan.FromMinutes(5),
+                            PrepareSchemaIfNecessary = true,
+                            DashboardJobListLimit = 50000,
+                            TransactionTimeout = TimeSpan.FromMinutes(1),
+                            TablePrefix = "Hangfire"
+                        }
+                    ));
+                        
+            });
+
+
             // Configure Abp and Dependency Injection
             return services.AddAbp<XTOPMSWebHostModule>(
                 // Configure Log4Net logging
@@ -85,7 +118,11 @@ namespace XTOPMS.Web.Host.Startup
             );
         } 
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            ILoggerFactory loggerFactory
+            )
         {
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
@@ -123,6 +160,35 @@ namespace XTOPMS.Web.Host.Startup
                 options.IndexStream = () => Assembly.GetExecutingAssembly()
                     .GetManifestResourceStream("XTOPMS.Web.Host.wwwroot.swagger.ui.index.html");
             }); // URL: /swagger
+
+
+            // HangFire
+            // 20190419 - Eric.
+            app.UseHangfireServer(
+                new BackgroundJobServerOptions {
+                    WorkerCount = 1,
+                    SchedulePollingInterval = TimeSpan.FromMinutes(1)
+                    }
+                );
+
+            app.UseHangfireDashboard("/hangfire");
+
+            // BackgroundJob.Enqueue(() => Console.WriteLine("Handfire regisited and running."));
+            // BackgroundJob.Schedule(() => Console.WriteLine("Handfire running"), TimeSpan.FromSeconds(20));
+            // RecurringJob.AddOrUpdate(() => Console.WriteLine("Recurrent running"), Cron.Minutely);
+
+            RecurringJob.AddOrUpdate<AccessTokenRefreshProcess>("Alibaba Refresh Token Refresh Job)", (t) => t.Execute(null), Cron.Minutely);
+
+            /*
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[]
+                {
+                    new AbpHangfireAuthorizationFilter("MyHangFireDashboardPermissionName")
+                };
+            });
+            */
         }
+
     }
 }

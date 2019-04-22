@@ -41,6 +41,7 @@
     <Folder Include="Documents\" />
     <Folder Include="Customers\" />
     <Folder Include="Localization\SourceFiles\" />
+    <Folder Include="Alibaba\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Localization\SourceFiles\XTOPMS.xml" />

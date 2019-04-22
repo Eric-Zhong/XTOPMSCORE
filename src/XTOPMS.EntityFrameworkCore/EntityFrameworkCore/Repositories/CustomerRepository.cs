@@ -19,11 +19,16 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using Abp.Domain.Repositories;
 using Abp.EntityFrameworkCore;
 using XTOPMS.Customers;
 
 namespace XTOPMS.EntityFrameworkCore.Repositories
 {
+    public interface ICustomerRepository : IRepository<Customer, long>
+    {
+    }
+
     public class CustomerRepository : XTOPMSRepositoryBase<Customer, long>, ICustomerRepository
     {
         public CustomerRepository(IDbContextProvider<XTOPMSDbContext> dbContextProvider) : base(dbContextProvider)

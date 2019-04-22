@@ -24,7 +24,7 @@ using Abp.Domain.Entities.Auditing;
 
 namespace XTOPMS.Dto
 {
-    public class XTOPMSEntityDto<T> : FullAuditedEntityDto<T>
+    public class XTOPMSEntityDto<T> : FullAuditedEntityDto<T>, IXTOPMSEntityDto
     {
         /// <summary>
         /// 为了解决浏览器上会把long数据进行截断，这里把Id转成String然后传递给前台。
@@ -40,5 +40,20 @@ namespace XTOPMS.Dto
         public string ErpId { get; set; }
         public int Status { get; set; }
         public string Comment { get; set; }
+    }
+
+
+    interface IXTOPMSEntityDto
+    {
+        string key { get; }
+        int? OrganizationUnitId { get; set; }
+        int? TenantId { get; set; }
+        string ExtensionData { get; set; }
+        bool IsActive { get; set; }
+        string Name { get; set; }
+        string Code { get; set; }
+        string ErpId { get; set; }
+        int Status { get; set; }
+        string Comment { get; set; }
     }
 }

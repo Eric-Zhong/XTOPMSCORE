@@ -12,6 +12,7 @@ using XTOPMS.Opportunities;
 using XTOPMS.Tasks;
 using XTOPMS.Documents;
 using XTOPMS.Customers;
+using XTOPMS.Alibaba;
 
 namespace XTOPMS.EntityFrameworkCore
 {
@@ -32,6 +33,7 @@ namespace XTOPMS.EntityFrameworkCore
         public DbSet<SKUCategoryValue> SKUCategoryValue { get; set; }
         public DbSet<Document> Document { get; set; }
         public DbSet<Customer> Customer { get; set; }
+        public DbSet<AccessToken> AccessToken { get; set; }
 
         public XTOPMSDbContext(DbContextOptions<XTOPMSDbContext> options)
             : base(options)

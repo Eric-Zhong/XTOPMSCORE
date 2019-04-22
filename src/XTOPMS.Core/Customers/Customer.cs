@@ -59,9 +59,4 @@ namespace XTOPMS.Customers
         {
         }
     }
-
-    public interface ICustomerRepository : IRepository<Customer, long>
-    {
-    }
-
 }

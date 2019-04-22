@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -29,6 +30,27 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Tenants
         public void Create()
         {
             CreateCustomers();
+            CreateAccessToken();
+        }
+
+        private void CreateAccessToken()
+        {
+            Console.Write("Begin create access token. ");
+            if(_context.AccessToken.Count() == 0)
+            {
+                _context.AccessToken.Add(new Alibaba.AccessToken
+                {
+                    Name = "北京钛谷诚泽网络通讯科技有限公司",
+                    App_Key = "3259943",
+                    App_Secret = "t6MpyARzzv",
+                    Access_Token = "76dee230-a91b-4178-aa25-83855bb7808b",
+                    Refresh_Token = "14f0af01-0664-4fa0-a34f-5c0f815247f9",
+                    MemberId = "b2b-3305067292666fa",
+                    AliId = "3305067292",
+                    Resource_Owner = "ericzhongxu"
+                });
+            }
+            Console.WriteLine("Done.");
         }
 
         /// <summary>
@@ -36,7 +58,8 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Tenants
         /// </summary>
         private void CreateCustomers()
         {
-            if(_context.Customer.Count() == 0)
+            Console.WriteLine("Start to create customer.");
+            if (_context.Customer.Count() == 0)
             {
                 List<Customer> list = new List<Customer>();
                 InitCustomerData(ref list);
@@ -44,10 +67,12 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Tenants
                 foreach (var cust in list)
                 {
                     _context.Customer.Add(cust);
+                    Console.WriteLine(cust.Name);       // Output customer name.
                 }
 
                 _context.SaveChanges();
             }
+            Console.WriteLine("Finish create customer.");
         }
 
 
