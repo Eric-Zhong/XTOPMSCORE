@@ -28,6 +28,7 @@ using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Domain.Repositories;
 using Abp.Linq;
+using Abp.UI;
 using XTOPMS.Dto;
 
 namespace XTOPMS
@@ -146,6 +147,24 @@ namespace XTOPMS
             return await base.Update(input);
         }
 
+        public override Task Delete(TDeleteInput input)
+        {
+            return base.Delete(input);
+        }
+
+        public Task Remove(TPrimaryKey id)
+        {
+            TEntity entity= Repository.Get(id);
+            if(entity != null)
+            {
+                return Repository.DeleteAsync(entity);
+            }
+            else
+            {
+                throw new UserFriendlyException(id.ToString() + " not found");
+            }
+        }
+
 
         /// <summary>
         /// 获取可以自己的下属信息，默认是按用户的 line-manager进行查找
@@ -228,6 +247,6 @@ namespace XTOPMS
     {
         Task<PagedResultDto<TEntityDto>> GetMyAll(TGetAllInput input);
         Task<List<TEntityDto>> QuickSearch(QuickSearchInputDto input);
+        Task Remove(TPrimaryKey id);
     }
-
 }

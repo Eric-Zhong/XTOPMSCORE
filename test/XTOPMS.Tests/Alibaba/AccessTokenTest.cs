@@ -31,7 +31,7 @@ namespace XTOPMS.Tests.Alibaba
     {
         readonly IAccessTokenAppService _accessTokenAppService;
         readonly IAccessTokenManager _accessTokenManager;
-        private readonly IAccessTokenRepository _accessTokenRepository;
+        readonly IAccessTokenRepository _accessTokenRepository;
 
         public AccessTokenTest()
         {

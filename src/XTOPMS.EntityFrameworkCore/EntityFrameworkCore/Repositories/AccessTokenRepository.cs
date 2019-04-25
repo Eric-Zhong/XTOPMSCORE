@@ -54,7 +54,10 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
         public async Task<List<AccessToken>> GetAllRefreshTokenWillTimeout()
         {
             var query = from m in this.GetAll()
-                        where m.Refresh_Token_Timeout.AddDays(-30) <= DateTime.Now
+                        where 
+                            m.Refresh_Token_Timeout.AddDays(-30) <= DateTime.Now 
+                            && m.IsActive == true
+                            && m.IsDeleted == false
                         select m
                         ;
 
@@ -71,7 +74,10 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
         public async Task<List<AccessToken>> GetAllAccessTokenWillTimeout()
         {
             var query = from m in this.GetAll()
-                        where m.Expires_In.AddHours(-1) <= DateTime.Now
+                        where 
+                            m.Expires_In.AddHours(-1) <= DateTime.Now
+                            && m.IsActive == true
+                            && m.IsDeleted == false
                         select m
                         ;
 

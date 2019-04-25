@@ -1,6 +1,7 @@
 ﻿using com.alibaba.openapi.client.entity;
 using com.alibaba.openapi.client.http;
 using com.alibaba.openapi.client.policy;
+using com.alibaba.trade.param;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,7 +71,7 @@ namespace com.alibaba.openapi.client
                 &client_secret= YOUR_APPSECRET
                 &redirect_uri=YOUR_REDIRECT_URI
                 &code=CODE
-            */              
+            */
             APIId apiId = new APIId();
             apiId.Name = "getToken";
             apiId.NamespaceValue = "system.oauth2";
@@ -109,7 +110,7 @@ namespace com.alibaba.openapi.client
             apiId.Name = "getToken";
             apiId.NamespaceValue = "system.oauth2";
             apiId.Version = 1;
-        
+
             Request request = new Request();
             request.ApiId = apiId;
 
