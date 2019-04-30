@@ -19,10 +19,12 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using System.Collections.Generic;
 using Abp.Domain.Services;
 using com.alibaba.openapi.client;
 using com.alibaba.openapi.client.policy;
 using com.alibaba.trade.param;
+using XTOPMS.DataSyncServices;
 
 namespace XTOPMS.Alibaba
 {
@@ -30,41 +32,70 @@ namespace XTOPMS.Alibaba
     public interface ITradeManager
         : IDomainService
     {
-        void GetYesterdayOrder();
+        IList<AlibabaOpenplatformTradeModelTradeInfo> GetYesterdayModificationTradeInfos(IAccessToken token);
     }
 
     public class TradeManager
         : DomainService, ITradeManager
     {
 
-        private readonly IAccessTokenManager accessTokenManager;
-
-        public TradeManager(
-            IAccessTokenManager _accessTokenManager
-            )
+        public TradeManager()
         {
-            accessTokenManager = _accessTokenManager;
         }
 
-        public void GetYesterdayOrder()
+        /// <summary>
+        /// 获取前一天有更新的Trade Information
+        /// </summary>
+        /// <returns>The yesterday modification trade infos.</returns>
+        public IList<AlibabaOpenplatformTradeModelTradeInfo> GetYesterdayModificationTradeInfos(IAccessToken token)
         {
-            string accessToken = "aa200987-fcec-48d9-9521-967d3ce2eea2";
-            SyncAPIClient client = new SyncAPIClient("3259943", "t6MpyARzzv");
-            AlibabaTradeGetSellerOrderListParam param 
-                = new AlibabaTradeGetSellerOrderListParam();
+            // string accessToken = "aa200987-fcec-48d9-9521-967d3ce2eea2";
+            // SyncAPIClient client = new SyncAPIClient("3259943", "t6MpyARzzv");
+
+            string accessToken = token.Access_Token;
+            SyncAPIClient client = new SyncAPIClient(token.App_Key, token.App_Secret);
+
+            int maxPageSize = 20;   // Alibaba only support 20
+            int currentPage = 1;
+            long totalCount = 0;
 
             string yesteday = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
 
-            param.setModifyStartTime(DateTime.Parse(yesteday + " 00:00:00"));
-            param.setModifyEndTime(DateTime.Parse(yesteday + " 23:59:59"));
+            IList<AlibabaOpenplatformTradeModelTradeInfo> data = new List<AlibabaOpenplatformTradeModelTradeInfo>();
 
-            RequestPolicy oauthPolicy = new RequestPolicy();
-            oauthPolicy.UseHttps = true;
+            // 先计算一次，拿到总数后，再做循环处理
+            do
+            {
+                AlibabaTradeGetSellerOrderListParam param
+                    = new AlibabaTradeGetSellerOrderListParam();
+                param.setModifyStartTime(DateTime.Parse(yesteday + " 00:00:00"));
+                param.setModifyEndTime(DateTime.Parse(yesteday + " 23:59:59"));
 
-            AlibabaTradeGetSellerOrderListResult result = 
-                client.execute<AlibabaTradeGetSellerOrderListResult>(param, accessToken);
+                param.setPageSize(maxPageSize);
+                param.setPage(currentPage);
 
-            Console.Write(result.getTotalRecord());
+                RequestPolicy oauthPolicy = new RequestPolicy();
+                oauthPolicy.UseHttps = true;
+
+                AlibabaTradeGetSellerOrderListResult result =
+                    client.execute<AlibabaTradeGetSellerOrderListResult>(param, accessToken);
+
+                totalCount = result.getTotalRecord().Value;
+                AlibabaOpenplatformTradeModelTradeInfo[] orders = result.getResult();
+
+                foreach (var ord in orders)
+                {
+                    data.Add(ord);
+                }
+
+                currentPage++;
+            }
+            while ((currentPage * maxPageSize) < totalCount);
+
+            Console.WriteLine("Get trade order from alibaba: " + data.Count);
+
+            return data;
+
         }
 
         public void GetSellerTradeView()

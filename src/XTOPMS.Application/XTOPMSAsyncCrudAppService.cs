@@ -21,15 +21,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+
+// using Microsoft.EntityFrameworkCore;
+// using Microsoft.EntityFrameworkCore.Query;
+
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using Abp.Linq;
 using Abp.UI;
+using Abp.Collections.Extensions;
+using Abp.Data;
+using Abp.EntityFrameworkCore.Extensions;
+
 using XTOPMS.Dto;
+using XTOPMS.Authorization.Users;
 
 namespace XTOPMS
 {
@@ -48,7 +59,7 @@ namespace XTOPMS
 
     public abstract class XTOPMSAsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey>
         : XTOPMSAsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
-           where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity, ICreationAudited
+           where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity
            where TEntityDto : IEntityDto<TPrimaryKey>
     {
         protected XTOPMSAsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
@@ -60,7 +71,7 @@ namespace XTOPMS
 
     public abstract class XTOPMSAsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput>
         : XTOPMSAsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TEntityDto, TEntityDto>
-           where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity, ICreationAudited
+           where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity
            where TEntityDto : IEntityDto<TPrimaryKey>
     {
         protected XTOPMSAsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
@@ -72,7 +83,7 @@ namespace XTOPMS
 
     public abstract class XTOPMSAsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
         : XTOPMSAsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
-            where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity, ICreationAudited
+            where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity
             where TEntityDto : IEntityDto<TPrimaryKey>
             where TCreateInput : IEntityDto<TPrimaryKey>
     {
@@ -85,7 +96,7 @@ namespace XTOPMS
 
     public abstract class XTOPMSAsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
         : XTOPMSAsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, EntityDto<TPrimaryKey>>
-           where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity, ICreationAudited
+           where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity
            where TEntityDto : IEntityDto<TPrimaryKey>
            where TUpdateInput : IEntityDto<TPrimaryKey>
     {
@@ -98,7 +109,7 @@ namespace XTOPMS
 
     public abstract class XTOPMSAsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
         : XTOPMSAsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, IEntityDto<TPrimaryKey>>
-           where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity, ICreationAudited
+           where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity
            where TEntityDto : IEntityDto<TPrimaryKey>
            where TUpdateInput : IEntityDto<TPrimaryKey>
            where TGetInput : IEntityDto<TPrimaryKey>
@@ -113,7 +124,7 @@ namespace XTOPMS
        : AsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>,
         IXTOPMSAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>,
         IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
-           where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity, ICreationAudited
+           where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity
            where TEntityDto : IEntityDto<TPrimaryKey>
            where TUpdateInput : IEntityDto<TPrimaryKey>
            where TGetInput : IEntityDto<TPrimaryKey>
@@ -129,10 +140,32 @@ namespace XTOPMS
             return await base.Get(input);
         }
 
+        protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
+        {
+            var query = base.CreateFilteredQuery(input);
+            query = query.IncludeIf(true, t => t.CreatorUser);
+            query = query.IncludeIf(true, t => t.DeleterUser);
+            query = query.IncludeIf(true, t => t.LastModifierUser);
+            return query;
+        }
 
         public override async Task<PagedResultDto<TEntityDto>> GetAll(TGetAllInput input)
         {
-            return await base.GetAll(input);
+            CheckGetAllPermission();
+
+            var query = this.CreateFilteredQuery(input);
+
+            var totalCount = await AsyncQueryableExecuter.CountAsync(query);
+
+            query = ApplySorting(query, input);
+            query = ApplyPaging(query, input);
+
+            var entities = await AsyncQueryableExecuter.ToListAsync(query);
+
+            return new PagedResultDto<TEntityDto>(
+                totalCount,
+                entities.Select(MapToEntityDto).ToList()
+            );
         }
 
 
@@ -188,7 +221,7 @@ namespace XTOPMS
             // TODO: 需要花时间研究一下这里是用来干什么的。
             // CheckGetAllPermission();
 
-            var query = CreateFilteredQuery(input);
+            var query = this.CreateFilteredQuery(input);
 
             var directReports = this.GetDirectReports();
             var myId = this.AbpSession.UserId;
@@ -218,9 +251,9 @@ namespace XTOPMS
             var query = Repository.GetAll();
 
             query = query.Where(t => 
-                t.Name.Contains(value) || 
-                t.Code.Contains(value) || 
-                t.ErpId.Contains(value)
+                (t.Name ?? "").Contains(value) || 
+                (t.Code ?? "").Contains(value) || 
+                (t.ErpId ?? "").Contains(value)
                 );
 
             query = query.Take(count);
@@ -233,6 +266,26 @@ namespace XTOPMS
             return items;
         }
 
+        public async Task<PagedResultDto<TEntityDto>> GetAllWithFullAudited(TGetAllInput input)
+        {
+
+            CheckGetAllPermission();
+
+            var query = this.CreateFilteredQuery(input);
+
+            var totalCount = await AsyncQueryableExecuter.CountAsync(query);
+
+            query = ApplySorting(query, input);
+            query = ApplyPaging(query, input);
+
+            var entities = await AsyncQueryableExecuter.ToListAsync(query);
+
+            return new PagedResultDto<TEntityDto>(
+                totalCount,
+                entities.Select(MapToEntityDto).ToList()
+            );
+
+        }
     }
 
 
@@ -246,6 +299,7 @@ namespace XTOPMS
         where TDeleteInput : IEntityDto<TPrimaryKey>
     {
         Task<PagedResultDto<TEntityDto>> GetMyAll(TGetAllInput input);
+        Task<PagedResultDto<TEntityDto>> GetAllWithFullAudited(TGetAllInput input);
         Task<List<TEntityDto>> QuickSearch(QuickSearchInputDto input);
         Task Remove(TPrimaryKey id);
     }

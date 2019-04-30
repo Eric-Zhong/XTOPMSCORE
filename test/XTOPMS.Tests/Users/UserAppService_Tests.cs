@@ -5,16 +5,19 @@ using Xunit;
 using Abp.Application.Services.Dto;
 using XTOPMS.Users;
 using XTOPMS.Users.Dto;
+using XTOPMS.Authorization.Users;
 
 namespace XTOPMS.Tests.Users
 {
     public class UserAppService_Tests : XTOPMSTestBase
     {
         private readonly IUserAppService _userAppService;
+        private readonly UserManager _userManager;
 
         public UserAppService_Tests()
         {
             _userAppService = Resolve<IUserAppService>();
+            _userManager = Resolve<UserManager>();
         }
 
         [Fact]
@@ -47,6 +50,14 @@ namespace XTOPMS.Tests.Users
                 var johnNashUser = await context.Users.FirstOrDefaultAsync(u => u.UserName == "john.nash");
                 johnNashUser.ShouldNotBeNull();
             });
+        }
+
+        [Fact]
+        public async Task GetUser_Test()
+        {
+            var user = await _userManager.GetUserByIdAsync(3);
+            var creator = user.CreatorUser;
+            Assert.NotNull(creator);
         }
     }
 }

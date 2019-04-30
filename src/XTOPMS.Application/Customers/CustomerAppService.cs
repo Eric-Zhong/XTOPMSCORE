@@ -29,6 +29,7 @@ using XTOPMS.Customers.Dto;
 using System.Linq;
 using Abp.Linq.Extensions;
 using XTOPMS.EntityFrameworkCore.Repositories;
+using Abp.Auditing;
 
 namespace XTOPMS.Customers
 {
@@ -41,7 +42,7 @@ namespace XTOPMS.Customers
         Task<List<CustomerSearchResultDto>> Search(CustomerSearchInputDto input);
     }
 
-
+    [Audited]
     [AbpAuthorize(PermissionNames.Pages_Users)]
     public class CustomerAppService :
         XTOPMSAsyncCrudAppService<
@@ -75,11 +76,11 @@ namespace XTOPMS.Customers
 
             var query = from user in this.repository.GetAll()
                         where
-                            user.Name.Contains(value) ||
-                            user.ShortName.Contains(value) ||
-                            user.CompanyCode.Contains(value) ||
-                            user.Code.Contains(value) ||
-                            user.ErpId.Contains(value)
+                            (user.Name ?? "").Contains(value) ||
+                            (user.ShortName ?? "").Contains(value) ||
+                            (user.CompanyCode ?? "").Contains(value) ||
+                            (user.Code ?? "").Contains(value) ||
+                            (user.ErpId ?? "").Contains(value)
                         select user; 
 
             query = query.Take(count);

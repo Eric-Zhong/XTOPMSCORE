@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XTOPMS.EntityFrameworkCore;
 
 namespace XTOPMS.Migrations
 {
     [DbContext(typeof(XTOPMSDbContext))]
-    partial class XTOPMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190427065912_Migration_Opportunity_V2")]
+    partial class Migration_Opportunity_V2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1428,7 +1430,7 @@ namespace XTOPMS.Migrations
                     b.Property<string>("Region")
                         .HasMaxLength(50);
 
-                    b.Property<long?>("SalesId");
+                    b.Property<long>("SalesId");
 
                     b.Property<string>("ScheduleData")
                         .HasMaxLength(4000);
@@ -2141,7 +2143,8 @@ namespace XTOPMS.Migrations
 
                     b.HasOne("XTOPMS.Authorization.Users.User", "Sales")
                         .WithMany()
-                        .HasForeignKey("SalesId");
+                        .HasForeignKey("SalesId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("XTOPMS.Projects.Project", b =>

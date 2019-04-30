@@ -22,11 +22,12 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Repositories;
+using XTOPMS.Authorization.Users;
 
 namespace XTOPMS.Opportunities
 {
     [Table("XTOPMS_Opportunity")]
-    public class Opportunity : XTOPMSEntity
+    public class Opportunity : XTOPMSEntity<long>
     {
         /// <summary>
         /// 业主
@@ -47,7 +48,9 @@ namespace XTOPMS.Opportunities
         /// 对项目负责的本方销售代表
         /// </summary>
         /// <value>The sales identifier.</value>
-        public long SalesId { get; set; }
+        public long? SalesId { get; set; }
+        [ForeignKey("SalesId")]
+        public User Sales { get; set; }
         public decimal Amount { get; set; }
         [StringLength(50)]
         public string Currency { get; set; }

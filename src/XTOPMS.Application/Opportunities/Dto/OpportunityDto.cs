@@ -24,11 +24,12 @@ using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using Abp.Domain.Entities.Auditing;
 using XTOPMS.Dto;
+using XTOPMS.Users.Dto;
 
 namespace XTOPMS.Opportunities.Dto
 {
     [AutoMap(typeof(Opportunity))]
-    public class OpportunityDto : XTOPMSEntityDto<long>
+    public class OpportunityDto : XTOPMSEntityDto<long>, IEntityDto<long>
     {
         public long? OwnerId { get; set; }
         public string OwnerName { get; set; }
@@ -39,8 +40,8 @@ namespace XTOPMS.Opportunities.Dto
         public long? AgencyId { get; set; }
         public string AgencyName { get; set; }
         public string AgencyShortName { get; set; }
-        public long SalesId { get; set; }
-        public long SalesName { get; set; }
+        public long? SalesId { get; set; }
+        public UserKeyFieldDto Sales { get; set; }
         public decimal Amount { get; set; }
         public string Currency { get; set; }
         public string Region { get; set; }
@@ -49,6 +50,7 @@ namespace XTOPMS.Opportunities.Dto
         public string City { get; set; }
         public string ScheduleData { get; set; }
         public string GeographicData { get; set; }
+
         public OpportunityDto()
         {
         }

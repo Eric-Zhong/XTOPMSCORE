@@ -1,5 +1,5 @@
 ﻿//
-//  TradeTest.cs
+//  DataSyncServiceTest.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -19,29 +19,25 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using XTOPMS.Alibaba;
-using XTOPMS.EntityFrameworkCore.Repositories;
+using XTOPMS.DataSyncServices;
 using Xunit;
 
-namespace XTOPMS.Tests.Alibaba
+namespace XTOPMS.Tests.DataSyncServices
 {
-    public class TradeTest: XTOPMSTestBase
+    public class DataSyncServiceTest: XTOPMSTestBase
     {
+        IDataSyncServiceManager dataSyncServiceManager;
 
-        IAccessTokenRepository accessTokenRepository;
-        ITradeManager tradeManager;
-
-        public TradeTest()
+        public DataSyncServiceTest()
         {
-            accessTokenRepository = Resolve<IAccessTokenRepository>();
-            tradeManager = Resolve<ITradeManager>();
+            dataSyncServiceManager = Resolve<IDataSyncServiceManager>();
         }
 
         [Fact]
-        public void GetYesterdaySellerOrderListTest()
+        public void TryToGetAllService()
         {
-            var token = accessTokenRepository.Get(1);
-            tradeManager.GetYesterdayModificationTradeInfos(token);
+
+            dataSyncServiceManager.Execution();
         }
     }
 }

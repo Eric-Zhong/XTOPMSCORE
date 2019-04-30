@@ -24,8 +24,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace XTOPMS.Alibaba
 {
+
+    public interface IAccessToken
+    {
+        string Access_Token { get; }
+        string App_Key { get; set; }
+        string App_Secret { get; set; }
+    }
+
     [Table("Alibaba_AccessToken")]
-    public class AccessToken: XTOPMSEntity
+    public class AccessToken: XTOPMSEntity, IAccessToken
     {
 
         [StringLength(50)]

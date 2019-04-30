@@ -16,29 +16,35 @@ using XTOPMS.Authorization.Roles;
 using XTOPMS.Authorization.Users;
 using XTOPMS.Roles.Dto;
 using XTOPMS.Users.Dto;
+using XTOPMS.Dto;
 
 namespace XTOPMS.Users
 {
     [AbpAuthorize(PermissionNames.Pages_Users)]
-    public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedResultRequestDto, CreateUserDto, UserDto>, IUserAppService
+    public class UserAppService : 
+        AsyncCrudAppService<User, UserDto, long, PagedResultRequestDto, CreateUserDto, UserDto>
+        , IUserAppService
     {
         private readonly UserManager _userManager;
         private readonly RoleManager _roleManager;
         private readonly IRepository<Role> _roleRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IPermissionManager _permissionManager;
 
         public UserAppService(
             IRepository<User, long> repository,
             UserManager userManager,
             RoleManager roleManager,
             IRepository<Role> roleRepository,
-            IPasswordHasher<User> passwordHasher)
+            IPasswordHasher<User> passwordHasher,
+            IPermissionManager permissionManager)
             : base(repository)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _roleRepository = roleRepository;
             _passwordHasher = passwordHasher;
+            _permissionManager = permissionManager;
         }
 
         public override async Task<UserDto> Create(CreateUserDto input)
@@ -110,16 +116,16 @@ namespace XTOPMS.Users
             return user;
         }
 
-        protected override void MapToEntity(UserDto input, User user)
+        protected override void MapToEntity(UserDto updateInput, User entity)
         {
-            ObjectMapper.Map(input, user);
-            user.SetNormalizedNames();
+            ObjectMapper.Map(updateInput, entity);
+            entity.SetNormalizedNames();
         }
 
-        protected override UserDto MapToEntityDto(User user)
+        protected override UserDto MapToEntityDto(User entity)
         {
-            var roles = _roleManager.Roles.Where(r => user.Roles.Any(ur => ur.RoleId == r.Id)).Select(r => r.NormalizedName);
-            var userDto = base.MapToEntityDto(user);
+            var roles = _roleManager.Roles.Where(r => entity.Roles.Any(ur => ur.RoleId == r.Id)).Select(r => r.NormalizedName);
+            var userDto = base.MapToEntityDto(entity);
             userDto.RoleNames = roles.ToArray();
             return userDto;
         }
@@ -149,6 +155,30 @@ namespace XTOPMS.Users
         protected virtual void CheckErrors(IdentityResult identityResult)
         {
             identityResult.CheckErrors(LocalizationManager);
+        }
+
+        /// <summary>
+        /// Quick search the user.
+        /// </summary>
+        /// <returns>The search.</returns>
+        /// <param name="inputDto">Input dto.</param>
+        public async Task<List<UserDto>> QuickSearch(QuickSearchInputDto input)
+        {
+            string key = input.Value; 
+            int count = input.Count;
+
+            var list = await Repository.GetAll().Where(t =>
+                (t.Name ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                (t.UserName ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                // 因为邮箱中有域名，查询起来体验不好，没用的数据都查出来了
+                // (t.EmailAddress ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                // (t.FullName ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                // (t.Surname ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                (t.EmployeeNumber ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase)
+            ).OrderBy(t => t.Name).Take(count).ToListAsync();
+
+            List<UserDto> output = ObjectMapper.Map<List<UserDto>>(list);
+            return output;
         }
     }
 }

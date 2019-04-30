@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XTOPMS.EntityFrameworkCore;
 
 namespace XTOPMS.Migrations
 {
     [DbContext(typeof(XTOPMSDbContext))]
-    partial class XTOPMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190425072132_Migration_DataSyncService")]
+    partial class Migration_DataSyncService
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -895,12 +897,6 @@ namespace XTOPMS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
-
                     b.ToTable("Alibaba_AccessToken");
                 });
 
@@ -1167,12 +1163,6 @@ namespace XTOPMS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
-
                     b.ToTable("XTOPMS_Customer");
                 });
 
@@ -1230,14 +1220,6 @@ namespace XTOPMS.Migrations
                     b.Property<int>("TenantId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AccessTokenId");
-
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
 
                     b.ToTable("Alibaba_DataSyncService");
                 });
@@ -1307,12 +1289,6 @@ namespace XTOPMS.Migrations
                     b.Property<int>("TenantId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
 
                     b.ToTable("XTOPMS_Document");
                 });
@@ -1428,7 +1404,7 @@ namespace XTOPMS.Migrations
                     b.Property<string>("Region")
                         .HasMaxLength(50);
 
-                    b.Property<long?>("SalesId");
+                    b.Property<long>("SalesId");
 
                     b.Property<string>("ScheduleData")
                         .HasMaxLength(4000);
@@ -1438,14 +1414,6 @@ namespace XTOPMS.Migrations
                     b.Property<int>("TenantId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
-
-                    b.HasIndex("SalesId");
 
                     b.ToTable("XTOPMS_Opportunity");
                 });
@@ -1494,12 +1462,6 @@ namespace XTOPMS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
-
                     b.ToTable("XTOPMS_Project");
                 });
 
@@ -1547,12 +1509,6 @@ namespace XTOPMS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
-
                     b.ToTable("XTOPMS_Quotation");
                 });
 
@@ -1599,12 +1555,6 @@ namespace XTOPMS.Migrations
                     b.Property<int>("TenantId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
 
                     b.ToTable("XTOPMS_SalesAgreement");
                 });
@@ -1656,12 +1606,6 @@ namespace XTOPMS.Migrations
                     b.Property<int>("TenantId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
 
                     b.ToTable("XTOPMS_SKU");
                 });
@@ -1721,12 +1665,6 @@ namespace XTOPMS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
-
                     b.ToTable("XTOPMS_SKUCategory");
                 });
 
@@ -1777,12 +1715,6 @@ namespace XTOPMS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
-
                     b.ToTable("XTOPMS_SKUCategoryValue");
                 });
 
@@ -1830,12 +1762,6 @@ namespace XTOPMS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
-
                     b.ToTable("XTOPMS_SKUProperty");
                 });
 
@@ -1880,12 +1806,6 @@ namespace XTOPMS.Migrations
                     b.Property<int>("TenantId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorUserId");
-
-                    b.HasIndex("DeleterUserId");
-
-                    b.HasIndex("LastModifierUserId");
 
                     b.ToTable("XTOPMS_Task");
                 });
@@ -2011,21 +1931,6 @@ namespace XTOPMS.Migrations
                         .HasForeignKey("ParentId");
                 });
 
-            modelBuilder.Entity("XTOPMS.Alibaba.AccessToken", b =>
-                {
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-                });
-
             modelBuilder.Entity("XTOPMS.Authorization.Roles.Role", b =>
                 {
                     b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
@@ -2056,56 +1961,6 @@ namespace XTOPMS.Migrations
                         .HasForeignKey("LastModifierUserId");
                 });
 
-            modelBuilder.Entity("XTOPMS.Customers.Customer", b =>
-                {
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("XTOPMS.DataSyncServices.DataSyncService", b =>
-                {
-                    b.HasOne("XTOPMS.Alibaba.AccessToken", "AccessTokenInfo")
-                        .WithMany()
-                        .HasForeignKey("AccessTokenId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("XTOPMS.Documents.Document", b =>
-                {
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-                });
-
             modelBuilder.Entity("XTOPMS.MultiTenancy.Tenant", b =>
                 {
                     b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
@@ -2119,145 +1974,6 @@ namespace XTOPMS.Migrations
                     b.HasOne("Abp.Application.Editions.Edition", "Edition")
                         .WithMany()
                         .HasForeignKey("EditionId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("XTOPMS.Opportunities.Opportunity", b =>
-                {
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "Sales")
-                        .WithMany()
-                        .HasForeignKey("SalesId");
-                });
-
-            modelBuilder.Entity("XTOPMS.Projects.Project", b =>
-                {
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("XTOPMS.Quotations.Quotation", b =>
-                {
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("XTOPMS.SalesAgreements.SalesAgreement", b =>
-                {
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("XTOPMS.StockKeepingUnits.SKU", b =>
-                {
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("XTOPMS.StockKeepingUnits.SKUCategory", b =>
-                {
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("XTOPMS.StockKeepingUnits.SKUCategoryValue", b =>
-                {
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("XTOPMS.StockKeepingUnits.SKUProperty", b =>
-                {
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
-                        .WithMany()
-                        .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("XTOPMS.Tasks.Task", b =>
-                {
-                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
-                        .WithMany()
-                        .HasForeignKey("CreatorUserId");
-
-                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
-                        .WithMany()
-                        .HasForeignKey("DeleterUserId");
 
                     b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
                         .WithMany()

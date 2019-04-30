@@ -13,6 +13,7 @@ using XTOPMS.Tasks;
 using XTOPMS.Documents;
 using XTOPMS.Customers;
 using XTOPMS.Alibaba;
+using XTOPMS.DataSyncServices;
 
 namespace XTOPMS.EntityFrameworkCore
 {
@@ -34,6 +35,7 @@ namespace XTOPMS.EntityFrameworkCore
         public DbSet<Document> Document { get; set; }
         public DbSet<Customer> Customer { get; set; }
         public DbSet<AccessToken> AccessToken { get; set; }
+        public DbSet<DataSyncService> DataSyncService { get; set; }
 
         public XTOPMSDbContext(DbContextOptions<XTOPMSDbContext> options)
             : base(options)

@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XTOPMS.EntityFrameworkCore"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XTOPMS.Alibaba", "src\XTOPMS.Alibaba\XTOPMS.Alibaba.csproj", "{1CF130EE-0842-4C72-93DB-492C9AF40BE9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "abp", "abp", "{AD82C770-ED69-4CA0-A3CA-814781326EC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

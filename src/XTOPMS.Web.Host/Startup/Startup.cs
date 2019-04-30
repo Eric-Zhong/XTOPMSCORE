@@ -22,6 +22,7 @@ using Hangfire.MySql.Core;
 using System.Data;
 using Abp.Hangfire;
 using XTOPMS.Alibaba;
+using XTOPMS.DataSyncServices;
 
 namespace XTOPMS.Web.Host.Startup
 {
@@ -178,6 +179,7 @@ namespace XTOPMS.Web.Host.Startup
             // RecurringJob.AddOrUpdate(() => Console.WriteLine("Recurrent running"), Cron.Minutely);
 
             RecurringJob.AddOrUpdate<AccessTokenRefreshProcess>("Alibaba Refresh Token Refresh Job)", (t) => t.Execute(null), Cron.Minutely);
+            RecurringJob.AddOrUpdate<DataSyncServiceProcess>("Data Sync Service Schedule Job)", (t) => t.Execute(null), Cron.Minutely);
 
             /*
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
@@ -189,6 +191,5 @@ namespace XTOPMS.Web.Host.Startup
             });
             */
         }
-
     }
 }

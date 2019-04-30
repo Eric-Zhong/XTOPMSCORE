@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -54,5 +55,17 @@ namespace XTOPMS.Authorization.Users
                 settingManager)
         {
         }
+
+        public List<User> QuickSearch(string key, int count = 20)
+        {
+            return this.Users.Where(t =>
+                (t.Name ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                (t.EmailAddress ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                (t.FullName ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                (t.Surname ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                (t.EmployeeNumber ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase)
+            ).OrderBy(t => t.Name).Take(count).ToList();
+        }
+
     }
 }

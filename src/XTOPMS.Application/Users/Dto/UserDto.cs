@@ -36,5 +36,23 @@ namespace XTOPMS.Users.Dto
         public DateTime CreationTime { get; set; }
 
         public string[] RoleNames { get; set; }
+
+        // New property for XTOPMS
+        [StringLength(50)]
+        public string EmployeeNumber { get; set; }
+        [StringLength(50)]
+        public string IdCard { get; set; }
+        [StringLength(255)]
+        public string Avatar { get; set; }
+        [StringLength(255)]
+        public string Title { get; set; }
+        [StringLength(255)]
+        public string Signature { get; set; }
+        [StringLength(255)]
+        public string Phone { get; set; }
+        [StringLength(255)]
+        public string Address { get; set; }
+        public string ExtensionData { get; set; }
+        public long? OrganizationUnitId { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿//
-//  TradeTest.cs
+//  OpportunityTest.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -19,29 +19,40 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using XTOPMS.Alibaba;
+using Abp.Application.Services.Dto;
 using XTOPMS.EntityFrameworkCore.Repositories;
+using XTOPMS.Opportunities;
+using System.Linq;
 using Xunit;
 
-namespace XTOPMS.Tests.Alibaba
+namespace XTOPMS.Tests.Opportunities
 {
-    public class TradeTest: XTOPMSTestBase
+    public class OpportunityTest: XTOPMSTestBase
     {
-
-        IAccessTokenRepository accessTokenRepository;
-        ITradeManager tradeManager;
-
-        public TradeTest()
+        private readonly IOpportunityAppService opportunityAppService;
+        private readonly IOpportunityRepository opportunityRepository;
+        public OpportunityTest()
         {
-            accessTokenRepository = Resolve<IAccessTokenRepository>();
-            tradeManager = Resolve<ITradeManager>();
+            opportunityAppService = Resolve<IOpportunityAppService>();
+            opportunityRepository = Resolve<IOpportunityRepository>();
         }
 
         [Fact]
-        public void GetYesterdaySellerOrderListTest()
+        public void GetAllTest()
         {
-            var token = accessTokenRepository.Get(1);
-            tradeManager.GetYesterdayModificationTradeInfos(token);
+            var query =  from m in opportunityRepository.GetAll()
+                select m;
+
+            var list = query.ToList();
+
+            if(list.Count > 0)
+            {
+                var opp = list[0];
+                var creator = opp.CreatorUserName;
+                Console.WriteLine(creator);
+            }
+
+            Assert.True(list.Count > 0);
         }
     }
 }

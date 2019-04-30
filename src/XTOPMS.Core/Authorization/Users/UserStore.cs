@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -27,6 +29,21 @@ namespace XTOPMS.Authorization.Users
                   userClaimRepository,
                   userPermissionSettingRepository)
         {
+        }
+
+
+        public List<User> QuickSearch(string key, int maxCount = 20)
+        {
+            var query = from m in UserRepository.GetAll()
+                        where
+                            (m.Name ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                            (m.FullName ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                            (m.EmailAddress ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                            (m.EmployeeNumber ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase) ||
+                            (m.Title ?? "").Contains(key, System.StringComparison.OrdinalIgnoreCase)
+                        orderby m.Name
+                        select m;
+            return query.Take(maxCount).ToList();
         }
     }
 }

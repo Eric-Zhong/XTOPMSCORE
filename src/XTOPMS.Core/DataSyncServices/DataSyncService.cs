@@ -21,12 +21,30 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using XTOPMS.Alibaba;
 
-namespace XTOPMS.Alibaba
+namespace XTOPMS.DataSyncServices
 {
-    [Table("Alibaba_DataSyncService")]
-    public class DataSyncService: XTOPMSEntity
+
+    public interface IDataSyncService
     {
+        AccessToken AccessTokenInfo { get; set; }
+        long AccessTokenId { get; set; }
+        DateTime LastRunTime { get; set; }
+        DateTime NextRunTime { get; set; }
+        double Interval { get; set; }
+        int RetryCount { get; set; }
+        string LastResult { get; set; }
+        string Code { get; set; }
+    }
+
+
+    [Table("Alibaba_DataSyncService")]
+    public class DataSyncService: XTOPMSEntity, IDataSyncService
+    {
+
+        [ForeignKey("AccessTokenId")]
+        public AccessToken AccessTokenInfo { get; set; }
 
         /// <summary>
         /// Gets or sets the access token identifier.
@@ -34,22 +52,39 @@ namespace XTOPMS.Alibaba
         /// <value>The access token identifier.</value>
         public long AccessTokenId { get; set; }
 
-        public DateTime LatestRunTime { get; set; }
+        /// <summary>
+        /// 上次运行的时间
+        /// </summary>
+        /// <value>The latest run time.</value>
+        public DateTime LastRunTime { get; set; }
+
+        /// <summary>
+        /// 下次运行的时间
+        /// </summary>
+        /// <value>The next run time.</value>
+        public DateTime NextRunTime { get; set; }
+
+        /// <summary>
+        /// 延时周期（单位：分钟）
+        /// </summary>
+        /// <value>The indivadue.</value>
+        public double Interval { get; set; }
+
+        /// <summary>
+        /// 重试次数
+        /// </summary>
+        /// <value>The retry count.</value>
+        public int RetryCount { get; set; }
 
         [StringLength(4000)]
-        public string LatestResult { get; set; }
+        public string LastResult { get; set; }
 
-        public DataSyncService()
-        {
-        }
     }
-
-
 
     /// <summary>
     /// 定义 Service 的唯一标识，这个值会保存在 DataSyncService 中的 Code 字段上。
     /// </summary>
-    public enum DataSyncServiceCode: int
+    public enum DataSyncServiceCode: long
     {
         // https://open.1688.com/api/apidocdetail.htm?aopApiCategory=trade_new&id=com.alibaba.trade%3Aalibaba.trade.getSellerOrderList-1
         // 订单列表查看(卖家视角)

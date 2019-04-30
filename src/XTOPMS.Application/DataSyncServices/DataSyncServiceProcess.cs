@@ -1,5 +1,5 @@
 ﻿//
-//  TradeTest.cs
+//  DataSyncServiceProcess.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -19,29 +19,28 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using XTOPMS.Alibaba;
-using XTOPMS.EntityFrameworkCore.Repositories;
-using Xunit;
+using Hangfire.Annotations;
+using Hangfire.Server;
 
-namespace XTOPMS.Tests.Alibaba
+namespace XTOPMS.DataSyncServices
 {
-    public class TradeTest: XTOPMSTestBase
+    public class DataSyncServiceProcess: IBackgroundProcess
     {
-
-        IAccessTokenRepository accessTokenRepository;
-        ITradeManager tradeManager;
-
-        public TradeTest()
+        private readonly IDataSyncServiceManager dataSyncServiceManager;
+        public DataSyncServiceProcess(
+            IDataSyncServiceManager _d1
+            )
         {
-            accessTokenRepository = Resolve<IAccessTokenRepository>();
-            tradeManager = Resolve<ITradeManager>();
+            dataSyncServiceManager = _d1;
         }
 
-        [Fact]
-        public void GetYesterdaySellerOrderListTest()
+        public void Execute([NotNull] BackgroundProcessContext context)
         {
-            var token = accessTokenRepository.Get(1);
-            tradeManager.GetYesterdayModificationTradeInfos(token);
+            Console.WriteLine("Begin to start data sync service background job. " + DateTime.Now.ToString());
+            dataSyncServiceManager.Execution();
+            // context.Wait(TimeSpan.FromSeconds(5));
+            Console.WriteLine("Finish data sync service background job. " + DateTime.Now.ToString());
+
         }
     }
 }

@@ -42,6 +42,7 @@
     <Folder Include="Customers\" />
     <Folder Include="Localization\SourceFiles\" />
     <Folder Include="Alibaba\" />
+    <Folder Include="DataSyncServices\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Localization\SourceFiles\XTOPMS.xml" />

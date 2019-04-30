@@ -29,6 +29,8 @@ using XTOPMS.EntityFrameworkCore.Repositories;
 using Abp.Application.Services;
 using com.alibaba.openapi.client.exception;
 using Abp.UI;
+using Abp.Application.Services.Dto;
+using Abp.Domain.Uow;
 
 namespace XTOPMS.Alibaba
 {
@@ -50,16 +52,39 @@ namespace XTOPMS.Alibaba
 
         readonly IAccessTokenRepository _accessTokenRepository;
         readonly IAccessTokenManager _accessTokenManager;
+        readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public AccessTokenAppService(
             IRepository<AccessToken, long> repository
             , IAccessTokenRepository accessTokenRepository
             , IAccessTokenManager accessTokenManager
+            , IUnitOfWorkManager unitOfWorkManager
             ) : base(repository)
         {
             _accessTokenRepository = accessTokenRepository;
             _accessTokenManager = accessTokenManager;
+            _unitOfWorkManager = unitOfWorkManager;
         }
+
+
+        public override async Task<PagedResultDto<AccessTokenDto>> GetAll(PagedAndSortedResultRequestDto input)
+        {
+            using(_unitOfWorkManager.Current.DisableFilter(AbpDataFilters.SoftDelete))
+            {
+                var result = await base.GetAll(input);
+                return result;
+            }
+        }
+
+
+        public override async Task<AccessTokenDto> Update(AccessTokenDto input)
+        {
+            using (_unitOfWorkManager.Current.DisableFilter(AbpDataFilters.SoftDelete))
+            {
+                return await base.Update(input);
+            }
+        }
+
 
         public async Task<AccessTokenDto> InitializeAccessToken(InitializeAccessTokenInputDto input)
         {

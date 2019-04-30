@@ -1,5 +1,5 @@
 ﻿//
-//  TradeTest.cs
+//  Service.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -20,28 +20,27 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using XTOPMS.Alibaba;
-using XTOPMS.EntityFrameworkCore.Repositories;
-using Xunit;
 
-namespace XTOPMS.Tests.Alibaba
+namespace XTOPMS.DataSyncServices
 {
-    public class TradeTest: XTOPMSTestBase
+
+    public interface IService
+    {
+        void Execute();
+    }
+
+    public abstract class Service: IService
     {
 
-        IAccessTokenRepository accessTokenRepository;
-        ITradeManager tradeManager;
+        public AccessToken Token { get; set; }
 
-        public TradeTest()
+        public Service(AccessToken token)
         {
-            accessTokenRepository = Resolve<IAccessTokenRepository>();
-            tradeManager = Resolve<ITradeManager>();
+            this.Token = token;
         }
 
-        [Fact]
-        public void GetYesterdaySellerOrderListTest()
+        public virtual void Execute()
         {
-            var token = accessTokenRepository.Get(1);
-            tradeManager.GetYesterdayModificationTradeInfos(token);
         }
     }
 }

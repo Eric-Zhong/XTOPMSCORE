@@ -50,7 +50,6 @@
     <Compile Remove="Migrations\20190406170244_Update_Customer.cs" />
     <Compile Remove="Migrations\20190407134827_MustHaveTenant.Designer.cs" />
     <Compile Remove="Migrations\20190407134827_MustHaveTenant.cs" />
-    <Compile Remove="Migrations\XTOPMSDbContextModelSnapshot.cs" />
     <Compile Remove="Migrations\20190410090612_Initialize.cs" />
   </ItemGroup>
   <ItemGroup>

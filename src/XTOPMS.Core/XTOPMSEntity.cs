@@ -20,14 +20,16 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Organizations;
+using XTOPMS.Authorization.Users;
 
 namespace XTOPMS
 {
 
-    public interface IXTOPMSEntity
+    public interface IXTOPMSEntity : IFullAudited<User>
     {
         long? OrganizationUnitId { get; set; }
         int TenantId { get; set; }
@@ -40,9 +42,18 @@ namespace XTOPMS
         string Comment { get; set; }
     }
 
+    [Serializable]
+    public class XTOPMSEntity: XTOPMSEntity<long>
+    {
+        public XTOPMSEntity(): base()
+        {
 
-    public class XTOPMSEntity : 
-        FullAuditedEntity<long>,
+        }
+    }
+
+    [Serializable]
+    public class XTOPMSEntity<TPrimaryKey>: 
+        FullAuditedEntity<TPrimaryKey, User>,
         IXTOPMSEntity,
         IMustHaveTenant, 
         IMayHaveOrganizationUnit, 
@@ -89,7 +100,8 @@ namespace XTOPMS
         /// <value>The comment.</value>
         public string Comment { get; set; }
 
-        public XTOPMSEntity()
+
+        public XTOPMSEntity(): base()
         {
         }
 

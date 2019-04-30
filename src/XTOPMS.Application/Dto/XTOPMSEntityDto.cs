@@ -21,10 +21,20 @@
 using System;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities.Auditing;
+using XTOPMS.Users.Dto;
 
 namespace XTOPMS.Dto
 {
-    public class XTOPMSEntityDto<T> : FullAuditedEntityDto<T>, IXTOPMSEntityDto
+
+    public class XTOPMSEntityDto : XTOPMSEntityDto<long, UserKeyFieldDto>
+    {
+    }
+
+    public class XTOPMSEntityDto<TPrimaryKey> : XTOPMSEntityDto<TPrimaryKey, UserKeyFieldDto>
+    {
+    }
+
+    public class XTOPMSEntityDto<TPrimaryKey, TUser> : FullAuditedEntityDto<TPrimaryKey>, IXTOPMSEntityDto<TUser>
     {
         /// <summary>
         /// 为了解决浏览器上会把long数据进行截断，这里把Id转成String然后传递给前台。
@@ -40,10 +50,13 @@ namespace XTOPMS.Dto
         public string ErpId { get; set; }
         public int Status { get; set; }
         public string Comment { get; set; }
+        public TUser CreatorUser { get; set; }
+        public TUser LastModifierUser { get; set; }
+        public TUser DeleterUser { get; set; }
     }
 
 
-    interface IXTOPMSEntityDto
+    public interface IXTOPMSEntityDto<TUser> : IFullAudited
     {
         string key { get; }
         int? OrganizationUnitId { get; set; }
@@ -55,5 +68,8 @@ namespace XTOPMS.Dto
         string ErpId { get; set; }
         int Status { get; set; }
         string Comment { get; set; }
+        TUser CreatorUser { get; set; }
+        TUser LastModifierUser { get; set; }
+        TUser DeleterUser { get; set; }
     }
 }
