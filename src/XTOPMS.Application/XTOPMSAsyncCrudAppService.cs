@@ -41,6 +41,7 @@ using Abp.EntityFrameworkCore.Extensions;
 
 using XTOPMS.Dto;
 using XTOPMS.Authorization.Users;
+using XTOPMS.EntityFrameworkCore.Repositories;
 
 namespace XTOPMS
 {
@@ -50,7 +51,7 @@ namespace XTOPMS
            where TEntity : class, IEntity<long>, IXTOPMSEntity, ICreationAudited
            where TEntityDto : IEntityDto<long>
     {
-        protected XTOPMSAsyncCrudAppService(IRepository<TEntity, long> repository) : base(repository)
+        protected XTOPMSAsyncCrudAppService(IXTOPMSRepositoryWithAuditedBase<TEntity, long> repository) : base(repository)
         {
         }
 
@@ -62,7 +63,7 @@ namespace XTOPMS
            where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity
            where TEntityDto : IEntityDto<TPrimaryKey>
     {
-        protected XTOPMSAsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        protected XTOPMSAsyncCrudAppService(IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -74,7 +75,7 @@ namespace XTOPMS
            where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity
            where TEntityDto : IEntityDto<TPrimaryKey>
     {
-        protected XTOPMSAsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        protected XTOPMSAsyncCrudAppService(IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -87,7 +88,7 @@ namespace XTOPMS
             where TEntityDto : IEntityDto<TPrimaryKey>
             where TCreateInput : IEntityDto<TPrimaryKey>
     {
-        protected XTOPMSAsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        protected XTOPMSAsyncCrudAppService(IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -100,7 +101,7 @@ namespace XTOPMS
            where TEntityDto : IEntityDto<TPrimaryKey>
            where TUpdateInput : IEntityDto<TPrimaryKey>
     {
-        protected XTOPMSAsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        protected XTOPMSAsyncCrudAppService(IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -114,7 +115,7 @@ namespace XTOPMS
            where TUpdateInput : IEntityDto<TPrimaryKey>
            where TGetInput : IEntityDto<TPrimaryKey>
     {
-        protected XTOPMSAsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+        protected XTOPMSAsyncCrudAppService(IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -130,22 +131,32 @@ namespace XTOPMS
            where TGetInput : IEntityDto<TPrimaryKey>
            where TDeleteInput : IEntityDto<TPrimaryKey>
     {
-        protected XTOPMSAsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
+
+        protected new IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> Repository;
+    
+        protected XTOPMSAsyncCrudAppService(
+            IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> repository
+            ) : base(repository)
         {
+            Repository = repository;
+        }
+
+        protected override Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)
+        {
+            return Repository.GetAsync(id);
         }
 
 
         public override async Task<TEntityDto> Get(TGetInput input)
         {
-            return await base.Get(input);
+            CheckGetPermission();
+            var entity = await GetEntityByIdAsync(input.Id);
+            return MapToEntityDto(entity);
         }
 
         protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
             var query = base.CreateFilteredQuery(input);
-            query = query.IncludeIf(true, t => t.CreatorUser);
-            query = query.IncludeIf(true, t => t.DeleterUser);
-            query = query.IncludeIf(true, t => t.LastModifierUser);
             return query;
         }
 
@@ -162,10 +173,14 @@ namespace XTOPMS
 
             var entities = await AsyncQueryableExecuter.ToListAsync(query);
 
-            return new PagedResultDto<TEntityDto>(
+            Console.WriteLine(entities.Count);
+
+            var output = new PagedResultDto<TEntityDto>(
                 totalCount,
                 entities.Select(MapToEntityDto).ToList()
             );
+
+            return output;
         }
 
 
@@ -273,6 +288,11 @@ namespace XTOPMS
 
             var query = this.CreateFilteredQuery(input);
 
+            // Full Audited Information need output
+            query = query.IncludeIf(true, t => t.CreatorUser);
+            query = query.IncludeIf(true, t => t.DeleterUser);
+            query = query.IncludeIf(true, t => t.LastModifierUser);
+
             var totalCount = await AsyncQueryableExecuter.CountAsync(query);
 
             query = ApplySorting(query, input);
@@ -285,6 +305,13 @@ namespace XTOPMS
                 entities.Select(MapToEntityDto).ToList()
             );
 
+        }
+
+
+        public async Task<TEntityDto> GetDetailV1(TPrimaryKey id)
+        {
+            var entity = await this.Repository.GetDetailV1Async(id);
+            return MapToEntityDto(entity);
         }
     }
 

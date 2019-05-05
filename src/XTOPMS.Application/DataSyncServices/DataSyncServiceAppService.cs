@@ -52,18 +52,15 @@ namespace XTOPMS.Alibaba
         , IDataSyncServiceAppService
     {
 
-        readonly IDataSyncServiceRepository _dataSyncServiceRepository;
         readonly IAccessTokenRepository _accessTokenRepository;
         readonly IAccessTokenManager _accessTokenManager;
 
         public DataSyncServiceAppService(
-            IRepository<DataSyncService, long> repository
-            , IDataSyncServiceRepository dataSyncServiceRepositor
+            IDataSyncServiceRepository repository
             , IAccessTokenRepository accessTokenRepository
             , IAccessTokenManager accessTokenManager
             ) : base(repository)
         {
-            _dataSyncServiceRepository = dataSyncServiceRepositor;
             _accessTokenRepository = accessTokenRepository;
             _accessTokenManager = accessTokenManager;
         }

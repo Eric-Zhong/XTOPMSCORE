@@ -19,11 +19,11 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using XTOPMS.Dto;
+
 namespace XTOPMS.Customers.Dto
 {
-    public class CustomerSearchInputDto
+    public class CustomerSearchInputDto: QuickSearchInputDto
     {
-        public string Value { get; set; }
-        public int Count { get; set; }
     }
 }

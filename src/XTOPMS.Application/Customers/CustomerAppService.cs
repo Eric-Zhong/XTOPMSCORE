@@ -18,18 +18,16 @@
 //
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abp.Application.Services;
+using System.Linq;
+using Abp.Auditing;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
+using Abp.EntityFrameworkCore.Extensions;
 using XTOPMS.Authorization;
 using XTOPMS.Customers.Dto;
-using System.Linq;
-using Abp.Linq.Extensions;
 using XTOPMS.EntityFrameworkCore.Repositories;
-using Abp.Auditing;
 
 namespace XTOPMS.Customers
 {
@@ -48,7 +46,11 @@ namespace XTOPMS.Customers
         XTOPMSAsyncCrudAppService<
             Customer,
             CustomerDto,
-            long
+            long,
+            PagedResultRequestDto,
+            CustomerUpdateDto,
+            EntityDto<long>,
+            EntityDto<long>
             >,
         ICustomerAppService
     {
@@ -64,6 +66,14 @@ namespace XTOPMS.Customers
             this.UpdatePermissionName = PermissionNames.API_Customer_Update;
 
             repository = _repository;
+        }
+
+
+        protected override IQueryable<Customer> CreateFilteredQuery(PagedResultRequestDto input)
+        {
+            var query = base.CreateFilteredQuery(input);
+            query = query.IncludeIf(true, t => t.CustomerCategorySettings);
+            return query;
         }
 
 

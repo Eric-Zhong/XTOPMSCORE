@@ -40,5 +40,6 @@
     <Folder Include="Alibaba\" />
     <Folder Include="DataSyncServices\" />
     <Folder Include="Opportunities\" />
+    <Folder Include="Customers\" />
   </ItemGroup>
 </Project>

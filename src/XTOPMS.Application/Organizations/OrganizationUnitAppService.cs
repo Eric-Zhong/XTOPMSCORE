@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using XTOPMS;
 using XTOPMS.Organizations.Dto;
 
-namespace HF.Gate.CRRC.Organizations
+namespace XTOPMS.Organizations
 {
 
     public class OrganizationUnitAppService : XTOPMSAppServiceBase, IOrganizationUnitAppService

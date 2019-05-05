@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Abp.Zero.EntityFrameworkCore;
+using Abp.EntityFrameworkCore;
+using Abp.EntityFrameworkCore.Extensions;
+using System.Diagnostics.Contracts;
 using XTOPMS.Authorization.Roles;
 using XTOPMS.Authorization.Users;
 using XTOPMS.MultiTenancy;
 using XTOPMS.Quotations;
-using System.Diagnostics.Contracts;
 using XTOPMS.Projects;
 using XTOPMS.SalesAgreements;
 using XTOPMS.StockKeepingUnits;
@@ -14,6 +16,7 @@ using XTOPMS.Documents;
 using XTOPMS.Customers;
 using XTOPMS.Alibaba;
 using XTOPMS.DataSyncServices;
+using XTOPMS.Metadata;
 
 namespace XTOPMS.EntityFrameworkCore
 {
@@ -34,6 +37,8 @@ namespace XTOPMS.EntityFrameworkCore
         public DbSet<SKUCategoryValue> SKUCategoryValue { get; set; }
         public DbSet<Document> Document { get; set; }
         public DbSet<Customer> Customer { get; set; }
+        public DbSet<CustomerCategory> CustomerCategory { get; set; }
+        public DbSet<CustomerCategorySetting> CustomerCategorySetting { get; set; }
         public DbSet<AccessToken> AccessToken { get; set; }
         public DbSet<DataSyncService> DataSyncService { get; set; }
 
@@ -42,11 +47,39 @@ namespace XTOPMS.EntityFrameworkCore
         {
         }
 
+
+        /// <summary>
+        /// Ons the model creating.
+        /// </summary>
+        /// <see cref="https://www.cnblogs.com/Wddpct/archive/2017/05/10/6835574.html"/>
+        /// <param name="modelBuilder">Model builder.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Change default table prefix name.
             // modelBuilder.ChangeAbpTablePrefix<Tenant, Role, User>("Xtopms");
             base.OnModelCreating(modelBuilder);
+
+            // Customer : Category = N : N
+            modelBuilder.Entity<CustomerCategorySetting>()
+                .HasKey(t => new { t.Id, t.CustomerId, t.CustomerCategoryId });
+
+            modelBuilder.Entity<CustomerCategorySetting>()
+                .Property(f => f.Id)
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            modelBuilder.Entity<CustomerCategorySetting>()
+                .HasOne(ccs => ccs.Customer)
+                .WithMany(c => c.CustomerCategorySettings)
+                .HasForeignKey(ccs=>ccs.CustomerId)
+                .IsRequired();
+
+            modelBuilder.Entity<CustomerCategorySetting>()
+                .HasOne(ccs => ccs.CustomerCategory)
+                .WithMany(c => c.CustomerCategorySettings)
+                .HasForeignKey(ccs=>ccs.CustomerCategoryId)
+                .IsRequired();
+
         }
     }
 }

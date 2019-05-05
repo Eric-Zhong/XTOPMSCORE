@@ -25,6 +25,7 @@ using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Auditing;
 using Abp.Authorization;
+using Abp.Domain.Repositories;
 using Abp.EntityFrameworkCore.Extensions;
 using XTOPMS.Authorization;
 using XTOPMS.EntityFrameworkCore.Repositories;
@@ -41,8 +42,8 @@ namespace XTOPMS.Opportunities
 
     [Audited]
     [AbpAuthorize(PermissionNames.Pages_Users)]
-    public class OpportunityAppService : 
-        XTOPMSAsyncCrudAppService<Opportunity, OpportunityDto, long>
+    public class OpportunityAppService :
+        XTOPMSAsyncCrudAppService<Opportunity, OpportunityDto, long, PagedAndSortedResultRequestDto, OpportunityUpdateDto>
         , IOpportunityAppService
     {
 
@@ -51,7 +52,6 @@ namespace XTOPMS.Opportunities
         ): base(_repository)
         {
         }
-
 
         protected override IQueryable<Opportunity> CreateFilteredQuery(PagedAndSortedResultRequestDto input)
         {

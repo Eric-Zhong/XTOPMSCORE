@@ -55,7 +55,7 @@ namespace XTOPMS.Alibaba
         readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public AccessTokenAppService(
-            IRepository<AccessToken, long> repository
+            IXTOPMSRepositoryWithAuditedBase<AccessToken, long> repository
             , IAccessTokenRepository accessTokenRepository
             , IAccessTokenManager accessTokenManager
             , IUnitOfWorkManager unitOfWorkManager

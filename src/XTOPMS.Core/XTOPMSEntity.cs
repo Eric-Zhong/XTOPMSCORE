@@ -29,12 +29,22 @@ using XTOPMS.Authorization.Users;
 namespace XTOPMS
 {
 
-    public interface IXTOPMSEntity : IFullAudited<User>
+    public interface IXTOPMSEntity : IXTOPMSEntity<long, User>
     {
-        long? OrganizationUnitId { get; set; }
-        int TenantId { get; set; }
-        string ExtensionData { get; set; }
-        bool IsActive { get; set; }
+    }
+
+    public interface IXTOPMSEntity<TPrimary> : IXTOPMSEntity<TPrimary, User>
+    {
+    }
+
+    public interface IXTOPMSEntity<TPrimary, TUser>
+        : IFullAudited<TUser>,
+        IMustHaveTenant,
+        IMayHaveOrganizationUnit,
+        IExtendableObject,
+        IPassivable
+        where TUser : class, IEntity<long>
+    {
         string Name { get; set; }
         string Code { get; set; }
         string ErpId { get; set; }
@@ -54,11 +64,7 @@ namespace XTOPMS
     [Serializable]
     public class XTOPMSEntity<TPrimaryKey>: 
         FullAuditedEntity<TPrimaryKey, User>,
-        IXTOPMSEntity,
-        IMustHaveTenant, 
-        IMayHaveOrganizationUnit, 
-        IExtendableObject, 
-        IPassivable
+        IXTOPMSEntity
     {
         public long? OrganizationUnitId { get; set; }
         public int TenantId { get; set; }

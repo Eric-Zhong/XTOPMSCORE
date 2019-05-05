@@ -21,13 +21,52 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using XTOPMS.Authorization.Users;
+using XTOPMS.Customers;
+using XTOPMS.Metadata;
 
 namespace XTOPMS.Opportunities
 {
+
+    /// <summary>
+    /// Opportunity basic properties.
+    /// </summary>
+    public interface IOpportunityEntity<TPrimaryKey, TUser, TCustomer, TBusinessCategory>
+        : IXTOPMSEntity<TPrimaryKey, TUser>
+        where TUser: class , IEntity<long>
+        where TCustomer: class, IEntity<long>
+    {
+        long? OwnerId { get; set; }
+        long? GeneralContractorId { get; set; }
+        long? AgencyId { get; set; }
+        long? SalesId { get; set; }
+        string BusinessCategoryId { get; set; }
+        decimal Amount { get; set; }
+        string Currency { get; set; }
+        string Region { get; set; }
+        string Country { get; set; }
+        string Province { get; set; }
+        string City { get; set; }
+        string ScheduleData { get; set; }
+        string GeographicData { get; set; }
+
+        // Foreign
+        TUser Sales { get; set; }
+        TCustomer Owner { get; set; }
+        TCustomer GeneralContractor { get; set; }
+        TCustomer Agency { get; set; }
+        TBusinessCategory BusinessCategory { get; set; }
+    }
+
+    public interface IOpportunityEntity: IOpportunityEntity<long, User, Customer, BusinessCategory>
+    {
+
+    }
+
     [Table("XTOPMS_Opportunity")]
-    public class Opportunity : XTOPMSEntity<long>
+    public class Opportunity : XTOPMSEntity, IOpportunityEntity
     {
         /// <summary>
         /// 业主
@@ -75,8 +114,18 @@ namespace XTOPMS.Opportunities
         [StringLength(4000)]
         public string GeographicData { get; set; }
 
+        [ForeignKey("OwnerId")]
+        public Customer Owner { get; set; }
+        [ForeignKey("GeneralContractorId")]
+        public Customer GeneralContractor { get; set; }
+        [ForeignKey("AgencyId")]
+        public Customer Agency { get; set; }
+        public string BusinessCategoryId { get; set; }
+        public BusinessCategory BusinessCategory { get; set; }
+
         public Opportunity()
         {
+            Amount = 0;
         }
     }
 }

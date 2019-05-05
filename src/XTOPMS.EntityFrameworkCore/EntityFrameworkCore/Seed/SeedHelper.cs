@@ -28,6 +28,8 @@ namespace XTOPMS.EntityFrameworkCore.Seed
             new DefaultTenantBuilder(context).Create();
             new TenantRoleAndUserBuilder(context, 1).Create();
             new TenantDemoDataBuilder(context, 1).Create();
+            // Metadata initialization.
+            new MetaDataBuilder(context, 1).Create();
         }
 
         private static void WithDbContext<TDbContext>(IIocResolver iocResolver, Action<TDbContext> contextAction)

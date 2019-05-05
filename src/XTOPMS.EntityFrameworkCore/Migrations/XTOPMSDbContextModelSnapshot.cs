@@ -1142,7 +1142,9 @@ namespace XTOPMS.Migrations
 
                     b.Property<long?>("OrganizationUnitId");
 
-                    b.Property<long>("ParentCompanyId");
+                    b.Property<long?>("ParentId");
+
+                    b.Property<long?>("ParentIdId");
 
                     b.Property<string>("Person")
                         .HasMaxLength(100);
@@ -1173,7 +1175,68 @@ namespace XTOPMS.Migrations
 
                     b.HasIndex("LastModifierUserId");
 
+                    b.HasIndex("ParentIdId");
+
                     b.ToTable("XTOPMS_Customer");
+                });
+
+            modelBuilder.Entity("XTOPMS.Customers.CustomerCategorySetting", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<long>("CustomerId");
+
+                    b.Property<long>("CustomerCategoryId");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<long?>("CreatorUserId");
+
+                    b.Property<long?>("DeleterUserId");
+
+                    b.Property<DateTime?>("DeletionTime");
+
+                    b.Property<string>("ErpId")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ExtensionData");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime");
+
+                    b.Property<long?>("LastModifierUserId");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255);
+
+                    b.Property<long?>("OrganizationUnitId");
+
+                    b.Property<int>("Status");
+
+                    b.Property<int>("TenantId");
+
+                    b.HasKey("Id", "CustomerId", "CustomerCategoryId");
+
+                    b.HasIndex("CreatorUserId");
+
+                    b.HasIndex("CustomerCategoryId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("DeleterUserId");
+
+                    b.HasIndex("LastModifierUserId");
+
+                    b.ToTable("XTOPMS_CustomerCategorySetting");
                 });
 
             modelBuilder.Entity("XTOPMS.DataSyncServices.DataSyncService", b =>
@@ -1317,6 +1380,87 @@ namespace XTOPMS.Migrations
                     b.ToTable("XTOPMS_Document");
                 });
 
+            modelBuilder.Entity("XTOPMS.Metadata.BusinessCategory", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<string>("FullKey");
+
+                    b.Property<string>("FullPath");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsLeaf");
+
+                    b.Property<int>("Level");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("ParentId");
+
+                    b.Property<int>("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("XTOPMS_BusinessCategory");
+                });
+
+            modelBuilder.Entity("XTOPMS.Metadata.CustomerCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<long?>("CreatorUserId");
+
+                    b.Property<long?>("DeleterUserId");
+
+                    b.Property<DateTime?>("DeletionTime");
+
+                    b.Property<string>("ErpId")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ExtensionData");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime");
+
+                    b.Property<long?>("LastModifierUserId");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255);
+
+                    b.Property<long?>("OrganizationUnitId");
+
+                    b.Property<int>("Status");
+
+                    b.Property<int>("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorUserId");
+
+                    b.HasIndex("DeleterUserId");
+
+                    b.HasIndex("LastModifierUserId");
+
+                    b.ToTable("XTOPMS_CustomerCategory");
+                });
+
             modelBuilder.Entity("XTOPMS.MultiTenancy.Tenant", b =>
                 {
                     b.Property<int>("Id")
@@ -1374,6 +1518,8 @@ namespace XTOPMS.Migrations
                     b.Property<long?>("AgencyId");
 
                     b.Property<decimal>("Amount");
+
+                    b.Property<string>("BusinessCategoryId");
 
                     b.Property<string>("City")
                         .HasMaxLength(50);
@@ -1439,11 +1585,19 @@ namespace XTOPMS.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AgencyId");
+
+                    b.HasIndex("BusinessCategoryId");
+
                     b.HasIndex("CreatorUserId");
 
                     b.HasIndex("DeleterUserId");
 
+                    b.HasIndex("GeneralContractorId");
+
                     b.HasIndex("LastModifierUserId");
+
+                    b.HasIndex("OwnerId");
 
                     b.HasIndex("SalesId");
 
@@ -2069,6 +2223,35 @@ namespace XTOPMS.Migrations
                     b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
+
+                    b.HasOne("XTOPMS.Customers.Customer", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentIdId");
+                });
+
+            modelBuilder.Entity("XTOPMS.Customers.CustomerCategorySetting", b =>
+                {
+                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
+                        .WithMany()
+                        .HasForeignKey("CreatorUserId");
+
+                    b.HasOne("XTOPMS.Metadata.CustomerCategory", "CustomerCategory")
+                        .WithMany("CustomerCategorySettings")
+                        .HasForeignKey("CustomerCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("XTOPMS.Customers.Customer", "Customer")
+                        .WithMany("CustomerCategorySettings")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
+                        .WithMany()
+                        .HasForeignKey("DeleterUserId");
+
+                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
+                        .WithMany()
+                        .HasForeignKey("LastModifierUserId");
                 });
 
             modelBuilder.Entity("XTOPMS.DataSyncServices.DataSyncService", b =>
@@ -2106,6 +2289,28 @@ namespace XTOPMS.Migrations
                         .HasForeignKey("LastModifierUserId");
                 });
 
+            modelBuilder.Entity("XTOPMS.Metadata.BusinessCategory", b =>
+                {
+                    b.HasOne("XTOPMS.Metadata.BusinessCategory", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+                });
+
+            modelBuilder.Entity("XTOPMS.Metadata.CustomerCategory", b =>
+                {
+                    b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
+                        .WithMany()
+                        .HasForeignKey("CreatorUserId");
+
+                    b.HasOne("XTOPMS.Authorization.Users.User", "DeleterUser")
+                        .WithMany()
+                        .HasForeignKey("DeleterUserId");
+
+                    b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
+                        .WithMany()
+                        .HasForeignKey("LastModifierUserId");
+                });
+
             modelBuilder.Entity("XTOPMS.MultiTenancy.Tenant", b =>
                 {
                     b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
@@ -2127,6 +2332,14 @@ namespace XTOPMS.Migrations
 
             modelBuilder.Entity("XTOPMS.Opportunities.Opportunity", b =>
                 {
+                    b.HasOne("XTOPMS.Customers.Customer", "Agency")
+                        .WithMany()
+                        .HasForeignKey("AgencyId");
+
+                    b.HasOne("XTOPMS.Metadata.BusinessCategory", "BusinessCategory")
+                        .WithMany()
+                        .HasForeignKey("BusinessCategoryId");
+
                     b.HasOne("XTOPMS.Authorization.Users.User", "CreatorUser")
                         .WithMany()
                         .HasForeignKey("CreatorUserId");
@@ -2135,9 +2348,17 @@ namespace XTOPMS.Migrations
                         .WithMany()
                         .HasForeignKey("DeleterUserId");
 
+                    b.HasOne("XTOPMS.Customers.Customer", "GeneralContractor")
+                        .WithMany()
+                        .HasForeignKey("GeneralContractorId");
+
                     b.HasOne("XTOPMS.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
+
+                    b.HasOne("XTOPMS.Customers.Customer", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId");
 
                     b.HasOne("XTOPMS.Authorization.Users.User", "Sales")
                         .WithMany()

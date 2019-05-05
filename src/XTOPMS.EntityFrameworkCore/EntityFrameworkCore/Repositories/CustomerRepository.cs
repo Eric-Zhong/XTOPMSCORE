@@ -25,11 +25,11 @@ using XTOPMS.Customers;
 
 namespace XTOPMS.EntityFrameworkCore.Repositories
 {
-    public interface ICustomerRepository : IRepository<Customer, long>
+    public interface ICustomerRepository : IXTOPMSRepositoryWithAuditedBase<Customer, long>
     {
     }
 
-    public class CustomerRepository : XTOPMSRepositoryBase<Customer, long>, ICustomerRepository
+    public class CustomerRepository : XTOPMSRepositoryWithAuditedBase<Customer, long>, ICustomerRepository
     {
         public CustomerRepository(IDbContextProvider<XTOPMSDbContext> dbContextProvider) : base(dbContextProvider)
         {

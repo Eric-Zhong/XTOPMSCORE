@@ -19,6 +19,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using System.Collections.Generic;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using XTOPMS.Dto;
@@ -28,7 +29,7 @@ namespace XTOPMS.Customers.Dto
     [AutoMap(typeof(Customer))]
     public class CustomerDto : XTOPMSEntityDto<long>
     {
-        public string ParentCompanyId { get; set; }
+        public string ParentId { get; set; }
         public string CompanyCode { get; set; }
         public string Category { get; set; }
         public string ShortName { get; set; }
@@ -42,5 +43,10 @@ namespace XTOPMS.Customers.Dto
         public string Address { get; set; }
         public int Rate { get; set; }
         public string RateReason { get; set; }
+
+        public CustomerKeyFieldDto Parent { get; set; }
+
+        // Get customer's category settings.
+        public List<CustomerCategorySettingForCustomerDto> CustomerCategorySettings { get; set; }
     }
 }

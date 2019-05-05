@@ -43,6 +43,7 @@
     <Folder Include="Localization\SourceFiles\" />
     <Folder Include="Alibaba\" />
     <Folder Include="DataSyncServices\" />
+    <Folder Include="Metadata\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Localization\SourceFiles\XTOPMS.xml" />

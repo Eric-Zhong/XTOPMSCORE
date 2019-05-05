@@ -48,8 +48,8 @@ namespace XTOPMS.Tests.Opportunities
             if(list.Count > 0)
             {
                 var opp = list[0];
-                var creator = opp.CreatorUserName;
-                Console.WriteLine(creator);
+                var creator = opp.CreatorUser;
+                Console.WriteLine(creator.Name);
             }
 
             Assert.True(list.Count > 0);
