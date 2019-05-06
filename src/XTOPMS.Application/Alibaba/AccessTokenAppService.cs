@@ -86,7 +86,7 @@ namespace XTOPMS.Alibaba
         }
 
 
-        public async Task<AccessTokenDto> InitializeAccessToken(InitializeAccessTokenInputDto i nput)
+        public async Task<AccessTokenDto> InitializeAccessToken(InitializeAccessTokenInputDto input)
         {
             // AccessToken token = _accessTokenRepository
             AccessToken token = await _accessTokenRepository.GetAsync(input.AccessTokenId);
