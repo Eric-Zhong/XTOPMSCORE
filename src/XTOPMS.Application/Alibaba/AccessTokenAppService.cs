@@ -55,7 +55,7 @@ namespace XTOPMS.Alibaba
         readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public AccessTokenAppService(
-            IXTOPMSRepositoryWithAuditedBase<AccessToken, long> repository
+            IXTOPMSFullAuditedBaseRepository<AccessToken, long> repository
             , IAccessTokenRepository accessTokenRepository
             , IAccessTokenManager accessTokenManager
             , IUnitOfWorkManager unitOfWorkManager
@@ -86,7 +86,7 @@ namespace XTOPMS.Alibaba
         }
 
 
-        public async Task<AccessTokenDto> InitializeAccessToken(InitializeAccessTokenInputDto input)
+        public async Task<AccessTokenDto> InitializeAccessToken(InitializeAccessTokenInputDto i nput)
         {
             // AccessToken token = _accessTokenRepository
             AccessToken token = await _accessTokenRepository.GetAsync(input.AccessTokenId);

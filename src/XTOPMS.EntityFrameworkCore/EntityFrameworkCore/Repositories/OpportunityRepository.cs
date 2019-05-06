@@ -26,11 +26,11 @@ using XTOPMS.Opportunities;
 namespace XTOPMS.EntityFrameworkCore.Repositories
 {
 
-    public interface IOpportunityRepository : IXTOPMSRepositoryWithAuditedBase<Opportunity, long>
+    public interface IOpportunityRepository : IXTOPMSFullAuditedBaseRepository<Opportunity, long>
     {
     }
 
-    public class OpportunityRepository: XTOPMSRepositoryWithAuditedBase<Opportunity, long>, IOpportunityRepository
+    public class OpportunityRepository: XTOPMSFullAuditedBaseRepository<Opportunity, long>, IOpportunityRepository
     {
         public OpportunityRepository(IDbContextProvider<XTOPMSDbContext> dbContextProvider): base(dbContextProvider)
         {

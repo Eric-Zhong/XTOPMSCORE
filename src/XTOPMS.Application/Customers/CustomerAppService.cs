@@ -28,6 +28,8 @@ using Abp.EntityFrameworkCore.Extensions;
 using XTOPMS.Authorization;
 using XTOPMS.Customers.Dto;
 using XTOPMS.EntityFrameworkCore.Repositories;
+using XTOPMS.Application.Dto;
+using Abp.Application.Services;
 
 namespace XTOPMS.Customers
 {
@@ -35,7 +37,7 @@ namespace XTOPMS.Customers
     /// <summary>
     /// Customer app service interface.
     /// </summary>
-    public interface ICustomerAppService
+    public interface ICustomerAppService: IApplicationService
     {
         Task<List<CustomerSearchResultDto>> Search(CustomerSearchInputDto input);
     }
@@ -47,7 +49,8 @@ namespace XTOPMS.Customers
             Customer,
             CustomerDto,
             long,
-            PagedResultRequestDto,
+            PagedSortedInputDto,
+            CustomerUpdateDto,
             CustomerUpdateDto,
             EntityDto<long>,
             EntityDto<long>
@@ -55,9 +58,11 @@ namespace XTOPMS.Customers
         ICustomerAppService
     {
         private ICustomerRepository repository;
+        private ICustomerManager customerManager;
 
         public CustomerAppService(
             ICustomerRepository _repository
+            , ICustomerManager _customerManager
             ) : base(_repository)
         {
             this.CreatePermissionName = PermissionNames.API_Customer_Create;
@@ -66,13 +71,14 @@ namespace XTOPMS.Customers
             this.UpdatePermissionName = PermissionNames.API_Customer_Update;
 
             repository = _repository;
+            customerManager = _customerManager;
         }
 
 
-        protected override IQueryable<Customer> CreateFilteredQuery(PagedResultRequestDto input)
+        protected override IQueryable<Customer> CreateFilteredQuery(PagedSortedInputDto input)
         {
             var query = base.CreateFilteredQuery(input);
-            query = query.IncludeIf(true, t => t.CustomerCategorySettings);
+            query = query.IncludeIf(true, "CustomerCategorySettings.CustomerCategory");
             return query;
         }
 
@@ -101,5 +107,12 @@ namespace XTOPMS.Customers
             return items;
         }
 
+
+        public override async Task<CustomerDto> Update(CustomerUpdateDto input)
+        {
+            customerManager.UpdateCustomerCategory(input.Id, input.CategorySettings);
+            var output = await base.Update(input);
+            return output;
+        }
     }
 }

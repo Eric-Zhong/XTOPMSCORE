@@ -36,6 +36,8 @@ namespace XTOPMS.Customers.Dto
                 return Id.ToString();
             }
         }
-        public CustomerCategoryRootDto CustomerCategory { get; set; }
+        //public CustomerCategoryRootDto CustomerCategory { get; set; }
+        public string CategoryName { get; set; }
+        public string CategoryCode { get; set; }
     }
 }

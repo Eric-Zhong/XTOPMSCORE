@@ -21,7 +21,7 @@ using XTOPMS.Dto;
 namespace XTOPMS.Users
 {
     [AbpAuthorize(PermissionNames.Pages_Users)]
-    public class UserAppService : 
+    public class UserAppService :
         AsyncCrudAppService<User, UserDto, long, PagedResultRequestDto, CreateUserDto, UserDto>
         , IUserAppService
     {
@@ -164,7 +164,7 @@ namespace XTOPMS.Users
         /// <param name="inputDto">Input dto.</param>
         public async Task<List<UserDto>> QuickSearch(QuickSearchInputDto input)
         {
-            string key = input.Value; 
+            string key = input.Value;
             int count = input.Count;
 
             var list = await Repository.GetAll().Where(t =>

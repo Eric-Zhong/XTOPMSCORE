@@ -46,12 +46,29 @@ using XTOPMS.EntityFrameworkCore.Repositories;
 namespace XTOPMS
 {
 
+    public interface IXTOPMSAsyncCrudAppService<TEntityDto, TPrimaryKey, in TGetAllInput, in TCreateInput, in TUpdateInput, in TGetInput, in TDeleteInput>
+        : IApplicationService,
+        IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+        where TEntityDto : IEntityDto<TPrimaryKey>
+        where TUpdateInput : IEntityDto<TPrimaryKey>
+        where TGetInput : IEntityDto<TPrimaryKey>
+        where TDeleteInput : IEntityDto<TPrimaryKey>
+    {
+        Task<PagedResultDto<TEntityDto>> GetMyAll(TGetAllInput input);
+        Task<PagedResultDto<TEntityDto>> GetAllWithFullAudited(TGetAllInput input);
+        Task<List<TEntityDto>> QuickSearch(QuickSearchInputDto input);
+        Task Remove(TPrimaryKey id);
+        Task<TEntityDto> GetDetailV1(TPrimaryKey id);
+    }
+
+
+
     public abstract class XTOPMSAsyncCrudAppService<TEntity, TEntityDto>
         : XTOPMSAsyncCrudAppService<TEntity, TEntityDto, long>
            where TEntity : class, IEntity<long>, IXTOPMSEntity, ICreationAudited
            where TEntityDto : IEntityDto<long>
     {
-        protected XTOPMSAsyncCrudAppService(IXTOPMSRepositoryWithAuditedBase<TEntity, long> repository) : base(repository)
+        protected XTOPMSAsyncCrudAppService(IXTOPMSFullAuditedBaseRepository<TEntity, long> repository) : base(repository)
         {
         }
 
@@ -63,7 +80,7 @@ namespace XTOPMS
            where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity
            where TEntityDto : IEntityDto<TPrimaryKey>
     {
-        protected XTOPMSAsyncCrudAppService(IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> repository) : base(repository)
+        protected XTOPMSAsyncCrudAppService(IXTOPMSFullAuditedBaseRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -75,7 +92,7 @@ namespace XTOPMS
            where TEntity : class, IEntity<TPrimaryKey>, IXTOPMSEntity
            where TEntityDto : IEntityDto<TPrimaryKey>
     {
-        protected XTOPMSAsyncCrudAppService(IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> repository) : base(repository)
+        protected XTOPMSAsyncCrudAppService(IXTOPMSFullAuditedBaseRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -88,7 +105,7 @@ namespace XTOPMS
             where TEntityDto : IEntityDto<TPrimaryKey>
             where TCreateInput : IEntityDto<TPrimaryKey>
     {
-        protected XTOPMSAsyncCrudAppService(IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> repository) : base(repository)
+        protected XTOPMSAsyncCrudAppService(IXTOPMSFullAuditedBaseRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -101,7 +118,7 @@ namespace XTOPMS
            where TEntityDto : IEntityDto<TPrimaryKey>
            where TUpdateInput : IEntityDto<TPrimaryKey>
     {
-        protected XTOPMSAsyncCrudAppService(IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> repository) : base(repository)
+        protected XTOPMSAsyncCrudAppService(IXTOPMSFullAuditedBaseRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -115,7 +132,7 @@ namespace XTOPMS
            where TUpdateInput : IEntityDto<TPrimaryKey>
            where TGetInput : IEntityDto<TPrimaryKey>
     {
-        protected XTOPMSAsyncCrudAppService(IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> repository) : base(repository)
+        protected XTOPMSAsyncCrudAppService(IXTOPMSFullAuditedBaseRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -132,10 +149,10 @@ namespace XTOPMS
            where TDeleteInput : IEntityDto<TPrimaryKey>
     {
 
-        protected new IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> Repository;
+        protected new IXTOPMSFullAuditedBaseRepository<TEntity, TPrimaryKey> Repository;
     
         protected XTOPMSAsyncCrudAppService(
-            IXTOPMSRepositoryWithAuditedBase<TEntity, TPrimaryKey> repository
+            IXTOPMSFullAuditedBaseRepository<TEntity, TPrimaryKey> repository
             ) : base(repository)
         {
             Repository = repository;
@@ -281,7 +298,7 @@ namespace XTOPMS
             return items;
         }
 
-        public async Task<PagedResultDto<TEntityDto>> GetAllWithFullAudited(TGetAllInput input)
+        public virtual async Task<PagedResultDto<TEntityDto>> GetAllWithFullAudited(TGetAllInput input)
         {
 
             CheckGetAllPermission();
@@ -308,7 +325,7 @@ namespace XTOPMS
         }
 
 
-        public async Task<TEntityDto> GetDetailV1(TPrimaryKey id)
+        public virtual async Task<TEntityDto> GetDetailV1(TPrimaryKey id)
         {
             var entity = await this.Repository.GetDetailV1Async(id);
             return MapToEntityDto(entity);
@@ -317,17 +334,4 @@ namespace XTOPMS
 
 
 
-    public interface IXTOPMSAsyncCrudAppService<TEntityDto, TPrimaryKey, in TGetAllInput, in TCreateInput, in TUpdateInput, in TGetInput, in TDeleteInput>
-        : IApplicationService,
-        IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TGetInput : IEntityDto<TPrimaryKey>
-        where TDeleteInput : IEntityDto<TPrimaryKey>
-    {
-        Task<PagedResultDto<TEntityDto>> GetMyAll(TGetAllInput input);
-        Task<PagedResultDto<TEntityDto>> GetAllWithFullAudited(TGetAllInput input);
-        Task<List<TEntityDto>> QuickSearch(QuickSearchInputDto input);
-        Task Remove(TPrimaryKey id);
-    }
 }

@@ -33,14 +33,14 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
 {
 
     public interface IDataSyncServiceRepository 
-        : IXTOPMSRepositoryWithAuditedBase<DataSyncService, long>
+        : IXTOPMSFullAuditedBaseRepository<DataSyncService, long>
     {
         Task<List<DataSyncService>> GetAllNeedStartServices();
     }
 
 
     public class DataSyncServiceRepository 
-        : XTOPMSRepositoryWithAuditedBase<DataSyncService,long>
+        : XTOPMSFullAuditedBaseRepository<DataSyncService,long>
         , IDataSyncServiceRepository
     {
         public DataSyncServiceRepository(IDbContextProvider<XTOPMSDbContext> dbContextProvider) : base(dbContextProvider)

@@ -31,7 +31,9 @@ namespace XTOPMS.Customers.Dto
     {
         public long CustomerId { get; set; }
         public long CustomerCategoryId { get; set; }
-        public CustomerKeyFieldDto Customer { get; set; }
-        public CustomerCategoryKeyFieldDto CustomerCategory { get; set; }
+        //public CustomerKeyFieldDto Customer { get; set; }
+        //public CustomerCategoryKeyFieldDto CustomerCategory { get; set; }
+        public string CategoryName { get; set; }
+        public string CategoryCode { get; set; }
     }
 }

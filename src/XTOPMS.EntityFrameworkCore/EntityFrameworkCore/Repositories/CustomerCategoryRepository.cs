@@ -25,13 +25,13 @@ using XTOPMS.Metadata;
 
 namespace XTOPMS.EntityFrameworkCore.Repositories
 {
-    public interface ICustomerCategoryRepository: IXTOPMSRepositoryWithAuditedBase<CustomerCategory, long>
+    public interface ICustomerCategoryRepository: IXTOPMSFullAuditedBaseRepository<CustomerCategory, long>
     {
 
     }
 
     public class CustomerCategoryRepository 
-        : XTOPMSRepositoryWithAuditedBase<CustomerCategory>
+        : XTOPMSFullAuditedBaseRepository<CustomerCategory>
         , ICustomerCategoryRepository
     {
         public CustomerCategoryRepository(IDbContextProvider<XTOPMSDbContext> dbContextProvider) : base(dbContextProvider)

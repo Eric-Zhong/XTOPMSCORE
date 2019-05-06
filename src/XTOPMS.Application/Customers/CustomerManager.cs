@@ -1,5 +1,5 @@
 ﻿//
-//  CustomerCategorySettingAppService.cs
+//  CustomerManager.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -19,27 +19,37 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using Abp.Application.Services.Dto;
-using Abp.Domain.Repositories;
-using XTOPMS.Application.Dto;
-using XTOPMS.Customers.Dto;
+using System.Collections.Generic;
+using Abp.Domain.Services;
 using XTOPMS.EntityFrameworkCore.Repositories;
 
 namespace XTOPMS.Customers
 {
-    public class CustomerCategorySettingAppService 
-        : XTOPMSAsyncCrudAppService<
-            CustomerCategorySetting
-            , CustomerCategorySettingDto
-            , long
-            , PagedSortedInputDto
-            , CustomerCategorySettingUpdateDto
-            , EntityDto<long>
-            , EntityDto<long>>
+
+    public interface ICustomerManager: IDomainService
     {
-        public CustomerCategorySettingAppService(ICustomerCategorySettingRepository repository) 
-            : base(repository)
+        void UpdateCustomerCategory(long customerId, List<string> categoryCodes);
+    }
+
+    /// Represents an application domain, which is an isolated environment where applications execute. This class cannot be inherited.
+    public class CustomerManager : DomainService, ICustomerManager
+    {
+
+        ICustomerRepository customerRepository;
+
+
+        public CustomerManager(
+            ICustomerRepository _customerRepository
+            ) : base()
         {
+            customerRepository = _customerRepository;
         }
+
+
+        public void UpdateCustomerCategory(long customerId, List<string> categoryCodes)
+        {
+            customerRepository.UpdateCategory(customerId, categoryCodes);
+        }
+
     }
 }

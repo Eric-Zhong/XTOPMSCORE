@@ -47,6 +47,6 @@ namespace XTOPMS.Customers.Dto
         public CustomerKeyFieldDto Parent { get; set; }
 
         // Get customer's category settings.
-        public List<CustomerCategorySettingForCustomerDto> CustomerCategorySettings { get; set; }
+        public List<CustomerCategorySettingKeyFieldDto> CustomerCategorySettings { get; set; }
     }
 }

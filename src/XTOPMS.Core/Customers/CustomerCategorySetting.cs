@@ -32,8 +32,6 @@ namespace XTOPMS.Customers
         TCustomerCategory CustomerCategory { get; set; }
     }
 
-
-
     [Table("XTOPMS_CustomerCategorySetting")]
     public class CustomerCategorySetting: XTOPMSEntity<long>, ICustomerCategorySetting<Customer, CustomerCategory>
     {
@@ -47,5 +45,23 @@ namespace XTOPMS.Customers
         public Customer Customer { get; set; }
         [ForeignKey("CustomerCategoryId")]
         public CustomerCategory CustomerCategory { get; set; }
+
+        [NotMapped]
+        public string CategoryName
+        {
+            get
+            {
+                return this.CustomerCategory != null ? this.CustomerCategory.Name : null;
+            }
+        }
+
+        [NotMapped]
+        public string CategoryCode
+        {
+            get
+            {
+                return this.CustomerCategory != null ? this.CustomerCategory.Code : null;
+            }
+        }
     }
 }

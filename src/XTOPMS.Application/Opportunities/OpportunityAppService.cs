@@ -35,7 +35,7 @@ using XTOPMS.Opportunities.Dto;
 namespace XTOPMS.Opportunities
 {
 
-    public interface IOpportunityAppService 
+    public interface IOpportunityAppService: IApplicationService
     {
 
     }

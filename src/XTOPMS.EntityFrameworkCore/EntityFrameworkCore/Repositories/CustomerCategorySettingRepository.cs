@@ -24,13 +24,13 @@ using XTOPMS.Customers;
 
 namespace XTOPMS.EntityFrameworkCore.Repositories
 {
-    public interface ICustomerCategorySettingRepository : IXTOPMSRepositoryWithAuditedBase<CustomerCategorySetting, long>
+    public interface ICustomerCategorySettingRepository : IXTOPMSFullAuditedBaseRepository<CustomerCategorySetting, long>
     {
 
     }
 
     public class CustomerCategorySettingRepository
-        : XTOPMSRepositoryWithAuditedBase<CustomerCategorySetting>
+        : XTOPMSFullAuditedBaseRepository<CustomerCategorySetting>
         , ICustomerCategorySettingRepository
     {
         public CustomerCategorySettingRepository(IDbContextProvider<XTOPMSDbContext> dbContextProvider) : base(dbContextProvider)

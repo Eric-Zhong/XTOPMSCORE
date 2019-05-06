@@ -36,7 +36,7 @@ namespace XTOPMS.Customers
             CustomerCategory
             , CustomerCategoryDto
             , long
-            , PagedAndSortedResultRequest
+            , PagedSortedInputDto
             , CustomerCategoryBaseDto
             , CustomerCategoryBaseDto
             , CustomerCategoryBaseDto
@@ -48,14 +48,14 @@ namespace XTOPMS.Customers
         {
         }
 
-        protected override IQueryable<CustomerCategory> CreateFilteredQuery(PagedAndSortedResultRequest input)
+        protected override IQueryable<CustomerCategory> CreateFilteredQuery(PagedSortedInputDto input)
         {
             var query = base.CreateFilteredQuery(input);
             query = query.IncludeIf(true, f => f.CustomerCategorySettings);
             return query;
         }
 
-        public override Task<PagedResultDto<CustomerCategoryDto>> GetAll(PagedAndSortedResultRequest input)
+        public override Task<PagedResultDto<CustomerCategoryDto>> GetAll(PagedSortedInputDto input)
         {
             return base.GetAll(input);
         }

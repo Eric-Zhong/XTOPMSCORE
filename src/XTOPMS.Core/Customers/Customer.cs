@@ -83,7 +83,7 @@ namespace XTOPMS.Customers
         public string RateReason { get; set; }
 
         public long? ParentId { get; set; }
-        [ForeignKey("ParentIdId")]
+        [ForeignKey("ParentId")]
         public Customer Parent { get; set; }
 
         public List<CustomerCategorySetting> CustomerCategorySettings { get; set; }

@@ -24,10 +24,8 @@ using Abp.Application.Services.Dto;
 
 namespace XTOPMS.Application.Dto
 {
-    public class PagedAndSortedResultRequest : IPagedAndSortedResultRequest
+    public class PagedSortedInputDto : PagedAndSortedResultRequestDto, IPagedAndSortedResultRequest
     {
-        public int SkipCount { get; set; }
-        public int MaxResultCount { get; set; }
-        public string Sorting { get; set; }
+        // Add your property
     }
 }

@@ -19,6 +19,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using System.Collections.Generic;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using XTOPMS.Dto;
@@ -30,7 +31,7 @@ namespace XTOPMS.Customers.Dto
     {
         public string ParentCompanyId { get; set; }
         public string CompanyCode { get; set; }
-        public string Category { get; set; }
+        public List<string> CategorySettings { get; set; }
         public string ShortName { get; set; }
         public string BankName { get; set; }
         public string BankAccount { get; set; }
