@@ -27,7 +27,7 @@ using XTOPMS.Dto;
 namespace XTOPMS.Customers.Dto
 {
     [AutoMap(typeof(Customer))]
-    public class CustomerUpdateDto : XTOPMSEntityUpdateDto<long>
+    public class CustomerUpdateDto : XTOPMSEntityCreateUpdateBaseDto<long>
     {
         public string ParentCompanyId { get; set; }
         public string CompanyCode { get; set; }

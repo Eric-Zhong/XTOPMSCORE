@@ -4,7 +4,7 @@ using XTOPMS.Application.Dto;
 
 namespace XTOPMS.Organizations.Dto
 {
-    public class GetOrganizationUnitUsersInput : PagedSortedInputDto, IShouldNormalize
+    public class GetOrganizationUnitUsersInput : PagedSortedFilterRequestBaseDto, IShouldNormalize
     {
         [Range(1, long.MaxValue)]
         public long Id { get; set; }

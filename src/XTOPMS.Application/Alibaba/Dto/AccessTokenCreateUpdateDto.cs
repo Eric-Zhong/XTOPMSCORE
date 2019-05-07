@@ -1,5 +1,5 @@
 ﻿//
-//  XTOPMSEntityBaseDto.cs
+//  AccessTokenDto.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -20,42 +20,31 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using Abp.Application.Services.Dto;
-using Abp.Domain.Entities;
-using Abp.Domain.Entities.Auditing;
-using Abp.Organizations;
-using XTOPMS.Users.Dto;
+using Abp.AutoMapper;
+using XTOPMS.Dto;
 
-namespace XTOPMS.Dto
+namespace XTOPMS.Alibaba.Dto
 {
 
-    public interface IXTOPMSEntityRootDto
-        : IEntityDto<long>
+    public interface IAccessTokenCreateUpateDto: IXTOPMSBaseDto
     {
-        string key { get; }
-        string Name { get; set; }
-        string Code { get; set; }
+        string App_Key { get; set; }
+        string App_Secret { get; set; }
+        bool IsDeleted { get; set; }         // Token 比较特殊，把 IsDeleted 也要放开
     }
 
-    public class XTOPMSEntityRootDto
-        : XTOPMSEntityRootDto<long>
+    [AutoMap(typeof(AccessToken))]
+    public class AccessTokenCreateUpdateDto 
+        : XTOPMSBaseDto
+        , IAccessTokenCreateUpateDto
     {
-    }
+        public string App_Key { get; set; }
+        public string App_Secret { get; set; }
+        public bool IsDeleted { get; set; }         // Token 比较特殊，把 IsDeleted 也要放开
 
-    public class XTOPMSEntityRootDto<TPrimaryKey>
-        : EntityDto<long>
-        , IXTOPMSEntityRootDto
-    {
-        public string key
+        public AccessTokenCreateUpdateDto(): base()
         {
-            get
-            {
-                return this.Id.ToString();
-            }
+            this.IsDeleted = false;
         }
-
-        public string Name { get; set; }
-        public string Code { get; set; }
     }
-
-
 }

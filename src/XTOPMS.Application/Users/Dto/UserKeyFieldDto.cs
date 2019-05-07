@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
+using Abp.Domain.Entities;
 using XTOPMS.Authorization.Users;
 
 namespace XTOPMS.Users.Dto
@@ -22,6 +23,6 @@ namespace XTOPMS.Users.Dto
         public string Surname { get; set; }
         public bool IsActive { get; set; }
         public string FullName { get; set; }
-        */       
+        */
     }
 }

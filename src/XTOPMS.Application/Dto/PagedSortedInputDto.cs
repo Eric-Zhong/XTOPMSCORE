@@ -24,7 +24,10 @@ using Abp.Application.Services.Dto;
 
 namespace XTOPMS.Application.Dto
 {
-    public class PagedSortedInputDto : PagedAndSortedResultRequestDto, IPagedAndSortedResultRequest
+    /// <summary>
+    /// XTOPMS 中最基础的 Query DTO，用于与 GetAll 接口配合使用，但无法实现 Filter 功能。只能用于输入参数。
+    /// </summary>
+    public class PagedSortedFilterRequestBaseDto : PagedAndSortedResultRequestDto, IPagedAndSortedResultRequest
     {
         // Add your property
     }

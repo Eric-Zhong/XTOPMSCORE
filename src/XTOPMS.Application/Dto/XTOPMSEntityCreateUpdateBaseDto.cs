@@ -28,36 +28,35 @@ using XTOPMS.Users.Dto;
 namespace XTOPMS.Dto
 {
 
-    public interface IXTOPMSEntityUpdateDto
-        : IEntityDto<long>
+    /// <summary>
+    /// XTOPMS 中用于定义 Create, Update 输入参数的基类。
+    /// 字段：Key(id), Name, Code, ErpId, Status, Comment, IsActive, ExtensionData 信息
+    /// 用途：定义 Create, Update 时的输入参数
+    /// 注意：Audited, Tenant 信息都会自动赋值
+    /// </summary>
+    public interface IXTOPMSEntityCreateUpdateBaseDto
+        : IXTOPMSBaseDto<long>
     {
-        string key { get; }
         string ExtensionData { get; set; }
         bool IsActive { get; set; }
-        string Name { get; set; }
-        string Code { get; set; }
-        string ErpId { get; set; }
-        int Status { get; set; }
-        string Comment { get; set; }
     }
 
-    public class XTOPMSEntityUpdateDto
-        : XTOPMSEntityUpdateDto<long>
+    /// <summary>
+    /// XTOPMS 中用于定义 Create, Update 输入参数的基类。
+    /// 字段：Key(id), Name, Code, ErpId, Status, Comment, IsActive, ExtensionData 信息
+    /// 用途：定义 Create, Update 时的输入参数
+    /// </summary>
+    public class XTOPMSEntityCreateUpdateBaseDto
+        : XTOPMSEntityCreateUpdateBaseDto<long>
     {
     }
 
-    public class XTOPMSEntityUpdateDto<TPrimaryKey>
-        : EntityDto<long>
-        , IXTOPMSEntityUpdateDto
+    public class XTOPMSEntityCreateUpdateBaseDto<TPrimaryKey>
+        : XTOPMSBaseDto<long>
+        , IXTOPMSEntityCreateUpdateBaseDto
     {
-        public string key { get; set; }
         public string ExtensionData { get; set; }
         public bool IsActive { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public string ErpId { get; set; }
-        public int Status { get; set; }
-        public string Comment { get; set; }
     }
 
 

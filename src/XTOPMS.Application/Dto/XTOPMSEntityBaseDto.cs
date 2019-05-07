@@ -28,42 +28,49 @@ using XTOPMS.Users.Dto;
 namespace XTOPMS.Dto
 {
 
-    public interface IXTOPMSEntityBaseDto 
-        : IEntityDto<long>
-        , IMustHaveTenant
-        , IMayHaveOrganizationUnit
+    /// <summary>
+    /// XTOPMS 中用于定义 Get, Create, Update 输入、输出参数的 DTO。
+    /// 字段：Id, Key(id), Name, Code, ErpId, Status, Comment, IsActive, ExtensionData 信息
+    /// 用途：适用于定义 Get, GetAll 时，输出 Entity 的明细信息
+    /// 建议：用在显示 List 信息时使用
+    /// 注意：注意 Update 时，TenantId, OrganizationUnitId, IsDeleted, IsActive 等都要赋值，否则数据会丢失
+    /// </summary>
+    public interface IXTOPMSEntityBaseDto: IXTOPMSEntityBaseDto<long>
     {
-        string key { get; }
-        string ExtensionData { get; set; }
-        bool IsActive { get; set; }
-        string Name { get; set; }
-        string Code { get; set; }
-        string ErpId { get; set; }
-        int Status { get; set; }
-        string Comment { get; set; }
     }
 
+
+    public interface IXTOPMSEntityBaseDto<TPrimaryKey> 
+        : IXTOPMSBaseDto<TPrimaryKey>
+        , IMustHaveTenant
+        , IMayHaveOrganizationUnit
+        , IPassivable
+        , IExtendableObject
+    {
+    }
+
+    /// <summary>
+    /// XTOPMS 中用于定义 Get, Create, Update 输入、输出参数的 DTO。
+    /// 字段：Id, Key(id), Name, Code, ErpId, Status, Comment, IsActive, ExtensionData 信息
+    /// 用途：适用于定义 Get, GetAll 时，输出 Entity 的明细信息
+    /// 建议：用在显示 List 信息时使用
+    /// 注意：注意 Update 时，TenantId, OrganizationUnitId, IsDeleted, IsActive 等都要赋值，否则数据会丢失
+    /// </summary>
     public class XTOPMSEntityBaseDto 
         : XTOPMSEntityBaseDto<long>
     {
     }
 
     public class XTOPMSEntityBaseDto<TPrimaryKey> 
-        : EntityDto<long>
-        , IXTOPMSEntityBaseDto
+        : XTOPMSBaseDto<TPrimaryKey>
+        , IXTOPMSEntityBaseDto<TPrimaryKey>
     {
         /// <summary>
         /// 为了解决浏览器上会把long数据进行截断，这里把Id转成String然后传递给前台。
         /// </summary>
         /// <value>The key.</value>
-        public string key { get { return Id.ToString(); } }
         public string ExtensionData { get; set; }
         public bool IsActive { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public string ErpId { get; set; }
-        public int Status { get; set; }
-        public string Comment { get; set; }
         public long? OrganizationUnitId { get; set; }
         public int TenantId { get; set; }
     }

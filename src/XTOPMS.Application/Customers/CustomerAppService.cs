@@ -49,7 +49,7 @@ namespace XTOPMS.Customers
             Customer,
             CustomerDto,
             long,
-            PagedSortedInputDto,
+            PagedSortedFilterRequestBaseDto,
             CustomerUpdateDto,
             CustomerUpdateDto,
             EntityDto<long>,
@@ -75,7 +75,7 @@ namespace XTOPMS.Customers
         }
 
 
-        protected override IQueryable<Customer> CreateFilteredQuery(PagedSortedInputDto input)
+        protected override IQueryable<Customer> CreateFilteredQuery(PagedSortedFilterRequestBaseDto input)
         {
             var query = base.CreateFilteredQuery(input);
             query = query.IncludeIf(true, "CustomerCategorySettings.CustomerCategory");

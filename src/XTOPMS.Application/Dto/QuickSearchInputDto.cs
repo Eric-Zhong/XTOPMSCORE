@@ -21,6 +21,16 @@
 using System;
 namespace XTOPMS.Dto
 {
+    interface IQuickSearchInputDto
+    {
+        string Value { get; set; }
+        int Count { get; set; }
+    }
+
+
+    /// <summary>
+    /// 用于数据快速查询时使用，多用在 Auto Completed, Dropdown list 中使用。
+    /// </summary>
     public class QuickSearchInputDto: IQuickSearchInputDto
     {
         public string Value { get; set; }
@@ -28,9 +38,4 @@ namespace XTOPMS.Dto
     }
 
 
-    interface IQuickSearchInputDto
-    {
-        string Value { get; set; }
-        int Count { get; set; }
-    }
 }

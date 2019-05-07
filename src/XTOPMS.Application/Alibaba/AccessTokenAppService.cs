@@ -21,8 +21,6 @@
 using System;
 using System.Threading.Tasks;
 using Abp.Authorization;
-using Abp.Domain.Repositories;
-using XTOPMS.Application;
 using XTOPMS.Alibaba.Dto;
 using XTOPMS.Authorization;
 using XTOPMS.EntityFrameworkCore.Repositories;
@@ -31,6 +29,7 @@ using com.alibaba.openapi.client.exception;
 using Abp.UI;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Uow;
+using XTOPMS.Application.Dto;
 
 namespace XTOPMS.Alibaba
 {
@@ -46,7 +45,15 @@ namespace XTOPMS.Alibaba
     /// </summary>
     [AbpAuthorize(PermissionNames.Pages_Users)]
     public class AccessTokenAppService : 
-        XTOPMSAsyncCrudAppService<AccessToken, AccessTokenDto>
+        XTOPMSAsyncCrudAppService<
+            AccessToken, 
+            AccessTokenDto,
+            long,
+            PagedSortedFilterRequestBaseDto,
+            AccessTokenCreateUpdateDto,
+            AccessTokenCreateUpdateDto,
+            AccessTokenCreateUpdateDto
+            >
         , IAccessTokenAppService
     {
 
@@ -64,7 +71,7 @@ namespace XTOPMS.Alibaba
         }
 
 
-        public override async Task<PagedResultDto<AccessTokenDto>> GetAll(PagedAndSortedResultRequestDto input)
+        public override async Task<PagedResultDto<AccessTokenDto>> GetAll(PagedSortedFilterRequestBaseDto input)
         {
             using(_unitOfWorkManager.Current.DisableFilter(AbpDataFilters.SoftDelete))
             {
@@ -74,7 +81,7 @@ namespace XTOPMS.Alibaba
         }
 
 
-        public override async Task<AccessTokenDto> Update(AccessTokenDto input)
+        public override async Task<AccessTokenDto> Update(AccessTokenCreateUpdateDto input)
         {
             using (_unitOfWorkManager.Current.DisableFilter(AbpDataFilters.SoftDelete))
             {

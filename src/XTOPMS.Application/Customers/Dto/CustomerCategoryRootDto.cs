@@ -28,7 +28,7 @@ using XTOPMS.Metadata;
 namespace XTOPMS.Customers.Dto
 {
     [AutoMap(typeof(CustomerCategory))]
-    public class CustomerCategoryRootDto : XTOPMSEntityRootDto
+    public class CustomerCategoryRootDto : XTOPMSBaseDto
     {
         public CustomerCategoryRootDto(): base()
         {

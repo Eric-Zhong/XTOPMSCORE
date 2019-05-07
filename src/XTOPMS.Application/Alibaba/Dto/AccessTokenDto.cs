@@ -26,10 +26,10 @@ using XTOPMS.Dto;
 namespace XTOPMS.Alibaba.Dto
 {
     [AutoMap(typeof(AccessToken))]
-    public class AccessTokenDto: XTOPMSEntityDto<long>
+    public class AccessTokenDto
+        : XTOPMSEntityDto
+        , IAccessTokenCreateUpateDto
     {
-        public string App_Key { get; set; }
-        public string App_Secret { get; set; }
         public string AliId { get; set; }
         public string Resource_Owner { get; set; }
         public string MemberId { get; set; }
@@ -37,9 +37,10 @@ namespace XTOPMS.Alibaba.Dto
         public DateTime Expires_In { get; set; }
         public string Refresh_Token { get; set; }
         public DateTime Refresh_Token_Timeout { get; set; }
+        public string App_Key { get; set; }
+        public string App_Secret { get; set; }
 
-
-        public AccessTokenDto()
+        public AccessTokenDto(): base()
         {
         }
     }

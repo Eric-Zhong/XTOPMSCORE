@@ -24,7 +24,7 @@ using XTOPMS.Dto;
 namespace XTOPMS.Opportunities.Dto
 {
     [AutoMap(typeof(Opportunity))]
-    public class OpportunityUpdateDto : XTOPMSEntityUpdateDto
+    public class OpportunityUpdateDto : XTOPMSEntityCreateUpdateBaseDto
     {
         public long? OwnerId { get; set; }
         public long? GeneralContractorId { get; set; }

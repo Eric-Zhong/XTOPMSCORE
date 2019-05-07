@@ -32,7 +32,7 @@ namespace XTOPMS.Customers
             CustomerCategorySetting
             , CustomerCategorySettingDto
             , long
-            , PagedSortedInputDto
+            , PagedSortedFilterRequestBaseDto
             , CustomerCategorySettingUpdateDto
             , EntityDto<long>
             , EntityDto<long>>
