@@ -1,10 +1,10 @@
 ﻿//
-//  Opportunity.cs
+//  BusinessCategoryDto.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
 //
-//  Copyright (c) 2018 
+//  Copyright (c) 2019 
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
@@ -18,24 +18,16 @@
 //
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using System;
 using Abp.AutoMapper;
-using XTOPMS.Customers.Dto;
-using XTOPMS.Metadata.BusinessCategories;
-using XTOPMS.Users.Dto;
+using XTOPMS.Dto;
 
-namespace XTOPMS.Opportunities.Dto
+namespace XTOPMS.Metadata.BusinessCategories
 {
-    [AutoMap(typeof(Opportunity))]
-    public class OpportunityDto : OpportunityBaseDto
+    [AutoMap(typeof(BusinessCategory))]
+    public class BusinessCategoryDto: BusinessCategoryBaseDto
     {
-
-        public CustomerKeyFieldDto Owner { get; set; }
-        public CustomerKeyFieldDto GeneralContractor { get; set; }
-        public CustomerKeyFieldDto Agency { get; set; }
-        public UserKeyFieldDto Sales { get; set; }
-        public BusinessCategoryDto BusinessCategory { get; set; }
-
-        public OpportunityDto(): base()
+        public BusinessCategoryDto(): base()
         {
         }
     }

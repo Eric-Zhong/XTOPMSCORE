@@ -79,9 +79,9 @@ namespace XTOPMS.Opportunities
         /// <value>The general contractor identifier.</value>
         public long? GeneralContractorId { get; set; }
         /// <summary>
-        /// 总包方
+        /// 代理
         /// </summary>
-        /// <value>The general contractor identifier.</value>
+        /// <value>The general agency identifier.</value>
         public long? AgencyId { get; set; }
         /// <summary>
         /// 对项目负责的本方销售代表
@@ -121,6 +121,7 @@ namespace XTOPMS.Opportunities
         [ForeignKey("AgencyId")]
         public Customer Agency { get; set; }
         public string BusinessCategoryId { get; set; }
+        [ForeignKey("BusinessCategoryId")]
         public BusinessCategory BusinessCategory { get; set; }
 
         public Opportunity()

@@ -21,26 +21,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-
-// using Microsoft.EntityFrameworkCore;
-// using Microsoft.EntityFrameworkCore.Query;
-
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
-using Abp.Domain.Repositories;
-using Abp.Domain.Uow;
-using Abp.Linq;
 using Abp.UI;
-using Abp.Collections.Extensions;
-using Abp.Data;
 using Abp.EntityFrameworkCore.Extensions;
-
 using XTOPMS.Dto;
-using XTOPMS.Authorization.Users;
 using XTOPMS.EntityFrameworkCore.Repositories;
 
 namespace XTOPMS
@@ -189,8 +177,6 @@ namespace XTOPMS
             query = ApplyPaging(query, input);
 
             var entities = await AsyncQueryableExecuter.ToListAsync(query);
-
-            Console.WriteLine(entities.Count);
 
             var output = new PagedResultDto<TEntityDto>(
                 totalCount,

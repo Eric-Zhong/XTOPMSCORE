@@ -21,18 +21,25 @@
 using System;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
+using Abp.Domain.Entities;
 using XTOPMS.Dto;
 
 namespace XTOPMS.Alibaba.Dto
 {
 
-    public interface IAccessTokenCreateUpateDto: IXTOPMSBaseDto
+    public interface IAccessTokenCreateUpateDto
+        : IXTOPMSBaseDto
+        , IPassivable
+        , ISoftDelete // AccessToken 比较特殊，把 Delete 也要显示出来，也可以还原
     {
         string App_Key { get; set; }
         string App_Secret { get; set; }
-        bool IsDeleted { get; set; }         // Token 比较特殊，把 IsDeleted 也要放开
     }
 
+    /// <summary>
+    /// Access token create update dto.
+    /// Field: App_Key, App_Secret, IsActive, IsDeleted
+    /// </summary>
     [AutoMap(typeof(AccessToken))]
     public class AccessTokenCreateUpdateDto 
         : XTOPMSBaseDto
@@ -41,6 +48,7 @@ namespace XTOPMS.Alibaba.Dto
         public string App_Key { get; set; }
         public string App_Secret { get; set; }
         public bool IsDeleted { get; set; }         // Token 比较特殊，把 IsDeleted 也要放开
+        public bool IsActive { get; set; }
 
         public AccessTokenCreateUpdateDto(): base()
         {

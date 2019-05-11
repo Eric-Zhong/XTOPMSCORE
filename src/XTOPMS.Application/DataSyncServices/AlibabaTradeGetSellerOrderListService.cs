@@ -25,7 +25,7 @@ using XTOPMS.Alibaba;
 
 namespace XTOPMS.DataSyncServices
 {
-    public class AlibabaTradeGetSellerOrderListService: IService
+    public class AlibabaTradeGetSellerOrderListService : IService
     {
         private readonly IAccessToken accessToken;
         private readonly ITradeManager tradeManager;
@@ -41,12 +41,79 @@ namespace XTOPMS.DataSyncServices
 
         public void Execute()
         {
+            Console.WriteLine("Service job executing. - XTOPMS.DataSyncServices.AlibabaTradeGetSellerOrderListService.Execute");
             IList<AlibabaOpenplatformTradeModelTradeInfo> tradeInfos = tradeManager.GetYesterdayModificationTradeInfos(accessToken);
             Console.WriteLine(string.Format("There are {0} trade need to sync.", tradeInfos.Count));
 
+            Console.WriteLine();
+            string header = "{0,20}\t{14,20}\t{1,10}\t{2,10}\t{3,20}\t{4,10}\t{5,10}\t{6,10}\t{7,10}\t{8,20}\t{9,20}\t{10,20}\t{11,20}\t{12,20}\t{13,20}";
+            string item = "{0,20}\t{1,20}\t{2,20}\t{4,20}\t{5,20}\t{6,20}\t{7,20}\t{8,10}\t{3}";
+
+            Console.WriteLine("Trade Header Information");
+            Console.WriteLine("--------------------------------------------------------------------------------");
+
+            Console.WriteLine(
+                header, 
+                "ID", 
+                "Amount", 
+                "Discount", 
+                "BuyerID", 
+                "Buyer Name", 
+                "Buyer Memo", 
+                "Seller Name", 
+                "Seller Memo", 
+                "Create Time", 
+                "Modify Time", 
+                "Completed Time", 
+                "Confirmed Time", 
+                "Remark", 
+                "ID",
+                "Status");
+
             foreach (var trade in tradeInfos)
             {
+
                 AlibabaOpenplatformTradeModelOrderBaseInfo baseInfo = trade.getBaseInfo();
+
+                Console.WriteLine(
+                    header,
+                    baseInfo.getId(),
+                    baseInfo.getTotalAmount(),
+                    baseInfo.getDiscount(),
+                    baseInfo.getBuyerID(),
+                    baseInfo.getBuyerContact().getName(),
+                    baseInfo.getBuyerMemo(),
+                    baseInfo.getSellerContact().getName(),
+                    baseInfo.getSellerMemo(),
+                    baseInfo.getCreateTime(),
+                    baseInfo.getModifyTime(),
+                    baseInfo.getCompleteTime(),
+                    baseInfo.getConfirmedTime(),
+                    baseInfo.getRemark(),
+                    baseInfo.getIdOfStr(),
+                    baseInfo.getStatus()
+                    );
+
+                // string json = Newtonsoft.Json.JsonConvert.SerializeObject(trade);
+
+                /*
+                Console.Write(baseInfo.getId() + "\t");
+                Console.Write(baseInfo.getTotalAmount() + "\t");
+                Console.Write(baseInfo.getDiscount() + "\t");
+                Console.Write(baseInfo.getBuyerID() + "\t");
+                Console.Write(baseInfo.getBuyerContact().getName() + "\t");
+                Console.Write(baseInfo.getBuyerMemo() + "\t");
+                Console.Write(baseInfo.getSellerContact().getName() + "\t");
+                Console.Write(baseInfo.getSellerMemo() + "\t");
+                Console.Write(baseInfo.getCreateTime() + "\t");
+                Console.Write(baseInfo.getModifyTime() + "\t");
+                Console.Write(baseInfo.getCompleteTime() + "\t");
+                Console.Write(baseInfo.getConfirmedTime() + "\t");
+                Console.Write(baseInfo.getRemark() + "\t");
+                Console.Write(baseInfo.getIdOfStr() + "\t");
+                Console.WriteLine();
+                */
+
                 AlibabaTradeCustoms customs = trade.getCustoms();
                 AlibabaOpenplatformTradeModelGuaranteeTermsInfo guaranteeTermsInfo = trade.getGuaranteesTerms();
                 AlibabaOpenplatformTradeModelInternationalLogisticsInfo internationalLogistics = trade.getInternationalLogistics();
@@ -55,11 +122,57 @@ namespace XTOPMS.DataSyncServices
                 AlibabaInvoiceOrderInvoiceModel orderInvoiceInfo = trade.getOrderInvoiceInfo();
                 AlibabaTradeOrderRateInfo orderRateInfo = trade.getOrderRateInfo();
                 AlibabaTradeOverseasExtraAddress overseasExtraAddress = trade.getOverseasExtraAddress();
-                AlibabaOpenplatformTradeModelProductItemInfo[] productItems = trade.getProductItems();
                 AlibabaOrderDetailCaigouQuoteInfo[] quoteList = trade.getQuoteList();
                 AlibabaOpenplatformTradeModelTradeTermsInfo[] tradeTerms = trade.getTradeTerms();
-                string json = Newtonsoft.Json.JsonConvert.SerializeObject(trade);
-                Console.WriteLine(json);
+
+                AlibabaOpenplatformTradeModelProductItemInfo[] productItems = trade.getProductItems();
+
+            }
+
+            Console.WriteLine("Trade Item Information");
+            Console.WriteLine("--------------------------------------------------------------------------------");
+            Console.WriteLine(item,
+                "ID",
+                "Product ID",
+                "SKU ID",
+                "Name",
+                "Quantity",
+                "Unit",
+                "Price",
+                "Amount",
+                "Description"
+                );
+
+            foreach (var trade in tradeInfos)
+            {
+                AlibabaOpenplatformTradeModelOrderBaseInfo baseInfo = trade.getBaseInfo();
+                AlibabaOpenplatformTradeModelProductItemInfo[] productItems = trade.getProductItems();
+
+                foreach (var prd in productItems)
+                {
+                    Console.WriteLine(item,
+                        baseInfo.getId(),
+                        prd.getProductID(),
+                        prd.getSkuID(),
+                        prd.getName(),
+                        prd.getQuantity(),
+                        prd.getUnit(),
+                        prd.getPrice(),
+                        prd.getItemAmount(),
+                        prd.getDescription()
+                        );
+
+                    /*
+                    Console.Write(prd.getProductID() + "\t");
+                    Console.Write(prd.getSkuID() + "\t");
+                    Console.Write(prd.getName() + "\t");
+                    Console.Write(prd.getQuantity() + "\t");
+                    Console.Write(prd.getUnit() + "\t");
+                    Console.Write(prd.getPrice() + "\t");
+                    Console.Write(prd.getItemAmount() + "\t");
+                    Console.WriteLine();
+                    */
+                }
             }
         }
     }

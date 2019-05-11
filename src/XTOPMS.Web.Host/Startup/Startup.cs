@@ -14,13 +14,11 @@ using Abp.Castle.Logging.Log4Net;
 using Abp.Extensions;
 using XTOPMS.Configuration;
 using XTOPMS.Identity;
-
+using Abp.Hangfire;
 using Abp.AspNetCore.SignalR.Hubs;
 using Hangfire;
-using Hangfire.MySql;
 using Hangfire.MySql.Core;
 using System.Data;
-using Abp.Hangfire;
 using XTOPMS.Alibaba;
 using XTOPMS.DataSyncServices;
 
@@ -173,14 +171,6 @@ namespace XTOPMS.Web.Host.Startup
                 );
 
             app.UseHangfireDashboard("/hangfire");
-
-            // BackgroundJob.Enqueue(() => Console.WriteLine("Handfire regisited and running."));
-            // BackgroundJob.Schedule(() => Console.WriteLine("Handfire running"), TimeSpan.FromSeconds(20));
-            // RecurringJob.AddOrUpdate(() => Console.WriteLine("Recurrent running"), Cron.Minutely);
-
-            RecurringJob.AddOrUpdate<AccessTokenRefreshProcess>("Alibaba Refresh Token Refresh Job)", (t) => t.Execute(null), Cron.Minutely);
-            RecurringJob.AddOrUpdate<DataSyncServiceProcess>("Data Sync Service Schedule Job)", (t) => t.Execute(null), Cron.Minutely);
-
             /*
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {
@@ -190,6 +180,14 @@ namespace XTOPMS.Web.Host.Startup
                 };
             });
             */
+
+            BackgroundJob.Enqueue(() => Console.WriteLine("Handfire regisited and running."));
+            // BackgroundJob.Schedule(() => Console.WriteLine("Handfire running"), TimeSpan.FromSeconds(20));
+            // RecurringJob.AddOrUpdate(() => Console.WriteLine("Recurrent running"), Cron.Minutely);
+
+            RecurringJob.AddOrUpdate<AccessTokenRefreshProcess>("Alibaba Refresh Token Refresh Job)", (t) => t.Execute(null), Cron.Daily);
+            RecurringJob.AddOrUpdate<DataSyncServiceProcess>("Data Sync Service Schedule Job)", (t) => t.Execute(null), Cron.Hourly);
+
         }
     }
 }

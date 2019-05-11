@@ -30,6 +30,8 @@
     <Folder Include="Alibaba\Dto\" />
     <Folder Include="DataSyncServices\" />
     <Folder Include="DataSyncServices\Dto\" />
+    <Folder Include="Metadata\" />
+    <Folder Include="Metadata\BusinessCategories\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Abp.HangFire.AspNetCore" Version="4.5.0" />

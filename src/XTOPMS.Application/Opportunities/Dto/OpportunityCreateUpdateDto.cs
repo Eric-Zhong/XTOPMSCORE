@@ -19,23 +19,30 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using Abp.AutoMapper;
-using XTOPMS.Customers.Dto;
-using XTOPMS.Metadata.BusinessCategories;
-using XTOPMS.Users.Dto;
+using XTOPMS.Dto;
 
 namespace XTOPMS.Opportunities.Dto
 {
     [AutoMap(typeof(Opportunity))]
-    public class OpportunityDto : OpportunityBaseDto
+    public class OpportunityCreateUpdateDto 
+        : XTOPMSEntityCreateUpdateBaseDto
+        , IOpportunityBaseDto
     {
+        public long? OwnerId { get; set; }
+        public long? GeneralContractorId { get; set; }
+        public long? AgencyId { get; set; }
+        public long? SalesId { get; set; }
+        public string BusinessCategoryId { get; set; }
+        public decimal Amount { get; set; }
+        public string Currency { get; set; }
+        public string Region { get; set; }
+        public string Country { get; set; }
+        public string Province { get; set; }
+        public string City { get; set; }
+        public string ScheduleData { get; set; }
+        public string GeographicData { get; set; }
 
-        public CustomerKeyFieldDto Owner { get; set; }
-        public CustomerKeyFieldDto GeneralContractor { get; set; }
-        public CustomerKeyFieldDto Agency { get; set; }
-        public UserKeyFieldDto Sales { get; set; }
-        public BusinessCategoryDto BusinessCategory { get; set; }
-
-        public OpportunityDto(): base()
+        public OpportunityCreateUpdateDto()
         {
         }
     }

@@ -43,7 +43,15 @@ namespace XTOPMS.Opportunities
     [Audited]
     [AbpAuthorize(PermissionNames.Pages_Users)]
     public class OpportunityAppService :
-        XTOPMSAsyncCrudAppService<Opportunity, OpportunityDto, long, PagedAndSortedResultRequestDto, OpportunityUpdateDto>
+        XTOPMSAsyncCrudAppService<
+            Opportunity, 
+            OpportunityDto, 
+            long, 
+            PagedAndSortedResultRequestDto,
+            OpportunityCreateUpdateDto,
+            OpportunityCreateUpdateDto,
+            OpportunityDto,
+            OpportunityDto>
         , IOpportunityAppService
     {
 
@@ -55,7 +63,17 @@ namespace XTOPMS.Opportunities
 
         protected override IQueryable<Opportunity> CreateFilteredQuery(PagedAndSortedResultRequestDto input)
         {
-            return base.CreateFilteredQuery(input).IncludeIf(true, t=>t.Sales);
+            // Initialize sales entity
+            var query = base.CreateFilteredQuery(input).IncludeIf(true, t=>t.Sales);
+            query = query.IncludeIf(true, t => t.BusinessCategory);
+
+            return query;
+        }
+
+        public override Task<OpportunityDto> Update(OpportunityCreateUpdateDto input)
+        {
+            var payload = input;
+            return base.Update(payload);
         }
 
     }

@@ -41,5 +41,6 @@
     <Folder Include="DataSyncServices\" />
     <Folder Include="Opportunities\" />
     <Folder Include="Customers\" />
+    <Folder Include="Metadata\" />
   </ItemGroup>
 </Project>

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using Abp.Domain.Entities;
+﻿using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.EntityFrameworkCore;
-using Abp.EntityFrameworkCore.Extensions;
 using Abp.EntityFrameworkCore.Repositories;
 
 namespace XTOPMS.EntityFrameworkCore.Repositories

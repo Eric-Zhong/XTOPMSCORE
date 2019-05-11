@@ -41,6 +41,7 @@ namespace XTOPMS.EntityFrameworkCore
         public DbSet<CustomerCategorySetting> CustomerCategorySetting { get; set; }
         public DbSet<AccessToken> AccessToken { get; set; }
         public DbSet<DataSyncService> DataSyncService { get; set; }
+        public DbSet<BusinessCategory> BusinessCategory { get; set; }
 
         public XTOPMSDbContext(DbContextOptions<XTOPMSDbContext> options)
             : base(options)

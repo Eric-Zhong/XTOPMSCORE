@@ -28,13 +28,34 @@ using XTOPMS.Users.Dto;
 
 namespace XTOPMS.Opportunities.Dto
 {
+
+    public interface IOpportunityBaseDto: IXTOPMSBaseDto
+    {
+        long? OwnerId { get; set; }
+        long? GeneralContractorId { get; set; }
+        long? AgencyId { get; set; }
+        long? SalesId { get; set; }
+        string BusinessCategoryId { get; set; }
+
+        decimal Amount { get; set; }
+        string Currency { get; set; }
+        string Region { get; set; }
+        string Country { get; set; }
+        string Province { get; set; }
+        string City { get; set; }
+        string ScheduleData { get; set; }
+        string GeographicData { get; set; }
+    }
+
     [AutoMap(typeof(Opportunity))]
-    public class OpportunityBaseDto : XTOPMSEntityBaseDto
+    public class OpportunityBaseDto : XTOPMSEntityBaseDto, IOpportunityBaseDto
     {
         public long? OwnerId { get; set; }
         public long? GeneralContractorId { get; set; }
         public long? AgencyId { get; set; }
         public long? SalesId { get; set; }
+        public string BusinessCategoryId { get; set; }
+
         public decimal Amount { get; set; }
         public string Currency { get; set; }
         public string Region { get; set; }

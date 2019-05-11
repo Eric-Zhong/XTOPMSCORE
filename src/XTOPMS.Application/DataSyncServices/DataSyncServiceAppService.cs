@@ -18,27 +18,20 @@
 //
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-using System;
-using System.Threading.Tasks;
+using Abp.Application.Services;
+using Abp.Auditing;
 using Abp.Authorization;
-using Abp.Domain.Repositories;
-using XTOPMS.Application;
 using XTOPMS.Alibaba.Dto;
 using XTOPMS.Authorization;
-using XTOPMS.EntityFrameworkCore.Repositories;
-using Abp.Application.Services;
-using com.alibaba.openapi.client.exception;
-using Abp.UI;
 using XTOPMS.DataSyncServices;
-using Abp.Auditing;
-using Abp.Application.Services.Dto;
+using XTOPMS.EntityFrameworkCore.Repositories;
 
 namespace XTOPMS.Alibaba
 {
 
     public interface IDataSyncServiceAppService: IApplicationService
     {
-
+        void Execute(long serviceId);
     }
 
 
@@ -54,15 +47,29 @@ namespace XTOPMS.Alibaba
 
         readonly IAccessTokenRepository _accessTokenRepository;
         readonly IAccessTokenManager _accessTokenManager;
+        readonly IDataSyncServiceRepository _dataSyncServiceRepository;
+        readonly ITradeManager _tradeManager;
 
         public DataSyncServiceAppService(
             IDataSyncServiceRepository repository
             , IAccessTokenRepository accessTokenRepository
             , IAccessTokenManager accessTokenManager
+            , IDataSyncServiceRepository dataSyncServiceRepository
+            , ITradeManager tradeManager
             ) : base(repository)
         {
             _accessTokenRepository = accessTokenRepository;
             _accessTokenManager = accessTokenManager;
+            _dataSyncServiceRepository = dataSyncServiceRepository;
+            _tradeManager = tradeManager;
+        }
+
+        public void Execute(long serviceId)
+        {
+            var syncServiceEntity = _dataSyncServiceRepository.Get(serviceId);
+            var accessToken = _accessTokenRepository.Get(syncServiceEntity.AccessTokenId);
+            IService service = new AlibabaTradeGetSellerOrderListService(accessToken, _tradeManager);
+            service.Execute();
         }
     }
 }
