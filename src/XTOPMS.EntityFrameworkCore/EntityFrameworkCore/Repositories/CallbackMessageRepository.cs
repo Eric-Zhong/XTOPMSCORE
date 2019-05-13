@@ -1,5 +1,5 @@
 ﻿//
-//  CallbackDto.cs
+//  CallbackMessageRepository.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -19,15 +19,23 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-namespace XTOPMS.Alibaba.Dto
-{
-    [Serializable]
-    public class CallbackDto
-    {
-        public string Message { get; set; }
-        public string Signature { get; set; }
+using Abp.EntityFrameworkCore;
+using XTOPMS.Alibaba;
 
-        public CallbackDto()
+namespace XTOPMS.EntityFrameworkCore.Repositories
+{
+
+    public interface ICallbackMessageRepository
+        : IXTOPMSBaseRepository<CallbackMessage, long>
+    {
+
+    }
+
+    public class CallbackMessageRepository
+        : XTOPMSBaseRepository<CallbackMessage>
+        , ICallbackMessageRepository
+    {
+        public CallbackMessageRepository(IDbContextProvider<XTOPMSDbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
     }

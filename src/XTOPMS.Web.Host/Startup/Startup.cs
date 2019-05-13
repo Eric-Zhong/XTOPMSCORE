@@ -181,7 +181,7 @@ namespace XTOPMS.Web.Host.Startup
             });
             */
 
-            BackgroundJob.Enqueue(() => Console.WriteLine("Handfire regisited and running."));
+            // BackgroundJob.Enqueue(() => Console.WriteLine("Handfire regisited and running."));
             // BackgroundJob.Schedule(() => Console.WriteLine("Handfire running"), TimeSpan.FromSeconds(20));
             // RecurringJob.AddOrUpdate(() => Console.WriteLine("Recurrent running"), Cron.Minutely);
 

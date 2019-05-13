@@ -20,6 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using Abp.Application.Services;
+using Abp.BackgroundJobs;
 using Microsoft.AspNetCore.Http;
 using XTOPMS.Alibaba.Dto;
 
@@ -35,12 +36,15 @@ namespace XTOPMS.Alibaba
         : XTOPMSAppServiceBase
         , IAlibabaCallbackAppService
     {
-        private readonly IHttpContextAccessor httpContext;
+        readonly IHttpContextAccessor httpContext;
+        readonly IBackgroundJobManager backgroundJobManager;
 
         public AlibabaCallbackAppService(
-            IHttpContextAccessor _httpContext)
+            IHttpContextAccessor _httpContext,
+            IBackgroundJobManager _backgroundJobManager)
         {
             httpContext = _httpContext;
+            backgroundJobManager = _backgroundJobManager;
         }
 
         public void Do()
@@ -58,6 +62,12 @@ namespace XTOPMS.Alibaba
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " Alibaba Callback: ");
             Console.WriteLine("\tSignature: " + input.Signature);
             Console.WriteLine("\tMessage: " + input.Message);
+
+            // Wirte a log
+            this.Logger.Info(message);
+
+            // Create background job for save the callback/message.
+            backgroundJobManager.Enqueue<AlibabaCallbackJob, CallbackDto>(input);
 
         }
     }

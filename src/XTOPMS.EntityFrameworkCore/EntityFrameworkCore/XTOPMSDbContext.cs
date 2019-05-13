@@ -36,12 +36,14 @@ namespace XTOPMS.EntityFrameworkCore
         public DbSet<SKUCategory> SKUCategory { get; set; }
         public DbSet<SKUCategoryValue> SKUCategoryValue { get; set; }
         public DbSet<Document> Document { get; set; }
+        public DbSet<BusinessCategory> BusinessCategory { get; set; }
         public DbSet<Customer> Customer { get; set; }
         public DbSet<CustomerCategory> CustomerCategory { get; set; }
         public DbSet<CustomerCategorySetting> CustomerCategorySetting { get; set; }
         public DbSet<AccessToken> AccessToken { get; set; }
         public DbSet<DataSyncService> DataSyncService { get; set; }
-        public DbSet<BusinessCategory> BusinessCategory { get; set; }
+        public DbSet<XTOPMS.Alibaba.Message> AlibabaMessage { get; set; }
+        public DbSet<CallbackMessage> AlibabaCallbackMessage { get; set; }
 
         public XTOPMSDbContext(DbContextOptions<XTOPMSDbContext> options)
             : base(options)

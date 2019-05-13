@@ -29,7 +29,7 @@ namespace XTOPMS.Alibaba.Dto
         public string Data { get; set; }
         public string UserInfo { get; set; }
         public string Type { get; set; }
-        public string extraInfo { get; set; }
+        public string ExtraInfo { get; set; }
 
         public MessageDto()
         {
