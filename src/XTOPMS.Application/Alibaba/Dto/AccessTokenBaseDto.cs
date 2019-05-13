@@ -18,39 +18,25 @@
 //
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
 using System;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using XTOPMS.Authorization.Users;
-using XTOPMS.DataSyncServices;
 using XTOPMS.Dto;
 
 namespace XTOPMS.Alibaba.Dto
 {
-    [AutoMap(typeof(DataSyncService))]
-    public class DataSyncServiceDto : XTOPMSEntityDto<long>
+    [AutoMap(typeof(AccessToken))]
+    public class AccessTokenBaseDto
+        : XTOPMSBaseDto
     {
-        public long AccessTokenId { get; set; }
-        public DateTime LatestRunTime { get; set; }
-        public string LatestResult { get; set; }
-        public DateTime NextRunTime { get; set; }
-        public double Interval { get; set; }
-        public int RetryCount { get; set; }
+        public string AliId { get; set; }
+        public string Resource_Owner { get; set; }
+        public string MemberId { get; set; }
+        public string App_Key { get; set; }
+        public string App_Secret { get; set; }
 
-        /// <summary>
-        /// 通过 code 显示 DataSync 名称
-        /// </summary>
-        /// <value>The name of the service.</value>
-        public string ServiceName {
-            get
-            {
-                string name = Enum.GetName(typeof(DataSyncServiceCode), int.Parse(this.Code));
-                return name;
-            }
+        public AccessTokenBaseDto(): base()
+        {
         }
-
     }
 }

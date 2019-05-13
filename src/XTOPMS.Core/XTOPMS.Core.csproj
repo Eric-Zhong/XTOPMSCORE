@@ -44,6 +44,7 @@
     <Folder Include="Alibaba\" />
     <Folder Include="DataSyncServices\" />
     <Folder Include="Metadata\" />
+    <Folder Include="Notification\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Localization\SourceFiles\XTOPMS.xml" />

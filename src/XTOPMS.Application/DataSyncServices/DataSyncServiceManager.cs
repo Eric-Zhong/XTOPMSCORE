@@ -106,7 +106,19 @@ namespace XTOPMS.DataSyncServices
             foreach (var service in list)
             {
                 IService serviceJob = factory.Create(service);
-                serviceJob.Execute();
+                var dataSyncEntity = dataSyncServiceRepository.Get(service.Id);
+
+                try
+                {
+                    serviceJob.Execute();
+                    UpdateStatusWhenSuccess(dataSyncEntity, "Success");
+                }
+                catch(Exception exc)
+                {
+                    Console.WriteLine(exc.ToString());
+                    UpdateStatusWhenFailure(dataSyncEntity, "Failed", exc);
+                }
+
                 // BackgroundJob.Enqueue(() => Console.WriteLine("Service will start."));
             }
 

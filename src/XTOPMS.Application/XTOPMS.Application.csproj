@@ -32,6 +32,8 @@
     <Folder Include="DataSyncServices\Dto\" />
     <Folder Include="Metadata\" />
     <Folder Include="Metadata\BusinessCategories\" />
+    <Folder Include="Notification\" />
+    <Folder Include="Notification\Dto\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Abp.HangFire.AspNetCore" Version="4.5.0" />

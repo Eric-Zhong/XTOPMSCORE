@@ -18,12 +18,16 @@
 //
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using System.Linq;
 using Abp.Application.Services;
 using Abp.Auditing;
 using Abp.Authorization;
+using Abp.EntityFrameworkCore.Extensions;
 using XTOPMS.Alibaba.Dto;
+using XTOPMS.Application.Dto;
 using XTOPMS.Authorization;
 using XTOPMS.DataSyncServices;
+using XTOPMS.DataSyncServices.Dto;
 using XTOPMS.EntityFrameworkCore.Repositories;
 
 namespace XTOPMS.Alibaba
@@ -41,7 +45,15 @@ namespace XTOPMS.Alibaba
     [Audited]
     [AbpAuthorize(PermissionNames.Pages_Users)]
     public class DataSyncServiceAppService : 
-        XTOPMSAsyncCrudAppService<DataSyncService, DataSyncServiceDto>
+        XTOPMSAsyncCrudAppService<
+            DataSyncService
+            , DataSyncServiceDto
+            , long
+            , PagedSortedFilterRequestBaseDto
+            , DataSyncServiceCreateUpdateDto
+            , DataSyncServiceCreateUpdateDto
+            , DataSyncServiceCreateUpdateDto
+            , DataSyncServiceCreateUpdateDto>
         , IDataSyncServiceAppService
     {
 
@@ -62,6 +74,13 @@ namespace XTOPMS.Alibaba
             _accessTokenManager = accessTokenManager;
             _dataSyncServiceRepository = dataSyncServiceRepository;
             _tradeManager = tradeManager;
+        }
+
+        protected override IQueryable<DataSyncService> CreateFilteredQuery(PagedSortedFilterRequestBaseDto input)
+        {
+            var query = base.CreateFilteredQuery(input);
+            query = query.IncludeIf(true, t => t.AccessTokenInfo);
+            return query;
         }
 
         public void Execute(long serviceId)

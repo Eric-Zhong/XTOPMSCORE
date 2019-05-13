@@ -109,6 +109,9 @@ namespace XTOPMS
 
         public XTOPMSEntity(): base()
         {
+            this.IsActive = true;
+            this.IsDeleted = false;
+            this.Status = 0;
         }
 
     }
