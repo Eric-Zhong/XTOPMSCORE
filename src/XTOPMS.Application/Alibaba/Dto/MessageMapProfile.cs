@@ -1,5 +1,5 @@
 ﻿//
-//  CallbackMessageDto.cs
+//  MessageMapProfile.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -20,24 +20,17 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
-using Abp.AutoMapper;
+using AutoMapper;
+using Newtonsoft.Json;
 
 namespace XTOPMS.Alibaba.Dto
 {
-    [Serializable]
-    [AutoMap(typeof(Message))]
-    public class MessageDto
+    public class MessageMapProfile: Profile
     {
-        public long MsgId { get; set; }
-        public long GmtBorn { get; set; }
-        // https://www.cnblogs.com/Donnnnnn/p/6020353.html
-        public Dictionary<string, string> Data { get; set; }
-        public string UserInfo { get; set; }
-        public string Type { get; set; }
-        public string ExtraInfo { get; set; }
-
-        public MessageDto()
+        public MessageMapProfile()
         {
+            CreateMap<MessageDto, Message>().ForMember(entity => entity.Data, map => map.MapFrom(dto => JsonConvert.SerializeObject(dto.Data)));
+            CreateMap<Message, MessageDto>().ForMember(dto => dto.Data, map => map.MapFrom(entity => JsonConvert.DeserializeObject<Dictionary<string, string>>(entity.Data)));
         }
     }
 }

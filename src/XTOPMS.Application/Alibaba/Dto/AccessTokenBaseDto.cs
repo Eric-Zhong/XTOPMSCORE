@@ -25,6 +25,7 @@ using XTOPMS.Dto;
 
 namespace XTOPMS.Alibaba.Dto
 {
+    [Serializable]
     [AutoMap(typeof(AccessToken))]
     public class AccessTokenBaseDto
         : XTOPMSBaseDto

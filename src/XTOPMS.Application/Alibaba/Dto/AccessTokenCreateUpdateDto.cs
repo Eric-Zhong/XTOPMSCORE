@@ -40,6 +40,7 @@ namespace XTOPMS.Alibaba.Dto
     /// Access token create update dto.
     /// Field: App_Key, App_Secret, IsActive, IsDeleted
     /// </summary>
+    [Serializable]
     [AutoMap(typeof(AccessToken))]
     public class AccessTokenCreateUpdateDto 
         : XTOPMSBaseDto

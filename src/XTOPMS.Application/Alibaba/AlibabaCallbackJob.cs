@@ -33,13 +33,16 @@ namespace XTOPMS.Alibaba
     {
         ICallbackMessageRepository callbackMessageRepository;
         IAlibabaMessageRepository alibabaMessageRepository;
+        IAccessTokenRepository accessTokenRepository;
 
         public AlibabaCallbackJob(
             ICallbackMessageRepository _callbackMessageRepository,
-            IAlibabaMessageRepository _alibabaMessageRepository)
+            IAlibabaMessageRepository _alibabaMessageRepository,
+            IAccessTokenRepository _accessTokenRepository)
         {
             callbackMessageRepository = _callbackMessageRepository;
             alibabaMessageRepository = _alibabaMessageRepository;
+            accessTokenRepository = _accessTokenRepository;
         }
 
         public override void Execute(CallbackDto args)
@@ -58,7 +61,12 @@ namespace XTOPMS.Alibaba
             // Generate object from JSON
             var msg = JsonConvert.DeserializeObject<MessageDto>(args.Message);
 
+            // Caculate tenantid
+            var accessToken = accessTokenRepository.FirstOrDefault(t => t.MemberId == msg.UserInfo);
+            var tenantId = accessToken.TenantId;
+
             var msgEntity = msg.MapTo<Message>();
+            msgEntity.TenantId = tenantId;
 
             // Save alibaba message
             var msgId = alibabaMessageRepository.InsertAndGetId(msgEntity);

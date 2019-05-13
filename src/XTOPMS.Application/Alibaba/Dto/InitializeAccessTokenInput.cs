@@ -21,6 +21,7 @@
 using System;
 namespace XTOPMS.Alibaba.Dto
 {
+    [Serializable]
     public class InitializeAccessTokenInputDto
     {
         public long AccessTokenId { get; set; }
