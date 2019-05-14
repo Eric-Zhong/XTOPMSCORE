@@ -31,9 +31,11 @@ namespace XTOPMS.Alibaba.Dto
         public long MsgId { get; set; }
         public long GmtBorn { get; set; }
         // https://www.cnblogs.com/Donnnnnn/p/6020353.html
-        public Dictionary<string, string> Data { get; set; }
+        // public Dictionary<string, string> Data { get; set; }
+        public DataDto Data { get; set; }
         public string UserInfo { get; set; }
         public string Type { get; set; }
+        public string BizKey { get; set; }
         public string ExtraInfo { get; set; }
 
         public MessageDto()

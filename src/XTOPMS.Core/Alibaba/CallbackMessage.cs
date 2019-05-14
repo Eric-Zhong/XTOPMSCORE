@@ -41,7 +41,9 @@ namespace XTOPMS.Alibaba
         Success = 2,
         Failed = 3,
         Canceled = 4,
-        Ignored = 5
+        Ignored = 5,
+        NotFoundMember = 6,
+        ParseError = 7
     }
 
     /// <summary>

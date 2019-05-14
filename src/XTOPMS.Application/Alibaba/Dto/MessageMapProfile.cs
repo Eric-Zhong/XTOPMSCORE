@@ -29,8 +29,10 @@ namespace XTOPMS.Alibaba.Dto
     {
         public MessageMapProfile()
         {
+            /*
             CreateMap<MessageDto, Message>().ForMember(entity => entity.Data, map => map.MapFrom(dto => JsonConvert.SerializeObject(dto.Data)));
             CreateMap<Message, MessageDto>().ForMember(dto => dto.Data, map => map.MapFrom(entity => JsonConvert.DeserializeObject<Dictionary<string, string>>(entity.Data)));
+            */           
         }
     }
 }
