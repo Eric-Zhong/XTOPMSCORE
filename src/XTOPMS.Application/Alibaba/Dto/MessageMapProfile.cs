@@ -29,10 +29,20 @@ namespace XTOPMS.Alibaba.Dto
     {
         public MessageMapProfile()
         {
-            /*
-            CreateMap<MessageDto, Message>().ForMember(entity => entity.Data, map => map.MapFrom(dto => JsonConvert.SerializeObject(dto.Data)));
-            CreateMap<Message, MessageDto>().ForMember(dto => dto.Data, map => map.MapFrom(entity => JsonConvert.DeserializeObject<Dictionary<string, string>>(entity.Data)));
-            */           
+            // MessageDto.data = Message.ExtensionData
+            CreateMap<MessageDto, Message>()
+                .ForMember(
+                    entity => entity.ExtensionData,
+                    map => map.MapFrom(dto => JsonConvert.SerializeObject(dto.Data, Formatting.None, new JsonSerializerSettings
+                        {
+                            NullValueHandling = NullValueHandling.Ignore
+                        }))
+                    );
+            CreateMap<Message, MessageDto>()
+                .ForMember(
+                    dto => dto.Data,
+                    map => map.MapFrom(entity => JsonConvert.DeserializeObject<DataDto>(entity.ExtensionData))
+                    );
         }
     }
 }

@@ -27,6 +27,7 @@ namespace XTOPMS.Alibaba.Dto
     public interface IDataDto
     {
         string OrderId { get; set; }
+        string BizType { get; set; }
         string CurrentStatus { get; set; }
         string MsgSendTime { get; set; }
         string BuyerMemberId { get; set; }
@@ -38,7 +39,7 @@ namespace XTOPMS.Alibaba.Dto
         string SubUserId { get; set; }
         string SupplierMemberId { get; set; }
         string SourceBuyOfferId { get; set; }
-        IList<DataItemDto> Items { get; set; }
+        List<DataItemDto> Items { get; set; }
         string QuotationId { get; set; }
         string Title { get; set; }
         string CreateLoginId { get; set; }
@@ -65,6 +66,7 @@ namespace XTOPMS.Alibaba.Dto
         /// 询价单ID
         /// </summary>
         public string BuyOfferId { get; set; }
+        public string BizType { get; set; }
         /// <summary>
         /// 提交请购人子账号
         /// </summary>
@@ -88,7 +90,7 @@ namespace XTOPMS.Alibaba.Dto
         /// <summary>
         /// 
         /// </summary>
-        public IList<DataItemDto> Items { get; set; }
+        public List<DataItemDto> Items { get; set; }
         /// <summary>
         /// 消息发送时间
         /// </summary>
@@ -145,17 +147,31 @@ namespace XTOPMS.Alibaba.Dto
         /// 请购单标题
         /// </summary>
         public string Title { get; set; }
+
+        public DataDto()
+        {
+            this.Items = new List<DataItemDto>();
+        }
     }
 
 
     [Serializable]
     public class DataItemDto
     {
-        string OrderItemId { get; set; }
-        string PrItemId { get; set; }
-        string ProductCode { get; set; }
-        string ProductId { get; set; }
-        string ProductQuoteId { get; set; }
-        string SupplyNoteItemId { get; set; }
+        public string OrderItemId { get; set; }
+        public string PrItemId { get; set; }
+        public string ProductCode { get; set; }
+        public string ProductId { get; set; }
+        public string ProductQuoteId { get; set; }
+        public string SupplyNoteItemId { get; set; }
     }
+
+    /*
+        "Items": [{
+            "productCode": "MMA00152",
+            "productId": 2227112,
+            "orderItemId": 152539133487786140,
+            "productQuoteId": 569969887292
+        }],
+    */
 }

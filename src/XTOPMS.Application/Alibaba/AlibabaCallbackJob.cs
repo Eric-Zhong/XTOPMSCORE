@@ -85,7 +85,7 @@ namespace XTOPMS.Alibaba
                         {
                             var msgEntity = msg.MapTo<Message>();           // Dto map to Entity.
                             msgEntity.TenantId = tenantId;                  // Set entitie's tenantid.
-                            msgEntity.ExtensionData = msgEntity.Data;       // Copy data to extensionData field.
+                            // msgEntity.ExtensionData = msgEntity.Data;       // Copy data to extensionData field.
                             msgEntity.Status = (int)CallbackMessageStatus.New;   // Set status to new (0).
                             // Save alibaba message
                             var msgId = alibabaMessageRepository.InsertAndGetId(msgEntity);         // Save
