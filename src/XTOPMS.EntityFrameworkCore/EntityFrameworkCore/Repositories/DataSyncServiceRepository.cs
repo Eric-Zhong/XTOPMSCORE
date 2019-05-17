@@ -28,23 +28,32 @@ using Abp.Linq.Extensions;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
 using XTOPMS.DataSyncServices;
+using Abp.Domain.Uow;
 
 namespace XTOPMS.EntityFrameworkCore.Repositories
 {
 
-    public interface IDataSyncServiceRepository 
+    public interface IDataSyncServiceRepository
         : IXTOPMSFullAuditedBaseRepository<DataSyncService, long>
     {
         Task<List<DataSyncService>> GetAllNeedStartServices();
+        Task<DataSyncService> GetDataServiceInforByCodeAndMemberId(string serviceCode, string memberId);
     }
 
 
-    public class DataSyncServiceRepository 
-        : XTOPMSFullAuditedBaseRepository<DataSyncService,long>
+    public class DataSyncServiceRepository
+        : XTOPMSFullAuditedBaseRepository<DataSyncService, long>
         , IDataSyncServiceRepository
     {
-        public DataSyncServiceRepository(IDbContextProvider<XTOPMSDbContext> dbContextProvider) : base(dbContextProvider)
+
+        IUnitOfWorkManager unitOfWorkManager;
+
+        public DataSyncServiceRepository(
+            IDbContextProvider<XTOPMSDbContext> dbContextProvider,
+            IUnitOfWorkManager _unitOfWorkManager)
+            : base(dbContextProvider)
         {
+            unitOfWorkManager = _unitOfWorkManager;
         }
 
         /// <summary>
@@ -63,12 +72,24 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
                             && m.RetryCount <= 10       // 重试次数
                         select m
                         ;
-                        
+
             var list = await Task.FromResult(query.ToList());
 
             return list;
         }
 
+        public async Task<DataSyncService> GetDataServiceInforByCodeAndMemberId(string serviceCode, string memberId)
+        {
+            var query = from m in this.GetAllIncluding(t=>t.AccessTokenInfo)
+                        where true
+                            && m.IsActive == true       // 激活的
+                            && m.ErpId == serviceCode
+                            && m.AccessTokenInfo.MemberId == memberId
+                        select m;
+
+            var list = await Task.FromResult(query.First());
+            return list;
+        }
     }
 
 }

@@ -24,7 +24,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置指定单品货号，国际站无需关注。该字段不一定有值，仅仅在下单时才会把货号记录(如果卖家设置了单品货号的话)。别的订单类型的货号只能通过商品接口去获取。请注意：通过商品接口获取时的货号和下单时的货号可能不一致，因为下单完成后卖家可能修改商品信息，改变了货号。     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>指定单品货号，国际站无需关注。该字段不一定有值，仅仅在下单时才会把货号记录(如果卖家设置了单品货号的话)。别的订单类型的货号只能通过商品接口去获取。请注意：通过商品接口获取时的货号和下单时的货号可能不一致，因为下单完成后卖家可能修改商品信息，改变了货号。</pre>     
              * 此参数必填
           */
     public void setCargoNumber(string cargoNumber) {
@@ -43,7 +43,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置描述,1688无此信息     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>描述,1688无此信息</pre>     
              * 此参数必填
           */
     public void setDescription(string description) {
@@ -62,7 +62,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置实付金额，单位为元     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>实付金额，单位为元</pre>     
              * 此参数必填
           */
     public void setItemAmount(decimal itemAmount) {
@@ -81,7 +81,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置商品名称     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>商品名称</pre>     
              * 此参数必填
           */
     public void setName(string name) {
@@ -100,7 +100,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置原始单价，以元为单位     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>原始单价，以元为单位</pre>     
              * 此参数必填
           */
     public void setPrice(decimal price) {
@@ -119,7 +119,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置产品ID（非在线产品为空）     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>产品ID（非在线产品为空）</pre>     
              * 此参数必填
           */
     public void setProductID(long productID) {
@@ -138,7 +138,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置商品图片url     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>商品图片url</pre>     
              * 此参数必填
           */
     public void setProductImgUrl(string[] productImgUrl) {
@@ -157,7 +157,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置产品快照url，交易订单产生时会自动记录下当时的商品快照，供后续纠纷时参考     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>产品快照url，交易订单产生时会自动记录下当时的商品快照，供后续纠纷时参考</pre>     
              * 此参数必填
           */
     public void setProductSnapshotUrl(string productSnapshotUrl) {
@@ -176,7 +176,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置以unit为单位的数量，例如多少个、多少件、多少箱、多少吨     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>以unit为单位的数量，例如多少个、多少件、多少箱、多少吨</pre>     
              * 此参数必填
           */
     public void setQuantity(decimal quantity) {
@@ -195,7 +195,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置退款金额，单位为元     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>退款金额，单位为元</pre>     
              * 此参数必填
           */
     public void setRefund(decimal refund) {
@@ -214,7 +214,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置skuID     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>skuID</pre>     
              * 此参数必填
           */
     public void setSkuID(long skuID) {
@@ -233,7 +233,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置排序字段，商品列表按此字段进行排序，从0开始，1688不提供     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>排序字段，商品列表按此字段进行排序，从0开始，1688不提供</pre>     
              * 此参数必填
           */
     public void setSort(int sort) {
@@ -252,7 +252,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置子订单状态     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>子订单状态</pre>     
              * 此参数必填
           */
     public void setStatus(string status) {
@@ -271,7 +271,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置子订单号，或商品明细条目ID     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>子订单号，或商品明细条目ID</pre>     
              * 此参数必填
           */
     public void setSubItemID(long subItemID) {
@@ -290,7 +290,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置类型，国际站使用，供卖家标注商品所属类型     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>类型，国际站使用，供卖家标注商品所属类型</pre>     
              * 此参数必填
           */
     public void setType(string type) {
@@ -309,7 +309,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置售卖单位	例如：个、件、箱、吨     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>售卖单位	例如：个、件、箱、吨</pre>     
              * 此参数必填
           */
     public void setUnit(string unit) {
@@ -328,7 +328,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置重量	按重量单位计算的重量，例如：100     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>重量	按重量单位计算的重量，例如：100</pre>     
              * 此参数必填
           */
     public void setWeight(string weight) {
@@ -347,7 +347,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置重量单位	例如：g，kg，t     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>重量单位	例如：g，kg，t</pre>     
              * 此参数必填
           */
     public void setWeightUnit(string weightUnit) {
@@ -366,7 +366,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置保障条款，此字段仅针对1688     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>保障条款，此字段仅针对1688</pre>     
              * 此参数必填
           */
     public void setGuaranteesTerms(AlibabaOpenplatformTradeModelGuaranteeTermsInfo[] guaranteesTerms) {
@@ -385,7 +385,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置指定商品货号，该字段不一定有值，在下单时才会把货号记录。别的订单类型的货号只能通过商品接口去获取。请注意：通过商品接口获取时的货号和下单时的货号可能不一致，因为下单完成后卖家可能修改商品信息，改变了货号。该字段和cargoNUmber的区别是：该字段是定义在商品级别上的货号，cargoNUmber是定义在单品级别的货号     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>指定商品货号，该字段不一定有值，在下单时才会把货号记录。别的订单类型的货号只能通过商品接口去获取。请注意：通过商品接口获取时的货号和下单时的货号可能不一致，因为下单完成后卖家可能修改商品信息，改变了货号。该字段和cargoNUmber的区别是：该字段是定义在商品级别上的货号，cargoNUmber是定义在单品级别的货号</pre>     
              * 此参数必填
           */
     public void setProductCargoNumber(string productCargoNumber) {
@@ -396,14 +396,14 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     private AlibabaTradeSkuItemDesc[] skuInfos;
     
         /**
-       * @return 
+       * @return []
     */
         public AlibabaTradeSkuItemDesc[] getSkuInfos() {
                	return skuInfos;
             }
     
     /**
-     * 设置     *
+     * 设置[]     *
      * 参数示例：<pre></pre>     
              * 此参数必填
           */
@@ -423,7 +423,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置订单明细涨价或降价的金额     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>订单明细涨价或降价的金额</pre>     
              * 此参数必填
           */
     public void setEntryDiscount(long entryDiscount) {
@@ -442,7 +442,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置订单销售属性ID     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>订单销售属性ID</pre>     
              * 此参数必填
           */
     public void setSpecId(string specId) {
@@ -461,7 +461,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置以unit为单位的quantity精度系数，值为10的幂次，例如:quantityFactor=1000,unit=吨，那么quantity的最小精度为0.001吨     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>以unit为单位的quantity精度系数，值为10的幂次，例如:quantityFactor=1000,unit=吨，那么quantity的最小精度为0.001吨</pre>     
              * 此参数必填
           */
     public void setQuantityFactor(decimal quantityFactor) {
@@ -480,7 +480,7 @@ public class AlibabaOpenplatformTradeModelProductItemInfo {
     
     /**
      * 设置子订单状态描述     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>子订单状态描述</pre>     
              * 此参数必填
           */
     public void setStatusStr(string statusStr) {
@@ -509,7 +509,12 @@ REFUND_CLOSED 退款关闭
 WAIT_BUYER_MODIFY 待买家修改
 WAIT_BUYER_SEND 等待买家退货
 WAIT_SELLER_RECEIVE 等待卖家确认收货     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>WAIT_SELLER_AGREE 等待卖家同意
+REFUND_SUCCESS 退款成功
+REFUND_CLOSED 退款关闭
+WAIT_BUYER_MODIFY 待买家修改
+WAIT_BUYER_SEND 等待买家退货
+WAIT_SELLER_RECEIVE 等待卖家确认收货</pre>     
              * 此参数必填
           */
     public void setRefundStatus(string refundStatus) {
@@ -528,7 +533,7 @@ WAIT_SELLER_RECEIVE 等待卖家确认收货     *
     
     /**
      * 设置关闭原因     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>关闭原因</pre>     
              * 此参数必填
           */
     public void setCloseReason(string closeReason) {
@@ -557,7 +562,12 @@ WAIT_SELLER_RECEIVE 等待卖家确认收货     *
 4 已经退货
 5 部分发货
 8 还未创建物流订单     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>1 未发货
+2 已发货
+3 已收货
+4 已经退货
+5 部分发货
+8 还未创建物流订单</pre>     
              * 此参数必填
           */
     public void setLogisticsStatus(int logisticsStatus) {
@@ -581,7 +591,7 @@ WAIT_SELLER_RECEIVE 等待卖家确认收货     *
     
     /**
      * 设置创建时间     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>创建时间</pre>     
              * 此参数必填
           */
     public void setGmtCreate(DateTime gmtCreate) {
@@ -605,7 +615,7 @@ WAIT_SELLER_RECEIVE 等待卖家确认收货     *
     
     /**
      * 设置修改时间     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>修改时间</pre>     
              * 此参数必填
           */
     public void setGmtModified(DateTime gmtModified) {
@@ -629,7 +639,7 @@ WAIT_SELLER_RECEIVE 等待卖家确认收货     *
     
     /**
      * 设置明细完成时间     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>明细完成时间</pre>     
              * 此参数必填
           */
     public void setGmtCompleted(DateTime gmtCompleted) {
@@ -648,7 +658,7 @@ WAIT_SELLER_RECEIVE 等待卖家确认收货     *
     
     /**
      * 设置库存超时时间，格式为“yyyy-MM-dd HH:mm:ss”     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>库存超时时间，格式为“yyyy-MM-dd HH:mm:ss”</pre>     
              * 此参数必填
           */
     public void setGmtPayExpireTime(string gmtPayExpireTime) {
@@ -667,7 +677,7 @@ WAIT_SELLER_RECEIVE 等待卖家确认收货     *
     
     /**
      * 设置售中退款单号     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>售中退款单号</pre>     
              * 此参数必填
           */
     public void setRefundId(string refundId) {
@@ -686,7 +696,7 @@ WAIT_SELLER_RECEIVE 等待卖家确认收货     *
     
     /**
      * 设置子订单号，或商品明细条目ID(字符串类型，由于Long类型的ID可能在JS和PHP中处理有问题，所以可以用字符串类型来处理)     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>子订单号，或商品明细条目ID(字符串类型，由于Long类型的ID可能在JS和PHP中处理有问题，所以可以用字符串类型来处理)</pre>     
              * 此参数必填
           */
     public void setSubItemIDString(string subItemIDString) {
@@ -705,7 +715,7 @@ WAIT_SELLER_RECEIVE 等待卖家确认收货     *
     
     /**
      * 设置售后退款单号     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>售后退款单号</pre>     
              * 此参数必填
           */
     public void setRefundIdForAs(string refundIdForAs) {

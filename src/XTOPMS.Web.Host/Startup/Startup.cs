@@ -185,8 +185,10 @@ namespace XTOPMS.Web.Host.Startup
             // BackgroundJob.Schedule(() => Console.WriteLine("Handfire running"), TimeSpan.FromSeconds(20));
             // RecurringJob.AddOrUpdate(() => Console.WriteLine("Recurrent running"), Cron.Minutely);
 
-            RecurringJob.AddOrUpdate<AccessTokenRefreshProcess>("Alibaba Refresh Token Refresh Job)", (t) => t.Execute(null), Cron.Daily);
-            RecurringJob.AddOrUpdate<DataSyncServiceProcess>("Data Sync Service Schedule Job)", (t) => t.Execute(null), Cron.Hourly);
+            RecurringJob.AddOrUpdate<AccessTokenRefreshProcess>("Alibaba Access-Token Refresh Service", (t) => t.Execute(null), Cron.Daily);
+            RecurringJob.AddOrUpdate<RefreshTokenRefreshProcess>("Alibaba Refresh-Token Refresh Service", (t) => t.Execute(null), Cron.Daily);
+            // RecurringJob.AddOrUpdate<DataSyncServiceProcess>("Data Sync Service Schedule Job)", (t) => t.Execute(null), Cron.Hourly);
+            RecurringJob.AddOrUpdate<AlibabaCallbackMessageProcess>("Alibaba Callback Message Process Service", (t) => t.Execute(null), Cron.Minutely);
 
         }
     }

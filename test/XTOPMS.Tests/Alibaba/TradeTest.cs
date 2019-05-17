@@ -86,5 +86,18 @@ namespace XTOPMS.Tests.Alibaba
 
             Assert.NotNull(data);
         }
+
+
+        [Fact]
+        public void GetTradeInfo()
+        {
+            string appKey = "3259943";
+            string memberId = "b2b-2926677533915d6";
+            long orderId = 300773518252256809;
+
+            var result = tradeManager.GetTradeInfor(appKey, memberId, orderId);
+
+            Assert.NotNull(result);
+        }
     }
 }

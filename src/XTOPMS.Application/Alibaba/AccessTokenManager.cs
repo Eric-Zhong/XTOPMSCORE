@@ -22,6 +22,7 @@ using System;
 using System.Globalization;
 using Abp.Domain.Services;
 using com.alibaba.openapi.client;
+using Newtonsoft.Json;
 using XTOPMS.EntityFrameworkCore.Repositories;
 
 namespace XTOPMS.Alibaba
@@ -29,19 +30,22 @@ namespace XTOPMS.Alibaba
     public interface IAccessTokenManager: IDomainService
     {
         void UpdateToken();
+        void UpdateRefreshToken();
         void RefreshAccessToken(AccessToken token);
         void InitializeToken(AccessToken token, string code);
         void RefreshRefreshToken(AccessToken token);
     }
 
-    public class AccessTokenManager: DomainService, IAccessTokenManager
+    public class AccessTokenManager
+        : DomainService
+        , IAccessTokenManager
     {
 
-        private readonly IAccessTokenRepository _accessTokenRepository;
+        private readonly IAccessTokenRepository accessTokenRepository;
 
-        public AccessTokenManager(IAccessTokenRepository accessTokenRepository)
+        public AccessTokenManager(IAccessTokenRepository _accessTokenRepository)
         {
-            _accessTokenRepository = accessTokenRepository;
+            accessTokenRepository = _accessTokenRepository;
         }
 
 
@@ -76,7 +80,7 @@ namespace XTOPMS.Alibaba
             token.Refresh_Token_Timeout = TransformDateTime(newToken.getRefresh_token_timeout());
             token.MemberId = newToken.getMemberId();
 
-            _accessTokenRepository.Update(token);
+            accessTokenRepository.Update(token);
 
             Console.WriteLine(string.Format(
                 "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
@@ -104,17 +108,26 @@ namespace XTOPMS.Alibaba
                 "error": "invalid_request"
             }
             */
-            SyncAPIClient client = new SyncAPIClient(token.App_Key, token.App_Secret);
-            var newToken = client.refreshRefreshToken(token.Access_Token, token.Refresh_Token);
-            newToken.setExpires_in(newToken.getExpires_in());
+            try
+            {
+                SyncAPIClient client = new SyncAPIClient(token.App_Key, token.App_Secret);
+                var newToken = client.refreshRefreshToken(token.Access_Token, token.Refresh_Token);
 
-            token.Access_Token = newToken.getAccess_token();
-            token.Expires_In = newToken.getExpires_time();
-            token.Refresh_Token = newToken.getRefresh_token();
-            token.Refresh_Token_Timeout = TransformDateTime(newToken.getRefresh_token_timeout());
-            token.AliId = newToken.getAliId().ToString();
-            token.Resource_Owner = newToken.getResource_owner();
-            token.MemberId = newToken.getMemberId();
+                token.Access_Token = newToken.getAccess_token();
+                token.Expires_In = newToken.getExpires_time();
+                token.Refresh_Token = newToken.getRefresh_token();
+                token.Refresh_Token_Timeout = TransformDateTime(newToken.getRefresh_token_timeout());
+                token.AliId = newToken.getAliId().ToString();
+                token.Resource_Owner = newToken.getResource_owner();
+                token.MemberId = newToken.getMemberId();
+                token.Status = (int)CallbackMessageStatus.Success;
+                token.Comment = "Success. " + JsonConvert.SerializeObject(newToken);
+            }
+            catch (Exception err)
+            {
+                token.Status = (int)CallbackMessageStatus.Failed;
+                token.Comment = err.ToString().Substring(0, 4000);
+            }
         }
 
 
@@ -133,39 +146,48 @@ namespace XTOPMS.Alibaba
                 "memberId": "b2b-3305067292666fa"
             }
             */
+            try
+            {
+                SyncAPIClient client = new SyncAPIClient(token.App_Key, token.App_Secret);
+                var oldAccessToken = token.Access_Token;
 
-            SyncAPIClient client = new SyncAPIClient(token.App_Key, token.App_Secret);
-            var oldAccessToken = token.Access_Token;
+                var newToken = client.refreshToken(token.Refresh_Token);
 
-            var newToken = client.refreshToken(token.Refresh_Token);
-            newToken.setExpires_in(newToken.getExpires_in());
+                token.Access_Token = newToken.getAccess_token();
+                token.AliId = newToken.getAliId().ToString();
+                token.Resource_Owner = newToken.getResource_owner();
+                // token.Expires_In = DateTime.Now.AddSeconds(double.Parse(newToken.getExpires_in().ToString()));
+                token.Expires_In = newToken.getExpires_time();
+                token.MemberId = newToken.getMemberId();
 
-            token.Access_Token = newToken.getAccess_token();
-            token.AliId = newToken.getAliId().ToString();
-            token.Resource_Owner = newToken.getResource_owner();
-            // token.Expires_In = DateTime.Now.AddSeconds(double.Parse(newToken.getExpires_in().ToString()));
-            token.Expires_In = newToken.getExpires_time();
-            token.MemberId = newToken.getMemberId();
+                token = accessTokenRepository.Update(token);    // Get new token.
 
-            token = _accessTokenRepository.Update(token);    // Get new token.
+                Console.WriteLine(string.Format(
+                    "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                    token.Id,
+                    token.App_Key,
+                    token.App_Secret,
+                    oldAccessToken,
+                    token.Access_Token,
+                    token.AliId,
+                    token.Resource_Owner,
+                    token.MemberId,
+                    token.Expires_In.ToString("yyyy-MM-dd HH:mm:ss")));
 
-            Console.WriteLine(string.Format(
-                "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}", 
-                token.Id, 
-                token.App_Key, 
-                token.App_Secret, 
-                oldAccessToken, 
-                token.Access_Token, 
-                token.AliId, 
-                token.Resource_Owner, 
-                token.MemberId, 
-                token.Expires_In.ToString("yyyy-MM-dd HH:mm:ss")));
+                token.Status = (int)CallbackMessageStatus.Success;
+                token.Comment = "Success. " + JsonConvert.SerializeObject(newToken);
+            }
+            catch (Exception err)
+            {
+                token.Status = (int)CallbackMessageStatus.Failed;
+                token.Comment = err.ToString().Substring(0, 4000);
+            }
         }
 
 
         public void UpdateToken()
         {
-            var list = _accessTokenRepository.GetAllAccessTokenWillTimeout().Result;
+            var list = accessTokenRepository.GetAllAccessTokenWillTimeout().Result;
             var count = list.Count;
             Console.WriteLine("There are " + count.ToString() + " tokens need to refresh.");
             foreach (var token in list)
@@ -177,13 +199,12 @@ namespace XTOPMS.Alibaba
 
         public void UpdateRefreshToken()
         {
-            var list = _accessTokenRepository.GetAllRefreshTokenWillTimeout().Result;
+            var list = accessTokenRepository.GetAllRefreshTokenWillTimeout().Result;
             foreach (var item in list)
             {
                 this.RefreshRefreshToken(item);
             }
         }
-
 
 
         private DateTime TransformDateTime(string value)
@@ -194,7 +215,6 @@ namespace XTOPMS.Alibaba
                 "yyyyMMddHHmmssfffzzz",
                 CultureInfo.InvariantCulture
                 );
-
             return output;
         }
 

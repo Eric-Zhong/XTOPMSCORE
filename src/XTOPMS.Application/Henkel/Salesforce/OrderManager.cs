@@ -1,5 +1,5 @@
 ﻿//
-//  CallbackMessageDto.cs
+//  CreateOrder.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -19,32 +19,35 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using System.Collections.Generic;
-using Abp.AutoMapper;
-using XTOPMS.Dto;
+using Abp.Domain.Services;
+using Newtonsoft.Json;
+using XTOPMS.Alibaba;
+using XTOPMS.DataSyncServices;
 
-namespace XTOPMS.Alibaba.Dto
+namespace XTOPMS.Henkel.Salesforce
 {
-    [Serializable]
-    [AutoMap(typeof(Message))]
-    public class MessageDto: XTOPMSEntityDto
+    public interface IOrderManager: IDomainService
     {
-        public long MsgId { get; set; }
-        public long GmtBorn { get; set; }
-        /// <summary>
-        /// Map to ExtensionData Field at Entity.
-        /// Map config at MessageMapProfile.cs
-        /// </summary>
-        /// <value>The data.</value>
-        public DataDto Data { get; set; }
-        public string BusinessData { get; set; }
-        public string UserInfo { get; set; }
-        public string Type { get; set; }
-        public string BizKey { get; set; }
-        public string ExtraInfo { get; set; }
+        string Create(string apiUri, OrderDto order);
+    }
 
-        public MessageDto()
+    public class OrderManager
+        : DomainService
+        , IOrderManager
+    {
+        public OrderManager()
         {
+        }
+
+        public string Create(string apiUri, OrderDto order)
+        {
+            HttpClient client = new HttpClient();
+
+            string uri = apiUri;
+            string body = JsonConvert.SerializeObject(order);
+            string resp = client.Post(apiUri, body);
+
+            return resp;
         }
     }
 }

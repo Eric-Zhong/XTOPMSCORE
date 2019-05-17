@@ -1,5 +1,5 @@
 ﻿//
-//  CallbackMessageDto.cs
+//  ProductDto.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
@@ -19,31 +19,15 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using System.Collections.Generic;
-using Abp.AutoMapper;
-using XTOPMS.Dto;
-
-namespace XTOPMS.Alibaba.Dto
+namespace XTOPMS.Henkel.Salesforce
 {
-    [Serializable]
-    [AutoMap(typeof(Message))]
-    public class MessageDto: XTOPMSEntityDto
+    public class ProductDto
     {
-        public long MsgId { get; set; }
-        public long GmtBorn { get; set; }
-        /// <summary>
-        /// Map to ExtensionData Field at Entity.
-        /// Map config at MessageMapProfile.cs
-        /// </summary>
-        /// <value>The data.</value>
-        public DataDto Data { get; set; }
-        public string BusinessData { get; set; }
-        public string UserInfo { get; set; }
-        public string Type { get; set; }
-        public string BizKey { get; set; }
-        public string ExtraInfo { get; set; }
-
-        public MessageDto()
+        public string IDH { get; set; }
+        public decimal Quantity { get; set; }
+        public string ProductName { get; set; }
+        public decimal OrderValue { get; set; }
+        public ProductDto()
         {
         }
     }

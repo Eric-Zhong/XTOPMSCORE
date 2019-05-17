@@ -1,17 +1,13 @@
-﻿using com.alibaba.openapi.client.policy;
-using com.alibaba.openapi.client.util;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.Serialization.Json;
-using System.IO;
-using com.alibaba.openapi.client.serialize;
-using com.alibaba.openapi.client.entity;
-using System.Collections;
 using System.Web;
+using com.alibaba.openapi.client.entity;
+using com.alibaba.openapi.client.policy;
+using com.alibaba.openapi.client.serialize;
+using com.alibaba.openapi.client.util;
 
 namespace com.alibaba.openapi.client.http
 {
@@ -32,7 +28,6 @@ namespace com.alibaba.openapi.client.http
             signature(path.ToString(), parameters, requestPolicy, clientPolicy);
             if ("GET".Equals(requestPolicy.HttpMethod))
             {
-
                 String queryString = createParameterStr(parameters);
                 String uriStr = buildRequestUri(requestPolicy, request);
                 uriStr = uriStr + "?" + queryString;
@@ -87,6 +82,7 @@ namespace com.alibaba.openapi.client.http
                     Stream responseStream = response.GetResponseStream();
                     DeSerializer deSerializer = SerializerProvider.getInstance().getDeSerializer(requestPolicy.ResponseProtocol);
                     Exception rw = deSerializer.buildException(responseStream,500, Encoding.UTF8.EncodingName);
+                    Console.WriteLine(rw.Message);
                     throw rw;
                 }
             }

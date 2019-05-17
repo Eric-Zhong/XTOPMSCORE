@@ -30,6 +30,7 @@ using Abp.UI;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Uow;
 using XTOPMS.Application.Dto;
+using com.alibaba.trade.param;
 
 namespace XTOPMS.Alibaba
 {
@@ -37,6 +38,7 @@ namespace XTOPMS.Alibaba
     public interface IAccessTokenAppService: IApplicationService
     {
         Task<AccessTokenDto> InitializeAccessToken(InitializeAccessTokenInputDto input);
+        AlibabaOpenplatformTradeModelTradeInfo GetTradeInfo(string appKey, string memberId, long orderId);
     }
 
 
@@ -59,15 +61,18 @@ namespace XTOPMS.Alibaba
 
         readonly IAccessTokenManager _accessTokenManager;
         readonly IUnitOfWorkManager _unitOfWorkManager;
+        readonly ITradeManager _tradeManager;
 
         public AccessTokenAppService(
             IAccessTokenRepository repository
             , IAccessTokenManager accessTokenManager
             , IUnitOfWorkManager unitOfWorkManager
+            , ITradeManager tradeManager
             ) : base(repository)
         {
             _accessTokenManager = accessTokenManager;
             _unitOfWorkManager = unitOfWorkManager;
+            _tradeManager = tradeManager;
         }
 
 
@@ -118,6 +123,12 @@ namespace XTOPMS.Alibaba
                     exc
                     );
             }
+        }
+
+        public AlibabaOpenplatformTradeModelTradeInfo GetTradeInfo(string appKey, string memberId, long orderId)
+        {
+            var trade = this._tradeManager.GetTradeInfor(appKey, memberId, orderId);
+            return trade;
         }
     }
 }

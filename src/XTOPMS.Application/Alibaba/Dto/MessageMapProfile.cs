@@ -34,15 +34,22 @@ namespace XTOPMS.Alibaba.Dto
                 .ForMember(
                     entity => entity.ExtensionData,
                     map => map.MapFrom(dto => JsonConvert.SerializeObject(dto.Data, Formatting.None, new JsonSerializerSettings
-                        {
-                            NullValueHandling = NullValueHandling.Ignore
-                        }))
-                    );
+                    {
+                        NullValueHandling = NullValueHandling.Ignore
+                    }))
+                ).ForMember(
+                    entity => entity.Data,
+                    map => map.MapFrom(dto => dto.BusinessData)
+                );
             CreateMap<Message, MessageDto>()
                 .ForMember(
                     dto => dto.Data,
                     map => map.MapFrom(entity => JsonConvert.DeserializeObject<DataDto>(entity.ExtensionData))
-                    );
+                    )
+                .ForMember(
+                    dto => dto.BusinessData,
+                    map => map.MapFrom(entity => entity.Data)
+                );
         }
     }
 }

@@ -55,7 +55,7 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
         {
             var query = from m in this.GetAll()
                         where 
-                            m.Refresh_Token_Timeout.AddDays(-30) <= DateTime.Now 
+                            m.Refresh_Token_Timeout.AddDays(-30) <= DateTime.Now
                             && m.IsActive == true
                             && m.IsDeleted == false
                         select m
@@ -65,7 +65,6 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
 
             return list;
         }
-
 
         /// <summary>
         /// Get all access token that have to update.
@@ -75,16 +74,13 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
         {
             var query = from m in this.GetAll()
                         where 
-                            m.Expires_In.AddHours(-1) <= DateTime.Now
+                            m.Expires_In.AddHours(-2) <= DateTime.Now
                             && m.IsActive == true
                             && m.IsDeleted == false
                         select m
                         ;
-
             var list = await Task.FromResult(query.ToList());
-
             return list;
         }
     }
-
 }

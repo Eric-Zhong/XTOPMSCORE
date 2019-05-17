@@ -77,7 +77,6 @@ namespace XTOPMS.Alibaba
                     }
                     else
                     {
-
                         // Found member, and continue to process the message.
                         var tenantId = accessToken.TenantId;                // Need to know this member's tenantId.
 
@@ -91,6 +90,8 @@ namespace XTOPMS.Alibaba
                             var msgId = alibabaMessageRepository.InsertAndGetId(msgEntity);         // Save
                             this.Logger.Info("Alibaba message (ID = '" + msgId + "') saved.");      // Log
                             Console.WriteLine("Message saved. (ID: " + msgId + ")");
+
+                            // After save this message, create an other schedule job for process there message.
                         }
                         catch (Exception err2)
                         {

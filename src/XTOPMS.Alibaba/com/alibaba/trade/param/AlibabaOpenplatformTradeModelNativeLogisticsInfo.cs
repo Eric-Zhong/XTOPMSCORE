@@ -24,7 +24,7 @@ public class AlibabaOpenplatformTradeModelNativeLogisticsInfo {
     
     /**
      * 设置详细地址     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>杭州市网商路699号</pre>     
              * 此参数必填
           */
     public void setAddress(string address) {
@@ -43,7 +43,7 @@ public class AlibabaOpenplatformTradeModelNativeLogisticsInfo {
     
     /**
      * 设置县，区     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>滨江区</pre>     
              * 此参数必填
           */
     public void setArea(string area) {
@@ -62,7 +62,7 @@ public class AlibabaOpenplatformTradeModelNativeLogisticsInfo {
     
     /**
      * 设置省市区编码     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>330108</pre>     
              * 此参数必填
           */
     public void setAreaCode(string areaCode) {
@@ -81,7 +81,7 @@ public class AlibabaOpenplatformTradeModelNativeLogisticsInfo {
     
     /**
      * 设置城市     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>杭州市</pre>     
              * 此参数必填
           */
     public void setCity(string city) {
@@ -100,7 +100,7 @@ public class AlibabaOpenplatformTradeModelNativeLogisticsInfo {
     
     /**
      * 设置联系人姓名     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>张三</pre>     
              * 此参数必填
           */
     public void setContactPerson(string contactPerson) {
@@ -138,7 +138,7 @@ public class AlibabaOpenplatformTradeModelNativeLogisticsInfo {
     
     /**
      * 设置手机     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>13988888888</pre>     
              * 此参数必填
           */
     public void setMobile(string mobile) {
@@ -157,7 +157,7 @@ public class AlibabaOpenplatformTradeModelNativeLogisticsInfo {
     
     /**
      * 设置省份     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>浙江省</pre>     
              * 此参数必填
           */
     public void setProvince(string province) {
@@ -176,7 +176,7 @@ public class AlibabaOpenplatformTradeModelNativeLogisticsInfo {
     
     /**
      * 设置电话     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>0517-88990077</pre>     
              * 此参数必填
           */
     public void setTelephone(string telephone) {
@@ -195,7 +195,7 @@ public class AlibabaOpenplatformTradeModelNativeLogisticsInfo {
     
     /**
      * 设置邮编     *
-     * 参数示例：<pre></pre>     
+     * 参数示例：<pre>000000</pre>     
              * 此参数必填
           */
     public void setZip(string zip) {

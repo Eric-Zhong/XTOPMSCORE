@@ -21,6 +21,9 @@
 using System;
 using Abp.EntityFrameworkCore;
 using XTOPMS.Alibaba;
+using System.Linq;
+using Abp.Linq.Extensions;
+using System.Collections.Generic;
 
 namespace XTOPMS.EntityFrameworkCore.Repositories
 {
@@ -28,7 +31,7 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
     public interface IAlibabaMessageRepository
         : IXTOPMSFullAuditedBaseRepository<Message, long>
     {
-
+        List<Message> GetAllMessageNeedToTrigger();
     }
 
     public class AlibabaMessageRepository
@@ -38,6 +41,15 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
         public AlibabaMessageRepository(IDbContextProvider<XTOPMSDbContext> dbContextProvider) 
             : base(dbContextProvider)
         {
+        }
+
+        public List<Message> GetAllMessageNeedToTrigger()
+        {
+            var query = from m in this.GetAll()
+                        where m.Status == (int)CallbackMessageStatus.New || (m.Status == (int)CallbackMessageStatus.Failed && m.RetryCount < 10)
+                        select m;
+
+            return query.ToList();
         }
     }
 }

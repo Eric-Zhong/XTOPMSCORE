@@ -34,6 +34,8 @@
     <Folder Include="Metadata\BusinessCategories\" />
     <Folder Include="Notification\" />
     <Folder Include="Notification\Dto\" />
+    <Folder Include="Henkel\" />
+    <Folder Include="Henkel\Salesforce\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Abp.HangFire.AspNetCore" Version="4.5.0" />

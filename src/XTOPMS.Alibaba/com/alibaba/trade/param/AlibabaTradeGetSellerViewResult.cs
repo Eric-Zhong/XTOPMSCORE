@@ -17,14 +17,14 @@ public class AlibabaTradeGetSellerViewResult : GatewayAPIResponse {
     private AlibabaOpenplatformTradeModelTradeInfo result;
     
         /**
-       * @return 订单详情信息
+       * @return 返回结果
     */
         public AlibabaOpenplatformTradeModelTradeInfo getResult() {
                	return result;
             }
     
     /**
-     * 设置订单详情信息     *
+     * 设置返回结果     *
           
              * 此参数必填
           */
@@ -55,19 +55,38 @@ public class AlibabaTradeGetSellerViewResult : GatewayAPIResponse {
     private string errorMessage;
     
         /**
-       * @return 错误描述
+       * @return 错误信息
     */
         public string getErrorMessage() {
                	return errorMessage;
             }
     
     /**
-     * 设置错误描述     *
+     * 设置错误信息     *
           
              * 此参数必填
           */
     public void setErrorMessage(string errorMessage) {
      	         	    this.errorMessage = errorMessage;
+     	        }
+    
+        [DataMember(Order = 4)]
+    private string success;
+    
+        /**
+       * @return 是否成功
+    */
+        public string getSuccess() {
+               	return success;
+            }
+    
+    /**
+     * 设置是否成功     *
+          
+             * 此参数必填
+          */
+    public void setSuccess(string success) {
+     	         	    this.success = success;
      	        }
     
     

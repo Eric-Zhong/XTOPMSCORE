@@ -20,11 +20,13 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using Abp.AutoMapper;
 using Abp.BackgroundJobs;
 using Abp.Domain.Services;
 using com.alibaba.openapi.client;
 using com.alibaba.openapi.client.policy;
 using com.alibaba.trade.param;
+using XTOPMS.Alibaba.Dto;
 using XTOPMS.DataSyncServices;
 using XTOPMS.EntityFrameworkCore.Repositories;
 
@@ -37,6 +39,8 @@ namespace XTOPMS.Alibaba
         IList<AlibabaOpenplatformTradeModelTradeInfo> GetModificationTradeInfos(IAccessToken token, DateTime modifyStart, DateTime modifyEnd);
         IList<AlibabaOpenplatformTradeModelTradeInfo> GetYesterdayModificationTradeInfos(IAccessToken token);
         bool SaveTradeInfos(IList<AlibabaOpenplatformTradeModelTradeInfo> tradeInfos);
+        AlibabaOpenplatformTradeModelTradeInfo GetTradeInfor(string appKey, string memberId, long orderId);
+        void CallbackMessageTrigger();
     }
 
     public class TradeManager
@@ -46,16 +50,19 @@ namespace XTOPMS.Alibaba
         IBackgroundJobManager backgroundJobManager;
         IAccessTokenManager accessTokenManager;
         IAccessTokenRepository accessTokenRepository;
+        IAlibabaMessageRepository alibabaMessageRepository;
 
         public TradeManager(
             IBackgroundJobManager _backgroundJobManager,
             IAccessTokenManager _accessTokenManager,
-            IAccessTokenRepository _accessTokenRepository
+            IAccessTokenRepository _accessTokenRepository,
+            IAlibabaMessageRepository _alibabaMessageRepository
             )
         {
             backgroundJobManager = _backgroundJobManager;
             accessTokenManager = _accessTokenManager;
             accessTokenRepository = _accessTokenRepository;
+            alibabaMessageRepository = _alibabaMessageRepository;
         }
 
         /// <summary>
@@ -156,6 +163,63 @@ namespace XTOPMS.Alibaba
             Console.WriteLine("Alibaba Order Count : " + data.Count);
             Console.WriteLine("Pull Order Count : " + data.Count);
             return data;
+        }
+
+
+        public AlibabaOpenplatformTradeModelTradeInfo GetTradeInfor(string appKey, string memberId, long orderId)
+        {
+            // var token = accessTokenRepository.Single(t => t.App_Key == appKey && t.MemberId == memberId && t.IsActive == true && t.IsDeleted == false);
+
+            // SyncAPIClient client = new SyncAPIClient(token.App_Key, token.App_Secret);
+            SyncAPIClient client = new SyncAPIClient("3259943", "t6MpyARzzv");
+
+            AlibabaTradeGetSellerViewParam param
+                = new AlibabaTradeGetSellerViewParam();
+            RequestPolicy oauthPolicy = new RequestPolicy();
+            oauthPolicy.UseHttps = true;
+
+            param.setOrderId(orderId);
+
+            // AlibabaTradeGetSellerViewResult response = client.execute<AlibabaTradeGetSellerViewResult>(param, token.Access_Token);
+            AlibabaTradeGetSellerViewResult response = client.execute<AlibabaTradeGetSellerViewResult>(param, "30ef3548-9ebb-4730-9c48-a8bfe6fea683");
+
+            return response.getResult();
+        }
+
+        public List<Message> GetMessageNeetToTrigger()
+        {
+            // Get newest message from storage.
+            var messages = alibabaMessageRepository.GetAllMessageNeedToTrigger();
+            return messages;
+        }
+
+        /// <summary>
+        /// Get the Alibaba callback message and start the processing background job.
+        /// </summary>
+        public void CallbackMessageTrigger()
+        {
+            // Step 1: Get the message need to process.
+            var messages = this.GetMessageNeetToTrigger();
+            Console.WriteLine("There are " + messages.Count + " messages need to process.");
+
+            // Generate background job for processing them.
+            foreach (var msg in messages)
+            {
+                // Init message
+                msg.Status = (int)CallbackMessageStatus.Inprocess;              // set message's status as 'inprocess'
+                var arg = msg.MapTo<MessageDto>();
+
+                switch (msg.Type)
+                {
+                    case "ORDER_PAY":
+                        backgroundJobManager.Enqueue<AlibabaCallbackOnOrderPayJob, MessageDto>(arg, BackgroundJobPriority.Low, null);
+                        Console.WriteLine("Background job created. Message Id is " + msg.Id.ToString());
+                        break;
+                    default:
+                        msg.Status = (int)CallbackMessageStatus.Ignored;        // Status set to 'ignored' when none job to trigger.
+                        break;
+                }
+            }
         }
     }
 }

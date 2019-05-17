@@ -21,6 +21,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Abp.Domain.Entities;
 
 namespace XTOPMS.Alibaba
 {
@@ -30,6 +31,7 @@ namespace XTOPMS.Alibaba
         long RefId { get; set; }
         long MsgId { get; set; }
         long GmtBorn { get; set; }
+        int RetryCount { get; set; }
         string Data { get; set; }
         [StringLength(50)]
         string UserInfo { get; set; }
@@ -43,6 +45,7 @@ namespace XTOPMS.Alibaba
     public class Message
         : XTOPMSEntity<long>
         , IMessage
+        , IExtendableObject
     {
         Message(): base()
         {
@@ -51,6 +54,7 @@ namespace XTOPMS.Alibaba
         public long RefId { get; set; }
         public long MsgId { get; set; }
         public long GmtBorn {get; set;}
+        public int RetryCount { get; set; }
         public string Data {get; set;}
         public string UserInfo {get; set;}
         public string Type {get; set;}
