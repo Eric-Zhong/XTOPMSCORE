@@ -33,7 +33,7 @@ namespace XTOPMS.Alibaba
     }
 
     [Table("Alibaba_AccessToken")]
-    public class AccessToken: XTOPMSEntity, IAccessToken
+    public class AccessToken: XTOPMSEntity, IAccessToken, IXTOPMSEntity
     {
 
         [StringLength(50)]

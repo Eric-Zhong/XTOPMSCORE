@@ -165,6 +165,7 @@ namespace XTOPMS
             return query;
         }
 
+
         public override async Task<PagedResultDto<TEntityDto>> GetAll(TGetAllInput input)
         {
             CheckGetAllPermission();

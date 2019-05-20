@@ -30,6 +30,13 @@ using XTOPMS.Metadata;
 namespace XTOPMS.Opportunities
 {
 
+    public interface IOpportunityEntity
+        : IOpportunityEntity<long, User, Customer, BusinessCategory>
+    {
+
+    }
+
+
     /// <summary>
     /// Opportunity basic properties.
     /// </summary>
@@ -60,13 +67,11 @@ namespace XTOPMS.Opportunities
         TBusinessCategory BusinessCategory { get; set; }
     }
 
-    public interface IOpportunityEntity: IOpportunityEntity<long, User, Customer, BusinessCategory>
-    {
-
-    }
-
     [Table("XTOPMS_Opportunity")]
-    public class Opportunity : XTOPMSEntity, IOpportunityEntity
+    public class Opportunity : 
+        XTOPMSEntity, 
+        IXTOPMSEntity, 
+        IOpportunityEntity
     {
         /// <summary>
         /// 业主

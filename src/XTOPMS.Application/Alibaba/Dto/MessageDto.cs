@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using Abp.AutoMapper;
+using XTOPMS.Application.Dto;
 using XTOPMS.Dto;
 
 namespace XTOPMS.Alibaba.Dto
@@ -42,9 +43,23 @@ namespace XTOPMS.Alibaba.Dto
         public string Type { get; set; }
         public string BizKey { get; set; }
         public string ExtraInfo { get; set; }
+        public int RetryCount { get; set; }
 
         public MessageDto()
         {
         }
+    }
+
+
+    public class MessageFilterFields
+    {
+        List<string> Type { get; set; }
+        List<int> Status { get; set; }
+    }
+
+
+    public class MessagePagedSortedFilterDto: PagedSortedFilterRequestBaseDto<MessageFilterFields>
+    {
+
     }
 }

@@ -32,7 +32,7 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
 {
 
     public interface IAccessTokenRepository 
-        : IXTOPMSFullAuditedBaseRepository<AccessToken, long>
+        : IXTOPMSFullAuditedBaseRepository<AccessToken>
     {
         Task<List<AccessToken>> GetAllRefreshTokenWillTimeout();
         Task<List<AccessToken>> GetAllAccessTokenWillTimeout();
@@ -40,7 +40,7 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
 
 
     public class AccessTokenRepository 
-        : XTOPMSFullAuditedBaseRepository<AccessToken,long>
+        : XTOPMSFullAuditedBaseRepository<AccessToken>
         , IAccessTokenRepository
     {
         public AccessTokenRepository(IDbContextProvider<XTOPMSDbContext> dbContextProvider) : base(dbContextProvider)

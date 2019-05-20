@@ -73,24 +73,23 @@ namespace XTOPMS.Alibaba
                         // It's mean not found the alibaba account info by memberId. Maybe it's only a test member.
                         this.Logger.Error("The member (Id='" + msg.UserInfo + "') not found.");
                         cbmEntity.Status = CallbackMessageStatus.NotFoundMember;   // Set status as not found member.
-                        this.callbackMessageRepository.Update(cbmEntity);   // Save the satatus.
+                        this.callbackMessageRepository.Update(cbmEntity);       // Save the satatus.
                     }
                     else
                     {
                         // Found member, and continue to process the message.
-                        var tenantId = accessToken.TenantId;                // Need to know this member's tenantId.
+                        var tenantId = accessToken.TenantId;                    // Need to know this member's tenantId.
 
                         try
                         {
-                            var msgEntity = msg.MapTo<Message>();           // Dto map to Entity.
-                            msgEntity.TenantId = tenantId;                  // Set entitie's tenantid.
-                            // msgEntity.ExtensionData = msgEntity.Data;       // Copy data to extensionData field.
-                            msgEntity.Status = (int)CallbackMessageStatus.New;   // Set status to new (0).
+                            var msgEntity = msg.MapTo<Message>();               // Dto map to Entity.
+                            msgEntity.TenantId = tenantId;                      // Set entitie's tenantid.
+                            // msgEntity.ExtensionData = msgEntity.Data;        // Copy data to extensionData field.
+                            msgEntity.Status = (int)CallbackMessageStatus.New;  // Set status to new (0).
                             // Save alibaba message
                             var msgId = alibabaMessageRepository.InsertAndGetId(msgEntity);         // Save
                             this.Logger.Info("Alibaba message (ID = '" + msgId + "') saved.");      // Log
                             Console.WriteLine("Message saved. (ID: " + msgId + ")");
-
                             // After save this message, create an other schedule job for process there message.
                         }
                         catch (Exception err2)

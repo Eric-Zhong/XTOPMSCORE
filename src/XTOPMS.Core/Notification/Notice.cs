@@ -24,7 +24,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace XTOPMS.Notification
 {
     [Table("XTOPMS_Notice")]
-    public class Notice : XTOPMSEntity
+    public class Notice 
+        : XTOPMSEntity
+        , IXTOPMSEntity
     {
         public Notice(): base()
         {

@@ -43,6 +43,7 @@ namespace XTOPMS.DataSyncServices
     [Table("Alibaba_DataSyncService")]
     public class DataSyncService 
         : XTOPMSEntity
+        , IXTOPMSEntity
         , IDataSyncService
         , IExtendableObject
     {

@@ -33,7 +33,10 @@ namespace XTOPMS.Customers
     }
 
     [Table("XTOPMS_CustomerCategorySetting")]
-    public class CustomerCategorySetting: XTOPMSEntity<long>, ICustomerCategorySetting<Customer, CustomerCategory>
+    public class CustomerCategorySetting
+        : XTOPMSEntity<long>, 
+        ICustomerCategorySetting<Customer, CustomerCategory>,
+        IXTOPMSEntity
     {
         public CustomerCategorySetting()
         {

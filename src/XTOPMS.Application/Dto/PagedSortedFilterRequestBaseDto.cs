@@ -31,4 +31,11 @@ namespace XTOPMS.Application.Dto
     {
         // Add your property
     }
+
+    public class PagedSortedFilterRequestBaseDto<TFiltersFields> : PagedAndSortedResultRequestDto, IPagedAndSortedResultRequest
+    {
+        // Add your property
+        TFiltersFields Filters { get; set; }
+    }
+
 }

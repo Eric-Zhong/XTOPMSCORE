@@ -44,6 +44,7 @@ namespace XTOPMS.Alibaba
     [Table("AlibabaMessage")]
     public class Message
         : XTOPMSEntity<long>
+        , IXTOPMSEntity
         , IMessage
         , IExtendableObject
     {

@@ -39,12 +39,13 @@ namespace XTOPMS
 
     public interface IXTOPMSEntity<TPrimary, TUser>
         : IFullAudited<TUser>,
+        IEntity<TPrimary>,
         IMustHaveTenant,
         IMayHaveOrganizationUnit,
         IExtendableObject,
         IPassivable
         where TUser : class, IEntity<long>
-    {
+    { 
         string Name { get; set; }
         string Code { get; set; }
         string ErpId { get; set; }
@@ -63,9 +64,10 @@ namespace XTOPMS
 
     [Serializable]
     public class XTOPMSEntity<TPrimaryKey>: 
-        FullAuditedEntity<TPrimaryKey, User>,
-        IXTOPMSEntity
+        FullAuditedEntity<TPrimaryKey, User>
+        ,IXTOPMSEntity<TPrimaryKey>
     {
+        // public TPrimaryKey Id { get; set; }
         public long? OrganizationUnitId { get; set; }
         public int TenantId { get; set; }
         public string ExtensionData { get; set; }
