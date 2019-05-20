@@ -43,6 +43,7 @@ namespace XTOPMS.EntityFrameworkCore
         public DbSet<AccessToken> AccessToken { get; set; }
         public DbSet<DataSyncService> DataSyncService { get; set; }
         public DbSet<XTOPMS.Alibaba.Message> AlibabaMessage { get; set; }
+        public DbSet<XTOPMS.Alibaba.ProductCategory> ProductCategory { get; set; }
         public DbSet<CallbackMessage> AlibabaCallbackMessage { get; set; }
 
         public XTOPMSDbContext(DbContextOptions<XTOPMSDbContext> options)
