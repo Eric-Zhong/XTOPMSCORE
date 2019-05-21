@@ -188,7 +188,7 @@ namespace XTOPMS.Web.Host.Startup
             RecurringJob.AddOrUpdate<AccessTokenRefreshProcess>("Alibaba Access-Token Refresh Service", (t) => t.Execute(null), Cron.Daily);
             RecurringJob.AddOrUpdate<RefreshTokenRefreshProcess>("Alibaba Refresh-Token Refresh Service", (t) => t.Execute(null), Cron.Daily);
             // RecurringJob.AddOrUpdate<DataSyncServiceProcess>("Data Sync Service Schedule Job)", (t) => t.Execute(null), Cron.Hourly);
-            RecurringJob.AddOrUpdate<AlibabaCallbackMessageProcess>("Alibaba Callback Message Process Service", (t) => t.Execute(null), Cron.Minutely);
+            RecurringJob.AddOrUpdate<AlibabaCallbackMessageProcess>("Alibaba Callback Message Process Service", (t) => t.Execute(null), Cron.Hourly);
 
         }
     }
