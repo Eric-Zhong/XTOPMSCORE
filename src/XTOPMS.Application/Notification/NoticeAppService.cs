@@ -21,6 +21,7 @@
 using System;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
+using XTOPMS.Application.Dto;
 using XTOPMS.EntityFrameworkCore.Repositories;
 using XTOPMS.Notification.Dto;
 
@@ -38,7 +39,7 @@ namespace XTOPMS.Notification
         }
 
 
-        public override Task<PagedResultDto<NoticeDto>> GetAll(PagedAndSortedResultRequestDto input)
+        public override Task<PagedResultDto<NoticeDto>> GetAll(QueryBaseDto input)
         {
             return base.GetAll(input);
         }

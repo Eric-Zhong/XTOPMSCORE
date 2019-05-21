@@ -28,7 +28,7 @@ namespace XTOPMS.Alibaba
         : IXTOPMSAsyncCrudAppService<
             ProductCategoryDto,
             long,
-            MessagePagedSortedFilterDto,
+            MessageQueryDto,
             ProductCategoryCreateUpdateDto,
             ProductCategoryCreateUpdateDto,
             ProductCategoryCreateUpdateDto,
@@ -42,7 +42,7 @@ namespace XTOPMS.Alibaba
             ProductCategory, 
             ProductCategoryDto,
             long,
-            MessagePagedSortedFilterDto,
+            MessageQueryDto,
             ProductCategoryCreateUpdateDto,
             ProductCategoryCreateUpdateDto,
             ProductCategoryCreateUpdateDto,

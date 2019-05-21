@@ -49,7 +49,7 @@ namespace XTOPMS.Alibaba
             DataSyncService
             , DataSyncServiceDto
             , long
-            , PagedSortedFilterRequestBaseDto
+            , QueryBaseDto
             , DataSyncServiceCreateUpdateDto
             , DataSyncServiceCreateUpdateDto
             , DataSyncServiceCreateUpdateDto
@@ -76,7 +76,7 @@ namespace XTOPMS.Alibaba
             _tradeManager = tradeManager;
         }
 
-        protected override IQueryable<DataSyncService> CreateFilteredQuery(PagedSortedFilterRequestBaseDto input)
+        protected override IQueryable<DataSyncService> CreateFilteredQuery(QueryBaseDto input)
         {
             var query = base.CreateFilteredQuery(input);
             query = query.IncludeIf(true, t => t.AccessTokenInfo);

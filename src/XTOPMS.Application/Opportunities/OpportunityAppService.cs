@@ -27,6 +27,7 @@ using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.EntityFrameworkCore.Extensions;
+using XTOPMS.Application.Dto;
 using XTOPMS.Authorization;
 using XTOPMS.EntityFrameworkCore.Repositories;
 using XTOPMS.Opportunities.Dto;
@@ -46,8 +47,8 @@ namespace XTOPMS.Opportunities
         XTOPMSAsyncCrudAppService<
             Opportunity, 
             OpportunityDto, 
-            long, 
-            PagedAndSortedResultRequestDto,
+            long,
+            QueryBaseDto,
             OpportunityCreateUpdateDto,
             OpportunityCreateUpdateDto,
             OpportunityDto,
@@ -61,7 +62,7 @@ namespace XTOPMS.Opportunities
         {
         }
 
-        protected override IQueryable<Opportunity> CreateFilteredQuery(PagedAndSortedResultRequestDto input)
+        protected override IQueryable<Opportunity> CreateFilteredQuery(QueryBaseDto input)
         {
             // Initialize sales entity
             var query = base.CreateFilteredQuery(input).IncludeIf(true, t=>t.Sales);

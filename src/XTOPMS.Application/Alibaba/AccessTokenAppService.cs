@@ -51,7 +51,7 @@ namespace XTOPMS.Alibaba
             AccessToken, 
             AccessTokenDto,
             long,
-            PagedSortedFilterRequestBaseDto,
+            QueryBaseDto,
             AccessTokenCreateUpdateDto,
             AccessTokenCreateUpdateDto,
             AccessTokenCreateUpdateDto
@@ -76,7 +76,7 @@ namespace XTOPMS.Alibaba
         }
 
 
-        public override async Task<PagedResultDto<AccessTokenDto>> GetAll(PagedSortedFilterRequestBaseDto input)
+        public override async Task<PagedResultDto<AccessTokenDto>> GetAll(QueryBaseDto input)
         {
             using(_unitOfWorkManager.Current.DisableFilter(AbpDataFilters.SoftDelete))
             {

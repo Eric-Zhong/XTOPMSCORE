@@ -44,6 +44,7 @@ namespace XTOPMS.Alibaba
         readonly IAlibabaMessageRepository alibabaMessageRepository;
         readonly IAccessTokenRepository accessTokenRepository;
         readonly IDataSyncServiceRepository dataSyncServiceRepository;
+        readonly IAlibabaProductCategoryRepository alibabaProductCategoryRepository;
         readonly ITradeManager tradeManager;
         readonly IOrderManager orderManager;
         readonly IUnitOfWorkManager unitOfWorkManager;
@@ -53,6 +54,7 @@ namespace XTOPMS.Alibaba
             IAlibabaMessageRepository _alibabaMessageRepository,
             IAccessTokenRepository _accessTokenRepository,
             IDataSyncServiceRepository _dataSyncServiceRepository,
+            IAlibabaProductCategoryRepository _alibabaProductCategoryRepository,
             ITradeManager _tradeManager,
             IOrderManager _orderManager,
             IUnitOfWorkManager _unitOfWorkManager)
@@ -61,6 +63,7 @@ namespace XTOPMS.Alibaba
             alibabaMessageRepository = _alibabaMessageRepository;
             accessTokenRepository = _accessTokenRepository;
             dataSyncServiceRepository = _dataSyncServiceRepository;
+            alibabaProductCategoryRepository = _alibabaProductCategoryRepository;
             tradeManager = _tradeManager;
             orderManager = _orderManager;
             unitOfWorkManager = _unitOfWorkManager;
@@ -111,6 +114,7 @@ namespace XTOPMS.Alibaba
                 {
                     tradeInfo = tradeManager.GetTradeInfor(dataSyncService.AccessTokenInfo.App_Key, memberId, orderId);
                     msgEntity.Data = JsonConvert.SerializeObject(tradeInfo);            // Save as JSON
+                    msgEntity.ErpId = tradeInfo.getBaseInfo().getIdOfStr();             // Save order id to ERP#
                     alibabaMessageRepository.Update(msgEntity);
                     Console.WriteLine("Got order from alibaba.");
                     Console.WriteLine(msgEntity.Data);
@@ -124,15 +128,34 @@ namespace XTOPMS.Alibaba
                 // Step 3: Check the product filter.
                 bool isMatched = false;
 
-                foreach (var prd in tradeInfo.getProductItems())
+                // Step 3.1: Get product filters
+                var filters = alibabaProductCategoryRepository.GetAll()
+                    .Where(t => t.IsActive)
+                    .Where(t=>t.TenantId == dataSyncService.TenantId)
+                    .ToList();
+
+                if(filters == null || filters.Count == 0)
                 {
-                    if (prd.getProductCargoNumber() == "")
+                    Console.WriteLine("None filter option.");
+                    isMatched = true;   // None filter mean all data will be send to salesforce.
+                }
+                else
+                {
+                    // Get sku in query as List<string>
+                    var sku_query = from f in filters
+                              select f.Code
+                              ;
+                    var sku = sku_query.ToList();
+
+                    foreach (var prd in tradeInfo.getProductItems())
                     {
-                        isMatched = true;
-                        break;
+                        // the category# of product in this order was matched.
+                        if (sku.Contains(prd.getProductCargoNumber()))
+                        {
+                            isMatched = true;
+                            break;
+                        }
                     }
-                    isMatched = true;
-                    break;
                 }
 
                 // Step 4: If matched then send it to salesforce.

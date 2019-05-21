@@ -26,6 +26,9 @@ using XTOPMS.Dto;
 
 namespace XTOPMS.Alibaba.Dto
 {
+    /// <summary>
+    /// Alibaba callback message DTO
+    /// </summary>
     [Serializable]
     [AutoMap(typeof(Message))]
     public class MessageDto: XTOPMSEntityDto
@@ -50,16 +53,19 @@ namespace XTOPMS.Alibaba.Dto
         }
     }
 
-
-    public class MessageFilterFields
+    public class MessageFilterOption: QueryBaseOption
     {
-        List<string> Type { get; set; }
-        List<int> Status { get; set; }
+        public List<string> Type { get; set; }
     }
 
-
-    public class MessagePagedSortedFilterDto: PagedSortedFilterRequestBaseDto<MessageFilterFields>
+    /// <summary>
+    /// Alibaba callback message filter option
+    /// </summary>
+    [Serializable]
+    public class MessageQueryDto
+        : QueryBaseDto<MessageFilterOption>, IQueryBaseDto<MessageFilterOption>
     {
 
     }
+
 }

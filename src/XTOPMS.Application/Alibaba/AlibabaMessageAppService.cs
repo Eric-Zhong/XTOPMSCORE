@@ -20,9 +20,12 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
+using Abp.Collections.Extensions;
 using Abp.Domain.Entities;
+using Abp.Linq.Extensions;
 using XTOPMS;
 using XTOPMS.Alibaba.Dto;
 using XTOPMS.EntityFrameworkCore.Repositories;
@@ -33,7 +36,7 @@ namespace XTOPMS.Alibaba
         : IXTOPMSAsyncCrudAppService<
             MessageDto
             , long
-            , MessagePagedSortedFilterDto
+            , MessageQueryDto
             , MessageDto
             , MessageDto
             , MessageDto
@@ -47,7 +50,7 @@ namespace XTOPMS.Alibaba
             Message
             , MessageDto
             , long
-            , MessagePagedSortedFilterDto
+            , MessageQueryDto
             , MessageDto
             , MessageDto
             , MessageDto
@@ -58,9 +61,16 @@ namespace XTOPMS.Alibaba
         {
         }
 
-        public override Task<MessageDto> Get(MessageDto input)
+        /// <summary>
+        /// 对过滤备件进行初始化
+        /// </summary>
+        /// <returns>The filtered query.</returns>
+        /// <param name="input">Input.</param>
+        protected override IQueryable<Message> CreateFilteredQuery(MessageQueryDto input)
         {
-            return base.Get(input);
+            return base.CreateFilteredQuery(input)
+                .WhereIf(input.Filters != null && input.Filters.Status != null && input.Filters.Status.Count > 0, t => input.Filters.Status.Contains(t.Status))
+                .WhereIf(input.Filters != null && input.Filters.Type != null && input.Filters.Type.Count > 0, t => input.Filters.Type.Contains(t.Type));
         }
 
         /// <summary>

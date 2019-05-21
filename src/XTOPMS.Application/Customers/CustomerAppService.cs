@@ -30,6 +30,7 @@ using XTOPMS.Customers.Dto;
 using XTOPMS.EntityFrameworkCore.Repositories;
 using XTOPMS.Application.Dto;
 using Abp.Application.Services;
+using Abp.Linq.Extensions;
 
 namespace XTOPMS.Customers
 {
@@ -49,7 +50,7 @@ namespace XTOPMS.Customers
             Customer,
             CustomerDto,
             long,
-            PagedSortedFilterRequestBaseDto,
+            CustomerQueryDto,
             CustomerUpdateDto,
             CustomerUpdateDto,
             EntityDto<long>,
@@ -69,19 +70,32 @@ namespace XTOPMS.Customers
             this.GetAllPermissionName = PermissionNames.API_Customer_GetAll;
             this.GetPermissionName = PermissionNames.API_Customer_Get;
             this.UpdatePermissionName = PermissionNames.API_Customer_Update;
-
             repository = _repository;
             customerManager = _customerManager;
         }
 
-
-        protected override IQueryable<Customer> CreateFilteredQuery(PagedSortedFilterRequestBaseDto input)
+        protected override IQueryable<Customer> CreateFilteredQuery(CustomerQueryDto input)
         {
             var query = base.CreateFilteredQuery(input);
+            query = query
+                .WhereIf(input.Filters != null && input.Filters.Rate != null, t => input.Filters.Rate.Contains(t.Rate))
+                // 下面这种写法，后台翻译后变成了 FALSE = TRUE 肯本查不出数据
+                // .WhereIf(input.Filters != null && input.Filters.IsActive != null && input.Filters.IsActive.Count > 0, t => t.IsActive == input.Filters.IsActive[0])
+                ;
+            if(input.Filters != null && input.Filters.IsActive != null && input.Filters.IsActive.Count > 0)
+            {
+                if (input.Filters.IsActive[0]) // True
+                {
+                    query = query.Where(t => t.IsActive);
+                }
+                else // False
+                {
+                    query = query.Where(t => !t.IsActive);
+                }
+            }
             query = query.IncludeIf(true, "CustomerCategorySettings.CustomerCategory");
             return query;
         }
-
 
         public async Task<List<CustomerSearchResultDto>> Search(CustomerSearchInputDto input)
         {
@@ -106,7 +120,6 @@ namespace XTOPMS.Customers
             var items = ObjectMapper.Map<List<CustomerSearchResultDto>>(list);
             return items;
         }
-
 
         public override async Task<CustomerDto> Update(CustomerUpdateDto input)
         {

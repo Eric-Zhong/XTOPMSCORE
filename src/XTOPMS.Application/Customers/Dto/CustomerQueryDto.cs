@@ -1,10 +1,10 @@
 ﻿//
-//  PagedAndSortedResultRequestDto.cs
+//  CustomerQueryDto.cs
 //
 //  Author:
 //       Eric-Zhong Xu <xu.zhong@hotmail.com>
 //
-//  Copyright (c) 2018 
+//  Copyright (c) 2019 
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
@@ -18,24 +18,34 @@
 //
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using System;
+using System.Collections.Generic;
+using XTOPMS.Application.Dto;
 
-
-using Abp.Application.Services.Dto;
-
-namespace XTOPMS.Application.Dto
+namespace XTOPMS.Customers.Dto
 {
-    /// <summary>
-    /// XTOPMS 中最基础的 Query DTO，用于与 GetAll 接口配合使用，但无法实现 Filter 功能。只能用于输入参数。
-    /// </summary>
-    public class PagedSortedFilterRequestBaseDto : PagedAndSortedResultRequestDto, IPagedAndSortedResultRequest
+    public interface ICustomerQueryDto
+        : IQueryBaseDto<CustomerQueryOption>
     {
-        // Add your property
     }
 
-    public class PagedSortedFilterRequestBaseDto<TFiltersFields> : PagedAndSortedResultRequestDto, IPagedAndSortedResultRequest
+    public class CustomerQueryDto
+        : QueryBaseDto<CustomerQueryOption>
+        , ICustomerQueryDto
     {
-        // Add your property
-        TFiltersFields Filters { get; set; }
+        public CustomerQueryDto()
+        {
+        }
+
+    }
+
+    public class CustomerQueryOption: QueryBaseOption
+    {
+        public CustomerQueryOption()
+        {
+        }
+
+        public List<int> Rate { get; set; }
     }
 
 }
