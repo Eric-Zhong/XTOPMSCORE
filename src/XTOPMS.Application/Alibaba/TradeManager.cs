@@ -213,13 +213,16 @@ namespace XTOPMS.Alibaba
                 {
                     case "ORDER_PAY":
                         backgroundJobManager.Enqueue<AlibabaCallbackOnOrderPayJob, MessageDto>(arg, BackgroundJobPriority.Low, null);
-                        Console.WriteLine("Background job created. Message Id is " + msg.Id.ToString());
+                        Console.WriteLine("Background job created for this message (" + msg.Id.ToString() + ") .");
                         break;
                     default:
                         msg.Status = (int)CallbackMessageStatus.Ignored;        // Status set to 'ignored' when none job to trigger.
+                        Console.WriteLine("This message (" + msg.Id.ToString() + ") not need to process.");
                         break;
                 }
+                alibabaMessageRepository.Update(msg);
             }
+
         }
     }
 }

@@ -19,6 +19,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using System.Linq;
 using Abp.EntityFrameworkCore;
 using XTOPMS.Alibaba;
 
@@ -37,6 +38,11 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
     {
         public AlibabaProductCategoryRepository(IDbContextProvider<XTOPMSDbContext> dbContextProvider) : base(dbContextProvider)
         {
+        }
+
+        public override IQueryable<ProductCategory> GetAll()
+        {
+            return base.GetAll();
         }
     }
 }

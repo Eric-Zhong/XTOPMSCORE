@@ -129,12 +129,14 @@ namespace XTOPMS.Alibaba
                 bool isMatched = false;
 
                 // Step 3.1: Get product filters
-                var filters = alibabaProductCategoryRepository.GetAll()
-                    .Where(t => t.IsActive)
-                    .Where(t=>t.TenantId == dataSyncService.TenantId)
-                    .ToList();
+                // 没有详细去研究为什么下面这种写法会报错，只能用后面的写法先代替了。
+                //var filters = alibabaProductCategoryRepository.GetAll()
+                //.Where(t => t.IsActive)
+                //.Where(t => t.TenantId == dataSyncService.TenantId)
+                //.ToList();
+                var filters = alibabaProductCategoryRepository.GetAllList(t => t.IsActive && t.TenantId == dataSyncService.TenantId);
 
-                if(filters == null || filters.Count == 0)
+                if (filters == null || filters.Count == 0)
                 {
                     Console.WriteLine("None filter option.");
                     isMatched = true;   // None filter mean all data will be send to salesforce.
