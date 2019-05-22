@@ -48,7 +48,7 @@ namespace XTOPMS.Opportunities.Dto
     }
 
     [AutoMap(typeof(Opportunity))]
-    public class OpportunityBaseDto : XTOPMSEntityBaseDto, IOpportunityBaseDto
+    public class OpportunityBaseDto : XTOPMSEntityDto, IOpportunityBaseDto
     {
         public long? OwnerId { get; set; }
         public long? GeneralContractorId { get; set; }

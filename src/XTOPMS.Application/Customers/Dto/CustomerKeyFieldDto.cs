@@ -18,17 +18,19 @@
 //
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-using System;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using XTOPMS.Dto;
 
 namespace XTOPMS.Customers.Dto
 {
     [AutoMap(typeof(Customer))]
     public class CustomerKeyFieldDto : EntityDto<long>, IEntityDto<long>
     {
+        public string Key { get { return Id.ToString(); } }
+        public string Name { get; set; }
         public string ShortName { get; set; }
+        public string Code { get; set; }
+        public string ErpId { get; set; }
         public string CompanyCode { get; set; }
 
         public CustomerKeyFieldDto Parent { get; set; }

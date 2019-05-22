@@ -18,14 +18,11 @@
 //
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services;
-using Abp.Application.Services.Dto;
 using Abp.Auditing;
 using Abp.Authorization;
-using Abp.Domain.Repositories;
 using Abp.EntityFrameworkCore.Extensions;
 using XTOPMS.Application.Dto;
 using XTOPMS.Authorization;
@@ -67,7 +64,9 @@ namespace XTOPMS.Opportunities
             // Initialize sales entity
             var query = base.CreateFilteredQuery(input).IncludeIf(true, t=>t.Sales);
             query = query.IncludeIf(true, t => t.BusinessCategory);
-
+            query = query.IncludeIf(true, t => t.Owner);
+            query = query.IncludeIf(true, t => t.Agency);
+            query = query.IncludeIf(true, t => t.GeneralContractor);
             return query;
         }
 

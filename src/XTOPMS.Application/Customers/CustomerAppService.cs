@@ -31,6 +31,7 @@ using XTOPMS.EntityFrameworkCore.Repositories;
 using XTOPMS.Application.Dto;
 using Abp.Application.Services;
 using Abp.Linq.Extensions;
+using XTOPMS.Dto;
 
 namespace XTOPMS.Customers
 {
@@ -95,6 +96,30 @@ namespace XTOPMS.Customers
             }
             query = query.IncludeIf(true, "CustomerCategorySettings.CustomerCategory");
             return query;
+        }
+
+
+        public override async Task<List<CustomerDto>> QuickSearch(QuickSearchInputDto input)
+        {
+            var value = input.Value;
+            var count = input.Count;
+
+            var query = Repository.GetAll();
+
+            query = query.Where(t =>
+                (t.Name ?? "").Contains(value) ||
+                (t.Code ?? "").Contains(value) ||
+                (t.ErpId ?? "").Contains(value)
+                );
+
+            query = query.Take(count);
+            query = query.OrderBy(t => t.Name);
+
+            var list = await Task.FromResult(query.ToList());
+
+            var items = ObjectMapper.Map<List<CustomerDto>>(list);
+
+            return items;
         }
 
         public async Task<List<CustomerSearchResultDto>> Search(CustomerSearchInputDto input)
