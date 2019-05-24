@@ -1,2 +1,2 @@
-﻿dotnet ef database drop -f -v
-dotnet ef database update -v
+﻿# dotnet ef database drop -f -v
+dotnet ef database update -v --prefix-output

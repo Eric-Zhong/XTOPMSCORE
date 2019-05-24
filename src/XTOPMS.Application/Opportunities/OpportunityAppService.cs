@@ -33,7 +33,15 @@ using XTOPMS.Opportunities.Dto;
 namespace XTOPMS.Opportunities
 {
 
-    public interface IOpportunityAppService: IApplicationService
+    public interface IOpportunityAppService
+        : IXTOPMSAsyncCrudAppService<
+            OpportunityDto,
+            long,
+            QueryBaseDto,
+            OpportunityCreateUpdateDto,
+            OpportunityCreateUpdateDto,
+            OpportunityDto,
+            OpportunityDto>
     {
 
     }

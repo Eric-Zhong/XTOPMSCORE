@@ -27,11 +27,17 @@ namespace XTOPMS.Metadata.BusinessCategories
     [AutoMap(typeof(BusinessCategory))]
     public class BusinessCategoryBaseDto : XTOPMSBaseDto<string>
     {
-        string ParentId { get; set; }
-        string FullKey { get; set; }
-        string FullPath { get; set; }
-        int Level { get; set; }
-        bool IsLeaf { get; set; }
+        public string ParentId { get; set; }
+        public string FullKey { get; set; }
+        public string FullPath { get; set; }
+        public int Level { get; set; }
+        public bool IsLeaf { get; set; }
+        public decimal Amount { get; set; }
+        public string Currency { get; set; }
+        public string Region { get; set; }
+        public string Country { get; set; }
+        public string Province { get; set; }
+        public string City { get; set; }
 
         public BusinessCategoryBaseDto(): base()
         {

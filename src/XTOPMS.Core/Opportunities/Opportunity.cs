@@ -58,6 +58,8 @@ namespace XTOPMS.Opportunities
         string City { get; set; }
         string ScheduleData { get; set; }
         string GeographicData { get; set; }
+        DateTime? BidDeadline { get; set; }
+        DateTime? DeliveryDate { get; set; }
 
         // Foreign
         TUser Sales { get; set; }
@@ -106,6 +108,8 @@ namespace XTOPMS.Opportunities
         public string Province { get; set; }
         [StringLength(50)]
         public string City { get; set; }
+        [StringLength(500)]
+        public string Address { get; set; }
         /// <summary>
         /// 进度数据，计划用在前端界面显示时所显示的进度信息。
         /// </summary>
@@ -128,6 +132,14 @@ namespace XTOPMS.Opportunities
         public string BusinessCategoryId { get; set; }
         [ForeignKey("BusinessCategoryId")]
         public BusinessCategory BusinessCategory { get; set; }
+        /// <summary>
+        /// 投标时间
+        /// </summary>
+        public DateTime? BidDeadline { get; set; }
+        /// <summary>
+        /// 交货期时间
+        /// </summary>
+        public DateTime? DeliveryDate { get; set; }
 
         public Opportunity()
         {

@@ -18,6 +18,7 @@
 //
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using System;
 using Abp.AutoMapper;
 using XTOPMS.Dto;
 
@@ -41,6 +42,9 @@ namespace XTOPMS.Opportunities.Dto
         public string City { get; set; }
         public string ScheduleData { get; set; }
         public string GeographicData { get; set; }
+        public string Address { get; set; }
+        public DateTime? BidDeadline { get; set; }
+        public DateTime? DeliveryDate { get; set; }
 
         public OpportunityCreateUpdateDto()
         {

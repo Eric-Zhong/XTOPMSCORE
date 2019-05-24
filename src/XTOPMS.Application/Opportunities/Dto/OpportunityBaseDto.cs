@@ -36,15 +36,17 @@ namespace XTOPMS.Opportunities.Dto
         long? AgencyId { get; set; }
         long? SalesId { get; set; }
         string BusinessCategoryId { get; set; }
-
         decimal Amount { get; set; }
         string Currency { get; set; }
         string Region { get; set; }
         string Country { get; set; }
         string Province { get; set; }
         string City { get; set; }
+        string Address { get; set; }
         string ScheduleData { get; set; }
         string GeographicData { get; set; }
+        DateTime? BidDeadline { get; set; }
+        DateTime? DeliveryDate { get; set; }
     }
 
     [AutoMap(typeof(Opportunity))]
@@ -55,17 +57,19 @@ namespace XTOPMS.Opportunities.Dto
         public long? AgencyId { get; set; }
         public long? SalesId { get; set; }
         public string BusinessCategoryId { get; set; }
-
         public decimal Amount { get; set; }
         public string Currency { get; set; }
         public string Region { get; set; }
         public string Country { get; set; }
         public string Province { get; set; }
         public string City { get; set; }
+        public string Address { get; set; }
         public string ScheduleData { get; set; }
         public string GeographicData { get; set; }
+        public DateTime? BidDeadline { get; set; }
+        public DateTime? DeliveryDate { get; set; }
 
-        public OpportunityBaseDto()
+        public OpportunityBaseDto(): base()
         {
         }
     }
