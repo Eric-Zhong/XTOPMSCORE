@@ -19,17 +19,108 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using System.Collections.Generic;
+using Abp.Application.Services;
+using Abp.BackgroundJobs;
+using Abp.MailKit;
+using Abp.Net.Mail.Smtp;
+using MailKit.Net.Smtp;
+using MimeKit;
+using XTOPMS.Email;
+
 namespace XTOPMS.Testing
 {
+    public interface IWebApiAppService : IApplicationService
+    {
+        int Add(int a, int b);
+        bool SendEmail();
+        bool SendEmail2();
+        bool SendEmail3();
+    }
+
     public class WebApiAppService: XTOPMSAppServiceBase, IWebApiAppService
     {
-        public WebApiAppService()
+        ISmtpEmailSenderConfiguration smtpEmailSenderConfiguration;
+        IAbpMailKitConfiguration abpMailKitConfiguration;
+        IEmailManager emailManager;
+        IBackgroundJobManager backgroundJobManager;
+
+        public WebApiAppService(
+            ISmtpEmailSenderConfiguration _smtpEmailSenderConfiguration,
+            IAbpMailKitConfiguration _abpMailKitConfiguration,
+            IEmailManager _emailManager,
+            IBackgroundJobManager _backgroundJobManage
+            )
         {
+            smtpEmailSenderConfiguration = _smtpEmailSenderConfiguration;
+            abpMailKitConfiguration = _abpMailKitConfiguration;
+            emailManager = _emailManager;
+            backgroundJobManager = _backgroundJobManage;
         }
 
         public int Add(int a, int b)
         {
             return a + b;
+        }
+
+        public bool SendEmail()
+        {
+            //emailManager.SendMailToAdmin("title", "Hello");
+            //return true;
+
+            var emailSender = new SmtpEmailSender(
+                smtpEmailSenderConfiguration);
+            string body = "<h1>This is HTML</h1>";
+            emailSender.Send("zhong.xu@biztalkgroup.com", "xu.zhong@hotmail.com", "This is a test", body, true);
+            return true;
+        }
+
+        public bool SendEmail2()
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Joey Tribbiani", "zhong.xu@biztalkgroup.com"));
+            message.To.Add(new MailboxAddress("Mrs. Chanandler Bong", "zhong.xu@biztalkgroup.com"));
+            message.Subject = "星期天去哪里玩？";
+            message.Body = new TextPart("plain") { Text = "我想去故宫玩，如何" };
+            try
+            {
+                using (var client = new SmtpClient())
+                {
+                    // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
+                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                    client.Connect("smtp.exmail.qq.com", 465, true);
+                    // Note: since we don't have an OAuth2 token, disable
+                    // the XOAUTH2 authentication mechanism.
+                    // client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    // Note: only needed if the SMTP server requires authentication
+                    client.Authenticate("zhong.xu@biztalkgroup.com", "w3vjyCuxmA4i4GS8");
+                    client.Send(message);
+                    client.Disconnect(true);
+                }
+            }
+            catch(Exception eee)
+            {
+                Console.WriteLine(eee.ToString());
+
+            }
+            return true;
+        }
+
+        public bool SendEmail3()
+        {
+            EmailTask task = new EmailTask();
+
+            task.Subject = "Test";
+            task.Body = "Body";
+            task.To.Add(new Users.Dto.UserDto()
+            {
+                FullName = "Eric Xu",
+                EmailAddress = "zhong.xu@biztalkgroup.com"
+            });
+
+            backgroundJobManager.Enqueue<EmailSenderJob, EmailTask>(task);
+
+            return true;
         }
     }
 }

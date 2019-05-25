@@ -4,11 +4,16 @@ using Abp.Modules;
 using Abp.Reflection.Extensions;
 using XTOPMS.Configuration;
 using Abp.Hangfire.Configuration;
+using Abp.MailKit;
+using XTOPMS.Email;
+using Abp.Configuration.Startup;
 
 namespace XTOPMS.Web.Host.Startup
 {
     [DependsOn(
-       typeof(XTOPMSWebCoreModule))]
+        typeof(XTOPMSWebCoreModule),
+        typeof(AbpMailKitModule)
+        )]
     public class XTOPMSWebHostModule: AbpModule
     {
         private readonly IHostingEnvironment _env;
@@ -27,6 +32,8 @@ namespace XTOPMS.Web.Host.Startup
             // HangFire - Enable backgroup process component.
             // 20190419 - Eric.
             Configuration.BackgroundJobs.UseHangfire();
+            // 20190524 - Eric. Add MailKit SMTP Setting.
+            Configuration.ReplaceService<IMailKitSmtpBuilder, XTOPMSMailKitSmtpBuilder>();
         }
 
 

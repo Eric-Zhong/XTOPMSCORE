@@ -54,5 +54,10 @@ namespace XTOPMS.Users.Dto
         public string Address { get; set; }
         public string ExtensionData { get; set; }
         public long? OrganizationUnitId { get; set; }
+
+        public UserDto(): base()
+        {
+
+        }
     }
 }

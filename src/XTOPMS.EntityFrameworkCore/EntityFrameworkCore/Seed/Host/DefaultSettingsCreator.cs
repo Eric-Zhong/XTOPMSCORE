@@ -18,8 +18,17 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Host
         public void Create()
         {
             // Emailing
-            AddSettingIfNotExists(EmailSettingNames.DefaultFromAddress, "admin@xtopms.com");
-            AddSettingIfNotExists(EmailSettingNames.DefaultFromDisplayName, "xtopms.com mailer");
+            AddSettingIfNotExists(EmailSettingNames.DefaultFromAddress, "zhong.xu@biztalkgroup.com");
+            AddSettingIfNotExists(EmailSettingNames.DefaultFromDisplayName, "Supporter(XTOPMS)");
+            AddSettingIfNotExists(EmailSettingNames.Smtp.Domain, "");
+            AddSettingIfNotExists(EmailSettingNames.Smtp.Host, "smtp.exmail.qq.com");
+            AddSettingIfNotExists(EmailSettingNames.Smtp.UserName, "zhong.xu@biztalkgroup.com");
+            AddSettingIfNotExists(EmailSettingNames.Smtp.Password, "w3vjyCuxmA4i4GS8");
+            //AddSettingIfNotExists(EmailSettingNames.Smtp.Port, "465");
+            //AddSettingIfNotExists(EmailSettingNames.Smtp.EnableSsl, "true");
+            AddSettingIfNotExists(EmailSettingNames.Smtp.Port, "25");
+            AddSettingIfNotExists(EmailSettingNames.Smtp.EnableSsl, "true");
+            AddSettingIfNotExists(EmailSettingNames.Smtp.UseDefaultCredentials, "false");
 
             // Languages
             AddSettingIfNotExists(LocalizationSettingNames.DefaultLanguage, "en");

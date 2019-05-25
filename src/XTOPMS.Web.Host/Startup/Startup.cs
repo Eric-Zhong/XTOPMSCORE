@@ -163,6 +163,7 @@ namespace XTOPMS.Web.Host.Startup
 
             // HangFire
             // 20190419 - Eric.
+            // HangFire分布式后端作业调度框架服务 https://yq.aliyun.com/articles/229859
             app.UseHangfireServer(
                 new BackgroundJobServerOptions {
                     WorkerCount = 1,
@@ -172,14 +173,17 @@ namespace XTOPMS.Web.Host.Startup
 
             app.UseHangfireDashboard("/hangfire");
             /*
+            */
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {
                 Authorization = new[]
                 {
-                    new AbpHangfireAuthorizationFilter("MyHangFireDashboardPermissionName")
-                };
+                    // new AbpHangfireAuthorizationFilter("MyHangFireDashboardPermissionName")
+                    new AbpHangfireAuthorizationFilter("HangFire.Dashboard")
+                },
+                AppPath = "http://xto.biztalkgroup.com",
+                StatsPollingInterval = 60000
             });
-            */
 
             // BackgroundJob.Enqueue(() => Console.WriteLine("Handfire regisited and running."));
             // BackgroundJob.Schedule(() => Console.WriteLine("Handfire running"), TimeSpan.FromSeconds(20));
