@@ -33,8 +33,11 @@ namespace XTOPMS.Email
         : IDomainService
     {
         void SendMail(EmailTask mail);
+        void SendMail(string to, string subject, string body, bool isBodyHtml);
         void SendMail(string from, List<string> to, string subject, string body, bool isBodyHtml);
         void SendMail(UserDto from, List<UserDto> to, string subject, string body, bool isBodyHtml);
+        void SendMail(List<UserDto> to, string subject, string body, bool isBodyHtml);
+        void SendMail(string subject, string body, bool isBodyHtml);
         void SendMail<TModel>(UserDto from, List<UserDto> to, long templateId, TModel model);
     }
 
@@ -64,19 +67,14 @@ namespace XTOPMS.Email
         /// <param name="isBodyHtml">If set to <c>true</c> is body html.</param>
         public void SendMail(string from, List<string> to, string subject, string body, bool isBodyHtml)
         {
-            EmailTask mail = new EmailTask();
-            mail.From.EmailAddress = from;
-
-            foreach(var address in to)
+            UserDto mailFrom = new UserDto { EmailAddress = from };
+            List<UserDto> mailTo = new List<UserDto>();
+            foreach (var address in to)
             {
                 UserDto u = new UserDto { EmailAddress = address };
-                mail.To.Add(u);
+                mailTo.Add(u);
             }
-            mail.Subject = subject;
-            mail.Body = body;
-            mail.IsBodyHtml = isBodyHtml;
-
-            this.SendMail(mail);
+            SendMail(mailFrom, mailTo, subject, body, isBodyHtml);
         }
 
         /// <summary>
@@ -98,8 +96,25 @@ namespace XTOPMS.Email
         /// <param name="isBodyHtml">If set to <c>true</c> is body html.</param>
         public void SendMail(UserDto from, List<UserDto> to, string subject, string body, bool isBodyHtml)
         {
-            throw new NotImplementedException();
+            EmailTask mail = new EmailTask();
+
+            mail.From.EmailAddress = from.EmailAddress;
+            mail.To.AddRange(to);
+            mail.Subject = subject;
+            mail.Body = body;
+            mail.IsBodyHtml = isBodyHtml;
+
+            SendMail(mail);
         }
+
+        public void SendMail(string to, string subject, string body, bool isBodyHtml)
+        {
+            string from = smtpEmailSenderConfiguration.DefaultFromAddress;
+            List<string> mailTo = new List<string>();
+            mailTo.Add(to);
+            SendMail(from, mailTo, subject, body, isBodyHtml);
+        }
+
 
 
         /// <summary>
@@ -125,6 +140,39 @@ namespace XTOPMS.Email
             // Transform body
 
             throw new NotImplementedException();
+        }
+
+        public void SendMail(List<UserDto> to, string subject, string body, bool isBodyHtml)
+        {
+            UserDto mailFrom = new UserDto
+            {
+                EmailAddress = smtpEmailSenderConfiguration.DefaultFromAddress,
+                FullName = smtpEmailSenderConfiguration.DefaultFromDisplayName
+            };
+
+            EmailTask mail = new EmailTask();
+
+            mail.From = mailFrom;
+            mail.To.AddRange(to);
+            mail.Subject = subject;
+            mail.Body = body;
+            mail.IsBodyHtml = isBodyHtml;
+
+            SendMail(mail);
+        }
+
+        public void SendMail(string subject, string body, bool isBodyHtml)
+        {
+            UserDto defaultUser = new UserDto
+            {
+                EmailAddress = smtpEmailSenderConfiguration.DefaultFromAddress,
+                FullName = smtpEmailSenderConfiguration.DefaultFromDisplayName
+            };
+
+            List<UserDto> mailTo = new List<UserDto>();
+            mailTo.Add(defaultUser);
+
+            SendMail(mailTo, subject, body, isBodyHtml);
         }
     }
 }

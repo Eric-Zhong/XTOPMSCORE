@@ -33,6 +33,7 @@ namespace XTOPMS.Web.Host.Startup
             // 20190419 - Eric.
             Configuration.BackgroundJobs.UseHangfire();
             // 20190524 - Eric. Add MailKit SMTP Setting.
+            // TODO: 但在实际使用中发现，按官网描述的方式注册后，邮件无法正常发送，目前还没有解决。
             Configuration.ReplaceService<IMailKitSmtpBuilder, XTOPMSMailKitSmtpBuilder>();
         }
 
@@ -40,6 +41,11 @@ namespace XTOPMS.Web.Host.Startup
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(XTOPMSWebHostModule).GetAssembly());
+        }
+
+        public override void PostInitialize()
+        {
+            base.PostInitialize();
         }
     }
 }

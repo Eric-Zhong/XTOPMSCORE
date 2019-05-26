@@ -95,7 +95,7 @@ namespace XTOPMS.Web.Host.Startup
                         new MySqlStorageOptions
                         {
                             TransactionIsolationLevel = IsolationLevel.ReadCommitted,
-                            QueuePollInterval = TimeSpan.FromSeconds(15),
+                            QueuePollInterval = TimeSpan.FromSeconds(15),               // 轮询队列时长
                             JobExpirationCheckInterval = TimeSpan.FromHours(1),
                             CountersAggregateInterval = TimeSpan.FromMinutes(5),
                             PrepareSchemaIfNecessary = true,
@@ -182,16 +182,17 @@ namespace XTOPMS.Web.Host.Startup
                     new AbpHangfireAuthorizationFilter("HangFire.Dashboard")
                 },
                 AppPath = "http://xto.biztalkgroup.com",
-                StatsPollingInterval = 60000
+                // StatsPollingInterval = 60000
+                DisplayStorageConnectionString = true
             });
 
             // BackgroundJob.Enqueue(() => Console.WriteLine("Handfire regisited and running."));
             // BackgroundJob.Schedule(() => Console.WriteLine("Handfire running"), TimeSpan.FromSeconds(20));
             // RecurringJob.AddOrUpdate(() => Console.WriteLine("Recurrent running"), Cron.Minutely);
 
+            // RecurringJob.AddOrUpdate<DataSyncServiceProcess>("Data Sync Service Schedule Job)", (t) => t.Execute(null), Cron.Hourly);
             RecurringJob.AddOrUpdate<AccessTokenRefreshProcess>("Alibaba Access-Token Refresh Service", (t) => t.Execute(null), Cron.Daily);
             RecurringJob.AddOrUpdate<RefreshTokenRefreshProcess>("Alibaba Refresh-Token Refresh Service", (t) => t.Execute(null), Cron.Daily);
-            // RecurringJob.AddOrUpdate<DataSyncServiceProcess>("Data Sync Service Schedule Job)", (t) => t.Execute(null), Cron.Hourly);
             RecurringJob.AddOrUpdate<AlibabaCallbackMessageProcess>("Alibaba Callback Message Process Service", (t) => t.Execute(null), Cron.Minutely);
 
         }

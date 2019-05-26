@@ -26,6 +26,7 @@ using XTOPMS.EntityFrameworkCore.Repositories;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Abp.AutoMapper;
+using XTOPMS.Email;
 
 namespace XTOPMS.Alibaba
 {
@@ -35,11 +36,13 @@ namespace XTOPMS.Alibaba
         ICallbackMessageRepository callbackMessageRepository;
         IAlibabaMessageRepository alibabaMessageRepository;
         IAccessTokenRepository accessTokenRepository;
+        IEmailManager emailManager;
 
         public AlibabaCallbackJob(
             ICallbackMessageRepository _callbackMessageRepository,
             IAlibabaMessageRepository _alibabaMessageRepository,
-            IAccessTokenRepository _accessTokenRepository)
+            IAccessTokenRepository _accessTokenRepository,
+            IEmailManager _emailManager)
         {
             callbackMessageRepository = _callbackMessageRepository;
             alibabaMessageRepository = _alibabaMessageRepository;
@@ -83,10 +86,12 @@ namespace XTOPMS.Alibaba
                         try
                         {
                             var msgEntity = msg.MapTo<Message>();               // Dto map to Entity.
+
                             msgEntity.TenantId = tenantId;                      // Set entitie's tenantid.
                             // msgEntity.ExtensionData = msgEntity.Data;        // Copy data to extensionData field.
                             msgEntity.Status = (int)CallbackMessageStatus.New;  // Set status to new (0).
                             // Save alibaba message
+
                             var msgId = alibabaMessageRepository.InsertAndGetId(msgEntity);         // Save
                             this.Logger.Info("Alibaba message (ID = '" + msgId + "') saved.");      // Log
                             Console.WriteLine("Message saved. (ID: " + msgId + ")");
@@ -97,7 +102,14 @@ namespace XTOPMS.Alibaba
                             this.Logger.Error("Get alibaba message entity throw error" + err2.Message, err2);
                             cbmEntity.Status = CallbackMessageStatus.ParseError;   // Set status as not found member.
                             this.callbackMessageRepository.Update(cbmEntity);   // Save the satatus.
+
+                            // 这里已经标记CallbackMessage状态为 ParseError 了，后面需要运维人员排查具体原因。
+                            // 所以这里不需要再抛出异常。抛出、重试也没用。
                             // throw err2;
+
+                            // here is error, need notice admin to followe.
+                            // Error Code : 100
+                            emailManager.SendMail("[XTOPMS] 处理Alibaba返回的消息时出现异常 (AlibabaCallbackJob 100)", err2.ToString(), false);
                         }
                     }
                 }
@@ -105,6 +117,8 @@ namespace XTOPMS.Alibaba
                 {
                     this.Logger.Error("Process alibaba message throw error. " + err0.Message, err0);
                     cbmEntity.Status = CallbackMessageStatus.Failed;
+                    // Error Code : 110
+                    emailManager.SendMail("[XTOPMS] 处理Alibaba返回的消息时出现异常 (AlibabaCallbackJob 110)", err0.ToString(), false);
                     throw err0;
                 }
             }
@@ -112,6 +126,8 @@ namespace XTOPMS.Alibaba
             {
                 this.Logger.Error("Process alibaba callback message throw error. " + args.Message, exc);
                 Console.WriteLine(exc.ToString());
+                // Error Code : 120
+                emailManager.SendMail("[XTOPMS] 处理Alibaba返回的消息时出现异常 (AlibabaCallbackJob 120)", exc.ToString(), false);
                 throw exc;
             }
         }
