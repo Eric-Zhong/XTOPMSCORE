@@ -23,6 +23,7 @@ using System.Globalization;
 using Abp.Domain.Services;
 using com.alibaba.openapi.client;
 using Newtonsoft.Json;
+using XTOPMS.Email;
 using XTOPMS.EntityFrameworkCore.Repositories;
 
 namespace XTOPMS.Alibaba
@@ -42,10 +43,14 @@ namespace XTOPMS.Alibaba
     {
 
         private readonly IAccessTokenRepository accessTokenRepository;
+        private readonly IEmailManager emailManager;
 
-        public AccessTokenManager(IAccessTokenRepository _accessTokenRepository)
+        public AccessTokenManager(
+            IAccessTokenRepository _accessTokenRepository,
+            IEmailManager _emailManager)
         {
             accessTokenRepository = _accessTokenRepository;
+            emailManager = _emailManager;
         }
 
 
@@ -112,7 +117,6 @@ namespace XTOPMS.Alibaba
             {
                 SyncAPIClient client = new SyncAPIClient(token.App_Key, token.App_Secret);
                 var newToken = client.refreshRefreshToken(token.Access_Token, token.Refresh_Token);
-
                 token.Access_Token = newToken.getAccess_token();
                 token.Expires_In = newToken.getExpires_time();
                 token.Refresh_Token = newToken.getRefresh_token();
@@ -126,7 +130,11 @@ namespace XTOPMS.Alibaba
             catch (Exception err)
             {
                 token.Status = (int)CallbackMessageStatus.Failed;
-                token.Comment = err.ToString().Substring(0, 4000);
+                token.Comment = err.ToString();
+
+                // Notice to admin
+                // Error code : 200
+                emailManager.SendMail("[XTOPMS] 刷新 AccessToken 时出现异常 (Error 200)", err.ToString(), false);
             }
         }
 
@@ -181,6 +189,10 @@ namespace XTOPMS.Alibaba
             {
                 token.Status = (int)CallbackMessageStatus.Failed;
                 token.Comment = err.ToString().Substring(0, 4000);
+
+                // Notice to admin
+                // Error code : 210
+                emailManager.SendMail("[XTOPMS] 刷新 AccessToken 时出现异常 (Error 210)", err.ToString(), false);
             }
         }
 
