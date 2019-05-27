@@ -21,11 +21,13 @@
 using System;
 using System.Collections.Generic;
 using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.BackgroundJobs;
 using Abp.MailKit;
 using Abp.Net.Mail.Smtp;
 using MailKit.Net.Smtp;
 using MimeKit;
+using XTOPMS.Authorization;
 using XTOPMS.Email;
 
 namespace XTOPMS.Testing
@@ -38,6 +40,7 @@ namespace XTOPMS.Testing
         bool SendEmail3();
     }
 
+    [AbpAuthorize(PermissionNames.Pages_Users)]
     public class WebApiAppService: XTOPMSAppServiceBase, IWebApiAppService
     {
         ISmtpEmailSenderConfiguration smtpEmailSenderConfiguration;
@@ -86,8 +89,13 @@ namespace XTOPMS.Testing
             {
                 using (var client = new SmtpClient())
                 {
+                    client.CheckCertificateRevocation = false;
                     // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
-                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                    client.ServerCertificateValidationCallback = (s, c, h, e) =>
+                    {
+                        Console.WriteLine("SMTP server ssl callback.");
+                        return true;
+                    };
                     client.Connect("smtp.exmail.qq.com", 465, true);
                     // Note: since we don't have an OAuth2 token, disable
                     // the XOAUTH2 authentication mechanism.

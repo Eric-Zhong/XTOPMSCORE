@@ -86,6 +86,9 @@ namespace XTOPMS.Email
             {
                 using (var client = new SmtpClient())
                 {
+                    // 没有下面这句，就会是一个坑： https://www.cnblogs.com/sunnytrudeau/p/10822470.html
+                    // 可以简单看看的资料：https://dotnetcoretutorials.com/2018/03/18/common-errors-sending-email-mailkit/
+                    client.CheckCertificateRevocation = false;
                     // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
                     client.ServerCertificateValidationCallback = (s, c, h, e) =>
                     {

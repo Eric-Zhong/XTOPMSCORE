@@ -37,6 +37,7 @@ namespace XTOPMS.Email
 
         protected override void ConfigureClient(SmtpClient client)
         {
+            client.CheckCertificateRevocation = false;
             client.ServerCertificateValidationCallback = (sender, certificate, chain, errors) => true;
             // Note: since we don't have an OAuth2 token, disable
             // the XOAUTH2 authentication mechanism.
