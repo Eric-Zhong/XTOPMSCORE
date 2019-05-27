@@ -22,6 +22,7 @@ using System;
 using System.Globalization;
 using Abp.Domain.Services;
 using com.alibaba.openapi.client;
+using com.alibaba.openapi.client.exception;
 using Newtonsoft.Json;
 using XTOPMS.Email;
 using XTOPMS.EntityFrameworkCore.Repositories;
@@ -134,8 +135,41 @@ namespace XTOPMS.Alibaba
 
                 // Notice to admin
                 // Error code : 200
-                emailManager.SendMail("[XTOPMS] 刷新 AccessToken 时出现异常 (Error 200)", err.ToString(), false);
+                string body = "";
+                try
+                {
+                    OceanException oceanException = err as OceanException;
+                    body = @"
+Hi admin,
+
+There are some error when executte refresh 'Refresh-Token' background job.
+";
+                body += @"
+Error Code: " + oceanException.getError_code();
+                body += @"
+Error Message: " + oceanException.getError_message();
+                body += @"
+Detail: " + oceanException.ToString();
+                }
+                finally {
+                    body += "\r\nError: " + err.ToString();
+                }
+
+//                string body = @"
+//Hi admin,
+
+//There are some error when executte refresh 'Refresh-Token' background job.
+//";
+//                body += @"
+//Error Code: " + err.getError_code();
+//                body += @"
+//Error Message: " + err.getError_message();
+//                body += @"
+//Detail: " + err.ToString();
+
+                emailManager.SendMail("[XTOPMS] 刷新 RefreshToken 时出现异常 (Error 200)", body, false);
             }
+            accessTokenRepository.Update(token);
         }
 
 
@@ -164,11 +198,11 @@ namespace XTOPMS.Alibaba
                 token.Access_Token = newToken.getAccess_token();
                 token.AliId = newToken.getAliId().ToString();
                 token.Resource_Owner = newToken.getResource_owner();
-                // token.Expires_In = DateTime.Now.AddSeconds(double.Parse(newToken.getExpires_in().ToString()));
-                token.Expires_In = newToken.getExpires_time();
+                token.Expires_In = DateTime.Now.AddSeconds(double.Parse(newToken.getExpires_in().ToString()));
+                // token.Expires_In = newToken.getExpires_time();
                 token.MemberId = newToken.getMemberId();
-
-                token = accessTokenRepository.Update(token);    // Get new token.
+                token.Status = (int)CallbackMessageStatus.Success;
+                token.Comment = "Success. " + JsonConvert.SerializeObject(newToken);
 
                 Console.WriteLine(string.Format(
                     "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
@@ -182,24 +216,24 @@ namespace XTOPMS.Alibaba
                     token.MemberId,
                     token.Expires_In.ToString("yyyy-MM-dd HH:mm:ss")));
 
-                token.Status = (int)CallbackMessageStatus.Success;
-                token.Comment = "Success. " + JsonConvert.SerializeObject(newToken);
             }
             catch (Exception err)
             {
                 token.Status = (int)CallbackMessageStatus.Failed;
-                token.Comment = err.ToString().Substring(0, 4000);
+                token.Comment = err.ToString();
 
                 // Notice to admin
                 // Error code : 210
                 emailManager.SendMail("[XTOPMS] 刷新 AccessToken 时出现异常 (Error 210)", err.ToString(), false);
             }
+
+            accessTokenRepository.Update(token);
         }
 
 
         public void UpdateToken()
         {
-            var list = accessTokenRepository.GetAllAccessTokenWillTimeout().Result;
+            var list = accessTokenRepository.GetAllAccessTokenWillTimeout().Result;         // Timeout after 2 hours.
             var count = list.Count;
             Console.WriteLine("There are " + count.ToString() + " tokens need to refresh.");
             foreach (var token in list)
@@ -211,7 +245,7 @@ namespace XTOPMS.Alibaba
 
         public void UpdateRefreshToken()
         {
-            var list = accessTokenRepository.GetAllRefreshTokenWillTimeout().Result;
+            var list = accessTokenRepository.GetAllRefreshTokenWillTimeout().Result;        // Timeout after 5 days.
             foreach (var item in list)
             {
                 this.RefreshRefreshToken(item);

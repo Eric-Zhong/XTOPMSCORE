@@ -55,7 +55,7 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
         {
             var query = from m in this.GetAll()
                         where 
-                            m.Refresh_Token_Timeout.AddDays(-30) <= DateTime.Now
+                            m.Refresh_Token_Timeout.AddDays(-5) <= DateTime.Now
                             && m.IsActive == true
                             && m.IsDeleted == false
                         select m

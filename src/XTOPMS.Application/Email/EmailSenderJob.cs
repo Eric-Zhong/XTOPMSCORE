@@ -87,7 +87,11 @@ namespace XTOPMS.Email
                 using (var client = new SmtpClient())
                 {
                     // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
-                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                    client.ServerCertificateValidationCallback = (s, c, h, e) =>
+                    {
+                        Console.WriteLine("Email server SSL callback.");
+                        return true;
+                    };
 
                     // Connect model
                     client.Connect(
