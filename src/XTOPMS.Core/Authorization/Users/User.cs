@@ -8,7 +8,11 @@ using XTOPMS.Utilities;
 
 namespace XTOPMS.Authorization.Users
 {
-    public class User : AbpUser<User>, IExtendableObject, IMayHaveOrganizationUnit
+    public class User 
+        : AbpUser<User>, 
+        IXTOPMSEntity,
+        IExtendableObject, 
+        IMayHaveOrganizationUnit
     {
         public const string DefaultPassword = "123qwe";
 
@@ -28,9 +32,7 @@ namespace XTOPMS.Authorization.Users
                 EmailAddress = emailAddress,
                 EmployeeNumber = IdFactory.NewId().ToString()
             };
-
             user.SetNormalizedNames();
-
             return user;
         }
 
@@ -52,5 +54,9 @@ namespace XTOPMS.Authorization.Users
         public string Address { get; set; }
         public string ExtensionData { get; set; }
         public long? OrganizationUnitId { get; set; }
+        public string Code { get; set; }
+        public string ErpId { get; set; }
+        public int Status { get; set; }
+        public string Comment { get; set; }
     }
 }
