@@ -32,6 +32,11 @@ using XTOPMS.Dto;
 using XTOPMS.EntityFrameworkCore.Repositories;
 using Abp.Collections.Extensions;
 using XTOPMS.Application.Dto;
+using XTOPMS.MultiTenancy;
+using Microsoft.AspNetCore.Identity;
+using XTOPMS.Authorization.Users;
+using Abp.Runtime.Session;
+using Abp.IdentityFramework;
 
 namespace XTOPMS
 {
@@ -319,5 +324,32 @@ namespace XTOPMS
             return await this.GetAll(input);
         }
 
+        #region Copy from XTOPMSAppServiceBase
+
+        public TenantManager TenantManager { get; set; }
+        public UserManager UserManager { get; set; }
+
+        protected virtual Task<User> GetCurrentUserAsync()
+        {
+            var user = UserManager.FindByIdAsync(AbpSession.GetUserId().ToString());
+            if (user == null)
+            {
+                throw new Exception("There is no current user!");
+            }
+
+            return user;
+        }
+
+        protected virtual Task<Tenant> GetCurrentTenantAsync()
+        {
+            return TenantManager.GetByIdAsync(AbpSession.GetTenantId());
+        }
+
+        protected virtual void CheckErrors(IdentityResult identityResult)
+        {
+            identityResult.CheckErrors(LocalizationManager);
+        }
+
+        #endregion
     }
 }

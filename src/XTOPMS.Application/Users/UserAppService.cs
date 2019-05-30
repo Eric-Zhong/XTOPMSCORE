@@ -18,37 +18,27 @@ using XTOPMS.Roles.Dto;
 using XTOPMS.Users.Dto;
 using XTOPMS.Dto;
 using XTOPMS.Application.Dto;
-using Abp.EntityFrameworkCore.Extensions;
-using System.Linq.Expressions;
-using Abp.Collections.Extensions;
-using System;
 using Abp.UI;
+using System.Linq.Expressions;
+using System;
+using Abp.Collections.Extensions;
 using Abp.AutoMapper;
+using XTOPMS.MultiTenancy;
 
 namespace XTOPMS.Users
 {
-
-    // TODO: 不知道为什么，User 无法使用 XTOPMSAsyncCrudAppService，所以暂只能这些在这里重新写一遍其中的能用方法
-
     public interface IUserAppService
-        : IXTOPMSAsyncCrudAppService<
-            UserDto,
-            long,
-            QueryBaseDto,
-            CreateUserDto,
-            UserDto,
-            UserDto,
-            UserDto>
+        : IAsyncCrudAppService<UserDto, long, QueryBaseDto, CreateUserDto, UserDto>
+        , IXTOPMSAsyncCrudAppService<UserDto, long, QueryBaseDto, CreateUserDto, UserDto, EntityDto<long>, EntityDto<long>>
     {
         Task<ListResultDto<RoleDto>> GetRoles();
         Task ChangeLanguage(ChangeUserLanguageDto input);
-        Task<PagedResultDto<UserDto>> QueryWithFullAudited(QueryBaseDto input);
+        Task ChangePassword(ChangePasswordDto input);
     }
-
 
     [AbpAuthorize(PermissionNames.Pages_Users)]
     public class UserAppService :
-        AsyncCrudAppService<User, UserDto, long, QueryBaseDto, CreateUserDto, UserDto, UserDto, UserDto>
+        AsyncCrudAppService<User, UserDto, long, QueryBaseDto, CreateUserDto, UserDto>
         , IUserAppService
     {
         private readonly UserManager _userManager;
@@ -114,7 +104,7 @@ namespace XTOPMS.Users
             return await Get(input);
         }
 
-        public override async Task Delete(UserDto input)
+        public override async Task Delete(EntityDto<long> input)
         {
             var user = await _userManager.GetUserByIdAsync(input.Id);
             await _userManager.DeleteAsync(user);
@@ -207,28 +197,14 @@ namespace XTOPMS.Users
             return output;
         }
 
-        public async Task<PagedResultDto<UserDto>> GetMyAll(QueryBaseDto input)
+        public Task<PagedResultDto<UserDto>> GetMyAll(QueryBaseDto input)
         {
-            // User manage is only support to admin, not need GetMyAll method.
-            return await this.GetAll(input);
+            throw new System.NotImplementedException();
         }
 
-        public async Task<PagedResultDto<UserDto>> GetAllWithFullAudited(QueryBaseDto input)
+        public Task<PagedResultDto<UserDto>> GetAllWithFullAudited(QueryBaseDto input)
         {
-            CheckGetAllPermission();
-            var query = this.CreateFilteredQuery(input);
-            // Full Audited Information need output
-            query = query.IncludeIf(true, t => t.CreatorUser);
-            query = query.IncludeIf(true, t => t.DeleterUser);
-            query = query.IncludeIf(true, t => t.LastModifierUser);
-            var totalCount = await AsyncQueryableExecuter.CountAsync(query);
-            query = ApplySorting(query, input);
-            query = ApplyPaging(query, input);
-            var entities = await AsyncQueryableExecuter.ToListAsync(query);
-            return new PagedResultDto<UserDto>(
-                totalCount,
-                entities.Select(MapToEntityDto).ToList()
-            );
+            throw new System.NotImplementedException();
         }
 
         public Task Remove(long id)
@@ -244,9 +220,9 @@ namespace XTOPMS.Users
             }
         }
 
-        public virtual IQueryable<User> GetDetailIncluding(params Expression<Func<User, object>>[] propertySelectors)
+        protected virtual IQueryable<User> GetDetailIncluding(params Expression<Func<User, object>>[] propertySelectors)
         {
-            var query = this.GetAll();
+            var query = this.Repository.GetAll();
 
             if (!propertySelectors.IsNullOrEmpty())
             {
@@ -258,36 +234,14 @@ namespace XTOPMS.Users
             return query;
         }
 
-        public IQueryable<User> GetAllIncluding()
-        {
-            return this.Repository.GetAll();
-        }
-
-        public IQueryable<User> GetAll()
-        {
-            return this.GetAllIncluding();
-        }
-
         public async Task<UserDto> GetDetailV1(long id)
         {
             var query = this.GetDetailIncluding(
                 t => t.DeleterUser
                 );
-            var user = await query.FirstOrDefaultAsync(this.CreateEqualityExpressionForId(id));
+            var user = await query.FirstOrDefaultAsync(t=>t.Id == id);
             UserDto userDto = user.MapTo<UserDto>();
             return userDto;
-        }
-
-        protected virtual Expression<Func<User, bool>> CreateEqualityExpressionForId(long id)
-        {
-            var lambdaParam = Expression.Parameter(typeof(User));
-
-            var lambdaBody = Expression.Equal(
-                Expression.PropertyOrField(lambdaParam, "Id"),
-                Expression.Constant(id, typeof(long))
-                );
-
-            return Expression.Lambda<Func<User, bool>>(lambdaBody, lambdaParam);
         }
 
         public async Task<PagedResultDto<UserDto>> Query(QueryBaseDto input)
@@ -295,22 +249,40 @@ namespace XTOPMS.Users
             return await this.GetAll(input);
         }
 
-        public async Task<PagedResultDto<UserDto>> QueryWithFullAudited(QueryBaseDto input)
+        #region Copy from XTOPMSAppServiceBase
+
+        public TenantManager TenantManager { get; set; }
+        public UserManager UserManager { get; set; }
+
+        protected virtual Task<User> GetCurrentUserAsync()
         {
-            CheckGetAllPermission();
-            var query = this.CreateFilteredQuery(input);
-            // Full Audited Information need output
-            query = query.IncludeIf(true, t => t.CreatorUser);
-            query = query.IncludeIf(true, t => t.DeleterUser);
-            query = query.IncludeIf(true, t => t.LastModifierUser);
-            var totalCount = await AsyncQueryableExecuter.CountAsync(query);
-            query = ApplySorting(query, input);
-            query = ApplyPaging(query, input);
-            var entities = await AsyncQueryableExecuter.ToListAsync(query);
-            return new PagedResultDto<UserDto>(
-                totalCount,
-                entities.Select(MapToEntityDto).ToList()
-            );
+            var user = UserManager.FindByIdAsync(AbpSession.GetUserId().ToString());
+            if (user == null)
+            {
+                throw new Exception("There is no current user!");
+            }
+
+            return user;
         }
+
+        protected virtual Task<Tenant> GetCurrentTenantAsync()
+        {
+            return TenantManager.GetByIdAsync(AbpSession.GetTenantId());
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 变更自己的登录密码
+        /// </summary>
+        /// <returns>The password.</returns>
+        /// <param name="input">Input.</param>
+        public async Task ChangePassword(ChangePasswordDto input)
+        {
+            var user = await this.GetCurrentUserAsync();
+            CheckErrors(await UserManager.ChangePasswordAsync(user, input.CurrentPassword, input.NewPassword));
+        }
+
+
     }
 }

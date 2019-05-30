@@ -193,7 +193,13 @@ namespace XTOPMS.Web.Host.Startup
             // RecurringJob.AddOrUpdate<DataSyncServiceProcess>("Data Sync Service Schedule Job)", (t) => t.Execute(null), Cron.Hourly);
             RecurringJob.AddOrUpdate<AccessTokenRefreshProcess>("Alibaba Access-Token Refresh Service", (t) => t.Execute(null), Cron.Daily);
             RecurringJob.AddOrUpdate<RefreshTokenRefreshProcess>("Alibaba Refresh-Token Refresh Service", (t) => t.Execute(null), Cron.Daily);
-            RecurringJob.AddOrUpdate<AlibabaCallbackMessageProcess>("Alibaba Callback Message Process Service", (t) => t.Execute(null), Cron.Minutely);
+
+            //  Cron Expression
+            // https://www.cnblogs.com/pipi-changing/p/5697481.html
+            // http://cron.qqe2.com/
+            // RecurringJob.AddOrUpdate<AlibabaCallbackMessageProcess>("Alibaba Callback Message Process Service", (t) => t.Execute(null), Cron.Hourly);
+            // "0 0/15 * * * ? -- not work
+            RecurringJob.AddOrUpdate<AlibabaCallbackMessageProcess>("Alibaba Callback Message Process Service", (t) => t.Execute(null), Cron.MinuteInterval(15));
 
         }
     }
