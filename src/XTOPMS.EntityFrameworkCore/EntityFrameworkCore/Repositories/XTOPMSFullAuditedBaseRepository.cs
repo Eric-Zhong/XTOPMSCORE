@@ -74,6 +74,7 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
         public virtual IQueryable<TEntity> GetDetailIncluding(params Expression<Func<TEntity, object>>[] propertySelectors)
         {
             var query = this.GetAll();
+
             if (!propertySelectors.IsNullOrEmpty())
             {
                 foreach (var propertySelector in propertySelectors)

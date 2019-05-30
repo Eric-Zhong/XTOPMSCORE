@@ -31,9 +31,6 @@ using Abp.Application.Services.Dto;
 using Abp.Domain.Uow;
 using XTOPMS.Application.Dto;
 using com.alibaba.trade.param;
-using cn.alibaba.open.param;
-using com.alibaba.openapi.client;
-using com.alibaba.openapi.client.policy;
 
 namespace XTOPMS.Alibaba
 {
@@ -42,7 +39,6 @@ namespace XTOPMS.Alibaba
     {
         Task<AccessTokenDto> InitializeAccessToken(InitializeAccessTokenInputDto input);
         AlibabaOpenplatformTradeModelTradeInfo GetTradeInfo(string appKey, string memberId, long orderId);
-        Task<PushQueryMessageListResult> PushQueryMessageList();
     }
 
 
@@ -133,20 +129,6 @@ namespace XTOPMS.Alibaba
         {
             var trade = this._tradeManager.GetTradeInfor(appKey, memberId, orderId);
             return trade;
-        }
-
-        public async Task<PushQueryMessageListResult> PushQueryMessageList()
-        {
-            AccessToken token = await this.Repository.GetAsync(6526667356666593280);
-            SyncAPIClient client = new SyncAPIClient(token.App_Key, token.App_Secret);
-            PushQueryMessageListParam param
-                = new PushQueryMessageListParam();
-            RequestPolicy oauthPolicy = new RequestPolicy();
-            oauthPolicy.UseHttps = true;
-
-            PushQueryMessageListResult response = client.execute<PushQueryMessageListResult>(param, token.Access_Token);
-
-            return null;
         }
     }
 }

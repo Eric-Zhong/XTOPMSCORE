@@ -55,11 +55,6 @@ namespace XTOPMS.Users.Dto
         public string ExtensionData { get; set; }
         public long? OrganizationUnitId { get; set; }
 
-        public string Key
-        {
-            get { return Id.ToString(); }
-        }
-
         public UserDto(): base()
         {
 

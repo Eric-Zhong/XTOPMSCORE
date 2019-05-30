@@ -6,7 +6,6 @@ using Abp.Application.Services.Dto;
 using XTOPMS.Users;
 using XTOPMS.Users.Dto;
 using XTOPMS.Authorization.Users;
-using XTOPMS.Application.Dto;
 
 namespace XTOPMS.Tests.Users
 {
@@ -25,7 +24,7 @@ namespace XTOPMS.Tests.Users
         public async Task GetUsers_Test()
         {
             // Act
-            var output = await _userAppService.GetAll(new QueryBaseDto{MaxResultCount=20, SkipCount=0} );
+            var output = await _userAppService.GetAll(new PagedResultRequestDto{MaxResultCount=20, SkipCount=0} );
 
             // Assert
             output.Items.Count.ShouldBeGreaterThan(0);

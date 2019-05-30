@@ -46,6 +46,5 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Testing\IWebApiAppService.cs" />
-    <Compile Remove="Users\UserAppService %28副本%29.cs" />
   </ItemGroup>
 </Project>

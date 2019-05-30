@@ -36,7 +36,7 @@ using XTOPMS.Application.Dto;
 namespace XTOPMS
 {
 
-    public interface IXTOPMSAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+    public interface IXTOPMSAsyncCrudAppService<TEntityDto, TPrimaryKey, in TGetAllInput, in TCreateInput, in TUpdateInput, in TGetInput, in TDeleteInput>
         : IApplicationService,
         IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
@@ -49,7 +49,6 @@ namespace XTOPMS
         Task<List<TEntityDto>> QuickSearch(QuickSearchInputDto input);
         Task Remove(TPrimaryKey id);
         Task<TEntityDto> GetDetailV1(TPrimaryKey id);
-        Task<PagedResultDto<TEntityDto>> Query(TGetAllInput input);
     }
 
 
@@ -85,6 +84,7 @@ namespace XTOPMS
         protected XTOPMSAsyncCrudAppService(IXTOPMSFullAuditedBaseRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
+
     }
 
 
@@ -292,20 +292,28 @@ namespace XTOPMS
 
         public virtual async Task<PagedResultDto<TEntityDto>> GetAllWithFullAudited(TGetAllInput input)
         {
+
             CheckGetAllPermission();
+
             var query = this.CreateFilteredQuery(input);
+
             // Full Audited Information need output
             query = query.IncludeIf(true, t => t.CreatorUser);
             query = query.IncludeIf(true, t => t.DeleterUser);
             query = query.IncludeIf(true, t => t.LastModifierUser);
+
             var totalCount = await AsyncQueryableExecuter.CountAsync(query);
+
             query = ApplySorting(query, input);
             query = ApplyPaging(query, input);
+
             var entities = await AsyncQueryableExecuter.ToListAsync(query);
+
             return new PagedResultDto<TEntityDto>(
                 totalCount,
                 entities.Select(MapToEntityDto).ToList()
             );
+
         }
 
         public virtual async Task<TEntityDto> GetDetailV1(TPrimaryKey id)

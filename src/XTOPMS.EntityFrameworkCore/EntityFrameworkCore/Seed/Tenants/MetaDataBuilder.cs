@@ -38,14 +38,15 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Tenants
         public void Create()
         {
             Console.WriteLine("Begin initialize metadata. ");
-            // TODO: 这里因为把CustomerCategory 设置成了 IMayHaveTenance，造成不能多次进行创建了。
-            // Init_CustomerCategory();
+            Init_CustomerCategory();
             Console.WriteLine("Finish initialize metadata. ");
         }
 
 
         private void Init_CustomerCategory()
         {
+            Console.WriteLine("<Customer Category>");
+
             List<CustomerCategory> list = new List<CustomerCategory>();
 
             // Init data

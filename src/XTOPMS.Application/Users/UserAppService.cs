@@ -17,38 +17,12 @@ using XTOPMS.Authorization.Users;
 using XTOPMS.Roles.Dto;
 using XTOPMS.Users.Dto;
 using XTOPMS.Dto;
-using XTOPMS.Application.Dto;
-using Abp.EntityFrameworkCore.Extensions;
-using System.Linq.Expressions;
-using Abp.Collections.Extensions;
-using System;
-using Abp.UI;
-using Abp.AutoMapper;
 
 namespace XTOPMS.Users
 {
-
-    // TODO: 不知道为什么，User 无法使用 XTOPMSAsyncCrudAppService，所以暂只能这些在这里重新写一遍其中的能用方法
-
-    public interface IUserAppService
-        : IXTOPMSAsyncCrudAppService<
-            UserDto,
-            long,
-            QueryBaseDto,
-            CreateUserDto,
-            UserDto,
-            UserDto,
-            UserDto>
-    {
-        Task<ListResultDto<RoleDto>> GetRoles();
-        Task ChangeLanguage(ChangeUserLanguageDto input);
-        Task<PagedResultDto<UserDto>> QueryWithFullAudited(QueryBaseDto input);
-    }
-
-
     [AbpAuthorize(PermissionNames.Pages_Users)]
     public class UserAppService :
-        AsyncCrudAppService<User, UserDto, long, QueryBaseDto, CreateUserDto, UserDto, UserDto, UserDto>
+        AsyncCrudAppService<User, UserDto, long, PagedResultRequestDto, CreateUserDto, UserDto>
         , IUserAppService
     {
         private readonly UserManager _userManager;
@@ -114,7 +88,7 @@ namespace XTOPMS.Users
             return await Get(input);
         }
 
-        public override async Task Delete(UserDto input)
+        public override async Task Delete(EntityDto<long> input)
         {
             var user = await _userManager.GetUserByIdAsync(input.Id);
             await _userManager.DeleteAsync(user);
@@ -156,7 +130,7 @@ namespace XTOPMS.Users
             return userDto;
         }
 
-        protected override IQueryable<User> CreateFilteredQuery(QueryBaseDto input)
+        protected override IQueryable<User> CreateFilteredQuery(PagedResultRequestDto input)
         {
             return Repository.GetAllIncluding(x => x.Roles);
         }
@@ -173,7 +147,7 @@ namespace XTOPMS.Users
             return user;
         }
 
-        protected override IQueryable<User> ApplySorting(IQueryable<User> query, QueryBaseDto input)
+        protected override IQueryable<User> ApplySorting(IQueryable<User> query, PagedResultRequestDto input)
         {
             return query.OrderBy(r => r.UserName);
         }
@@ -205,112 +179,6 @@ namespace XTOPMS.Users
 
             List<UserDto> output = ObjectMapper.Map<List<UserDto>>(list);
             return output;
-        }
-
-        public async Task<PagedResultDto<UserDto>> GetMyAll(QueryBaseDto input)
-        {
-            // User manage is only support to admin, not need GetMyAll method.
-            return await this.GetAll(input);
-        }
-
-        public async Task<PagedResultDto<UserDto>> GetAllWithFullAudited(QueryBaseDto input)
-        {
-            CheckGetAllPermission();
-            var query = this.CreateFilteredQuery(input);
-            // Full Audited Information need output
-            query = query.IncludeIf(true, t => t.CreatorUser);
-            query = query.IncludeIf(true, t => t.DeleterUser);
-            query = query.IncludeIf(true, t => t.LastModifierUser);
-            var totalCount = await AsyncQueryableExecuter.CountAsync(query);
-            query = ApplySorting(query, input);
-            query = ApplyPaging(query, input);
-            var entities = await AsyncQueryableExecuter.ToListAsync(query);
-            return new PagedResultDto<UserDto>(
-                totalCount,
-                entities.Select(MapToEntityDto).ToList()
-            );
-        }
-
-        public Task Remove(long id)
-        {
-            var entity = Repository.Get(id);
-            if (entity != null)
-            {
-                return Repository.DeleteAsync(entity);
-            }
-            else
-            {
-                throw new UserFriendlyException(id.ToString() + " not found");
-            }
-        }
-
-        public virtual IQueryable<User> GetDetailIncluding(params Expression<Func<User, object>>[] propertySelectors)
-        {
-            var query = this.GetAll();
-
-            if (!propertySelectors.IsNullOrEmpty())
-            {
-                foreach (var propertySelector in propertySelectors)
-                {
-                    query = query.Include(propertySelector);
-                }
-            }
-            return query;
-        }
-
-        public IQueryable<User> GetAllIncluding()
-        {
-            return this.Repository.GetAll();
-        }
-
-        public IQueryable<User> GetAll()
-        {
-            return this.GetAllIncluding();
-        }
-
-        public async Task<UserDto> GetDetailV1(long id)
-        {
-            var query = this.GetDetailIncluding(
-                t => t.DeleterUser
-                );
-            var user = await query.FirstOrDefaultAsync(this.CreateEqualityExpressionForId(id));
-            UserDto userDto = user.MapTo<UserDto>();
-            return userDto;
-        }
-
-        protected virtual Expression<Func<User, bool>> CreateEqualityExpressionForId(long id)
-        {
-            var lambdaParam = Expression.Parameter(typeof(User));
-
-            var lambdaBody = Expression.Equal(
-                Expression.PropertyOrField(lambdaParam, "Id"),
-                Expression.Constant(id, typeof(long))
-                );
-
-            return Expression.Lambda<Func<User, bool>>(lambdaBody, lambdaParam);
-        }
-
-        public async Task<PagedResultDto<UserDto>> Query(QueryBaseDto input)
-        {
-            return await this.GetAll(input);
-        }
-
-        public async Task<PagedResultDto<UserDto>> QueryWithFullAudited(QueryBaseDto input)
-        {
-            CheckGetAllPermission();
-            var query = this.CreateFilteredQuery(input);
-            // Full Audited Information need output
-            query = query.IncludeIf(true, t => t.CreatorUser);
-            query = query.IncludeIf(true, t => t.DeleterUser);
-            query = query.IncludeIf(true, t => t.LastModifierUser);
-            var totalCount = await AsyncQueryableExecuter.CountAsync(query);
-            query = ApplySorting(query, input);
-            query = ApplyPaging(query, input);
-            var entities = await AsyncQueryableExecuter.ToListAsync(query);
-            return new PagedResultDto<UserDto>(
-                totalCount,
-                entities.Select(MapToEntityDto).ToList()
-            );
         }
     }
 }
