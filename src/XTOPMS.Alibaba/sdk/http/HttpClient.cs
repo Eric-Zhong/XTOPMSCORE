@@ -70,7 +70,10 @@ namespace com.alibaba.openapi.client.http
                     HttpWebResponse response = httpWebRequest.GetResponse() as HttpWebResponse;
                     Stream responseStream = response.GetResponseStream();
 
-                    
+                    //StreamReader reader = new StreamReader(responseStream);
+                    //var body = reader.ReadToEnd();
+                    //Console.WriteLine(body);
+
                     DeSerializer deSerializer = SerializerProvider.getInstance().getDeSerializer(requestPolicy.ResponseProtocol);
                     ResponseWrapper rw = deSerializer.deSerialize(responseStream, typeof(T), Encoding.UTF8.EncodingName);
 

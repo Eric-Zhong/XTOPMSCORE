@@ -40,7 +40,7 @@ namespace XTOPMS
     public interface IXTOPMSEntity<TPrimary, TUser>
         : IFullAudited<TUser>,
         IEntity<TPrimary>,
-        IMustHaveTenant,
+        IMayHaveTenant,
         IMayHaveOrganizationUnit,
         IExtendableObject,
         IPassivable
@@ -69,7 +69,7 @@ namespace XTOPMS
     {
         // public TPrimaryKey Id { get; set; }
         public long? OrganizationUnitId { get; set; }
-        public int TenantId { get; set; }
+        public int? TenantId { get; set; }
         public string ExtensionData { get; set; }
         public bool IsActive { get; set; }
 
