@@ -44,7 +44,8 @@ namespace XTOPMS.Alibaba
         Ignored = 5,
         NotFoundMember = 6,
         ParseError = 7,
-        InterfaceThrowError = 8
+        InterfaceThrowError = 8,
+        Resend = 9
     }
 
     /// <summary>

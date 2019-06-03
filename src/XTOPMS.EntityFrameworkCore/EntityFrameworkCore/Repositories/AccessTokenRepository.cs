@@ -27,6 +27,7 @@ using System.Linq;
 using Abp.Linq.Extensions;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 
 namespace XTOPMS.EntityFrameworkCore.Repositories
 {
@@ -51,11 +52,14 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
         /// Get all token, that have need to refresh the "refresh token".
         /// </summary>
         /// <returns>The all need refresh.</returns>
-        public async Task<List<AccessToken>> GetAllRefreshTokenWillTimeout()
+        public virtual async Task<List<AccessToken>> GetAllRefreshTokenWillTimeout()
         {
+            this.UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant);
+
             var query = from m in this.GetAll()
                         where 
                             m.Refresh_Token_Timeout.AddDays(-5) <= DateTime.Now
+                            && m.TenantId != null
                             && m.IsActive == true
                             && m.IsDeleted == false
                         select m
@@ -70,11 +74,14 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
         /// Get all access token that have to update.
         /// </summary>
         /// <returns>The all access token will timeout.</returns>
-        public async Task<List<AccessToken>> GetAllAccessTokenWillTimeout()
+        public virtual async Task<List<AccessToken>> GetAllAccessTokenWillTimeout()
         {
+            this.UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant);
+
             var query = from m in this.GetAll()
                         where 
                             m.Expires_In.AddHours(-2) <= DateTime.Now
+                            && m.TenantId != null
                             && m.IsActive == true
                             && m.IsDeleted == false
                         select m

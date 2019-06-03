@@ -34,5 +34,6 @@ namespace XTOPMS.Users.Dto
         [StringLength(Abp.Authorization.Users.AbpUserBase.MaxPlainPasswordLength, MinimumLength = 6)]
         [DisableAuditing]
         public string NewPassword { get; set; }
+        public long UserId { get; set; }
     }
 }

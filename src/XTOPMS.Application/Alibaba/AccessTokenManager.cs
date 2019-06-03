@@ -21,6 +21,7 @@
 using System;
 using System.Globalization;
 using Abp.Domain.Services;
+using Abp.Domain.Uow;
 using com.alibaba.openapi.client;
 using com.alibaba.openapi.client.exception;
 using Newtonsoft.Json;
@@ -36,6 +37,7 @@ namespace XTOPMS.Alibaba
         void RefreshAccessToken(AccessToken token);
         void InitializeToken(AccessToken token, string code);
         void RefreshRefreshToken(AccessToken token);
+        AccessToken GetByMemberId(string memberId);
     }
 
     public class AccessTokenManager
@@ -43,15 +45,18 @@ namespace XTOPMS.Alibaba
         , IAccessTokenManager
     {
 
-        private readonly IAccessTokenRepository accessTokenRepository;
-        private readonly IEmailManager emailManager;
+        readonly IAccessTokenRepository accessTokenRepository;
+        readonly IEmailManager emailManager;
+        readonly IUnitOfWorkManager unitOfWorkManager;
 
         public AccessTokenManager(
             IAccessTokenRepository _accessTokenRepository,
-            IEmailManager _emailManager)
+            IEmailManager _emailManager,
+            IUnitOfWorkManager _unitOfWorkManager)
         {
             accessTokenRepository = _accessTokenRepository;
             emailManager = _emailManager;
+            unitOfWorkManager = _unitOfWorkManager;
         }
 
 
@@ -60,7 +65,7 @@ namespace XTOPMS.Alibaba
         /// </summary>
         /// <param name="token">Token.</param>
         /// <param name="code">Code.</param>
-        public void InitializeToken(AccessToken token, string code)
+        public virtual void InitializeToken(AccessToken token, string code)
         {
             /*
             {
@@ -106,7 +111,7 @@ namespace XTOPMS.Alibaba
         /// Refreshs the refresh token.
         /// </summary>
         /// <param name="token">Token.</param>
-        public void RefreshRefreshToken(AccessToken token)
+        public virtual void RefreshRefreshToken(AccessToken token)
         {
             /*
             {
@@ -177,7 +182,7 @@ Detail: " + oceanException.ToString();
         /// 使用 refresh token 来重新刷一个新的 access Token
         /// </summary>
         /// <param name="token">Token.</param>
-        public void RefreshAccessToken(AccessToken token)
+        public virtual void RefreshAccessToken(AccessToken token)
         {
             /*
             {
@@ -224,14 +229,15 @@ Detail: " + oceanException.ToString();
 
                 // Notice to admin
                 // Error code : 210
-                emailManager.SendMail("[XTOPMS] 刷新 AccessToken 时出现异常 (Error 210)", err.ToString(), false);
+                string tokenJson = JsonConvert.SerializeObject(token);
+                emailManager.SendMail("[XTOPMS] 刷新 AccessToken 时出现异常 (Error 210)", tokenJson + "\r\n\r\n" + err.ToString(), false);
             }
 
             accessTokenRepository.Update(token);
         }
 
 
-        public void UpdateToken()
+        public virtual void UpdateToken()
         {
             var list = accessTokenRepository.GetAllAccessTokenWillTimeout().Result;         // Timeout after 2 hours.
             var count = list.Count;
@@ -243,7 +249,7 @@ Detail: " + oceanException.ToString();
         }
 
 
-        public void UpdateRefreshToken()
+        public virtual void UpdateRefreshToken()
         {
             var list = accessTokenRepository.GetAllRefreshTokenWillTimeout().Result;        // Timeout after 5 days.
             foreach (var item in list)
@@ -262,6 +268,14 @@ Detail: " + oceanException.ToString();
                 CultureInfo.InvariantCulture
                 );
             return output;
+        }
+
+
+        public virtual AccessToken GetByMemberId(string memberId)
+        {
+            this.UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant);
+            var result = accessTokenRepository.FirstOrDefault(t => t.MemberId == memberId);
+            return result;
         }
 
     }

@@ -141,7 +141,7 @@ namespace XTOPMS.EntityFrameworkCore.Seed.Tenants
                     UserName = username,
                     Name = username,
                     Surname = username,
-                    EmailAddress = username + "@xtopms.com",
+                    EmailAddress = username + "@biztalkgroup.com",
                     // Add other default value
                     CreatorUserId = 1,
                     LastModifierUserId = 1,

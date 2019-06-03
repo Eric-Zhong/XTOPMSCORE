@@ -64,7 +64,6 @@ namespace XTOPMS.Alibaba
     {
 
         readonly IAccessTokenManager _accessTokenManager;
-        readonly IUnitOfWorkManager _unitOfWorkManager;
         readonly ITradeManager _tradeManager;
 
         public AccessTokenAppService(
@@ -75,32 +74,29 @@ namespace XTOPMS.Alibaba
             ) : base(repository)
         {
             _accessTokenManager = accessTokenManager;
-            _unitOfWorkManager = unitOfWorkManager;
+            base.UnitOfWorkManager = unitOfWorkManager;
             _tradeManager = tradeManager;
         }
 
 
         public override async Task<PagedResultDto<AccessTokenDto>> GetAll(QueryBaseDto input)
         {
-            using(_unitOfWorkManager.Current.DisableFilter(AbpDataFilters.SoftDelete))
-            {
-                var result = await base.GetAll(input);
-                return result;
-            }
+            CurrentUnitOfWork.DisableFilter(AbpDataFilters.SoftDelete);
+            var result = await base.GetAll(input);
+            return result;
         }
 
 
         public override async Task<AccessTokenDto> Update(AccessTokenCreateUpdateDto input)
         {
-            using (_unitOfWorkManager.Current.DisableFilter(AbpDataFilters.SoftDelete))
-            {
-                return await base.Update(input);
-            }
+            CurrentUnitOfWork.DisableFilter(AbpDataFilters.SoftDelete);
+            return await base.Update(input);
         }
 
 
-        public async Task<AccessTokenDto> InitializeAccessToken(InitializeAccessTokenInputDto input)
+        public virtual async Task<AccessTokenDto> InitializeAccessToken(InitializeAccessTokenInputDto input)
         {
+            CurrentUnitOfWork.DisableFilter(AbpDataFilters.SoftDelete);
             // AccessToken token = _accessTokenRepository
             AccessToken token = await this.Repository.GetAsync(input.AccessTokenId);
 
@@ -129,14 +125,16 @@ namespace XTOPMS.Alibaba
             }
         }
 
-        public AlibabaOpenplatformTradeModelTradeInfo GetTradeInfo(string appKey, string memberId, long orderId)
+        public virtual AlibabaOpenplatformTradeModelTradeInfo GetTradeInfo(string appKey, string memberId, long orderId)
         {
+            CurrentUnitOfWork.DisableFilter(AbpDataFilters.SoftDelete);
             var trade = this._tradeManager.GetTradeInfor(appKey, memberId, orderId);
             return trade;
         }
 
-        public async Task<PushQueryMessageListResult> PushQueryMessageList()
+        public virtual async Task<PushQueryMessageListResult> PushQueryMessageList()
         {
+            CurrentUnitOfWork.DisableFilter(AbpDataFilters.SoftDelete);
             AccessToken token = await this.Repository.GetAsync(6526667356666593280);
             SyncAPIClient client = new SyncAPIClient(token.App_Key, token.App_Secret);
             PushQueryMessageListParam param

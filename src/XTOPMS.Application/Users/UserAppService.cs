@@ -24,6 +24,7 @@ using System;
 using Abp.Collections.Extensions;
 using Abp.AutoMapper;
 using XTOPMS.MultiTenancy;
+using Microsoft.Extensions.Options;
 
 namespace XTOPMS.Users
 {
@@ -34,6 +35,7 @@ namespace XTOPMS.Users
         Task<ListResultDto<RoleDto>> GetRoles();
         Task ChangeLanguage(ChangeUserLanguageDto input);
         Task ChangePassword(ChangePasswordDto input);
+        Task ChangeUserPassword(ChangePasswordDto input);
     }
 
     [AbpAuthorize(PermissionNames.Pages_Users)]
@@ -244,6 +246,11 @@ namespace XTOPMS.Users
             return userDto;
         }
 
+        /// <summary>
+        /// Query the specified input. Likely GetAll Method, but it can POST.
+        /// </summary>
+        /// <returns>The query.</returns>
+        /// <param name="input">Input.</param>
         public async Task<PagedResultDto<UserDto>> Query(QueryBaseDto input)
         {
             return await this.GetAll(input);
@@ -283,6 +290,20 @@ namespace XTOPMS.Users
             CheckErrors(await UserManager.ChangePasswordAsync(user, input.CurrentPassword, input.NewPassword));
         }
 
-
+        // TODO: 需要增加权限控制
+        /// <summary>
+        /// Admin to changes the user password.
+        /// </summary>
+        /// <returns>The user password.</returns>
+        /// <param name="input">Input.</param>
+        public async Task ChangeUserPassword(ChangePasswordDto input)
+        {
+            var user = await this.Repository.GetAsync(input.UserId);
+            user.Password = new PasswordHasher<User>(
+                new OptionsWrapper<PasswordHasherOptions>(
+                    new PasswordHasherOptions()
+                )
+            ).HashPassword(user, input.NewPassword);
+        }
     }
 }
