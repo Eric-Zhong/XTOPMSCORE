@@ -186,12 +186,18 @@ namespace XTOPMS.Web.Host.Startup
                 DisplayStorageConnectionString = true
             });
 
+            // Demo for background job
             // BackgroundJob.Enqueue(() => Console.WriteLine("Handfire regisited and running."));
             // BackgroundJob.Schedule(() => Console.WriteLine("Handfire running"), TimeSpan.FromSeconds(20));
             // RecurringJob.AddOrUpdate(() => Console.WriteLine("Recurrent running"), Cron.Minutely);
 
+            // Loop query
             // RecurringJob.AddOrUpdate<DataSyncServiceProcess>("Data Sync Service Schedule Job)", (t) => t.Execute(null), Cron.Hourly);
-            RecurringJob.AddOrUpdate<AccessTokenRefreshProcess>("Alibaba Access-Token Refresh Service", (t) => t.Execute(null), Cron.Daily);
+
+            // Every 1 hour
+            RecurringJob.AddOrUpdate<AccessTokenRefreshProcess>("Alibaba Access-Token Refresh Service", (t) => t.Execute(null), Cron.HourInterval(1));
+
+            // Every day
             RecurringJob.AddOrUpdate<RefreshTokenRefreshProcess>("Alibaba Refresh-Token Refresh Service", (t) => t.Execute(null), Cron.Daily);
 
             //  Cron Expression
