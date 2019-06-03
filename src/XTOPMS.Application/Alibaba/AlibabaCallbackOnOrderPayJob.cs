@@ -87,24 +87,7 @@ namespace XTOPMS.Alibaba
             try
             {
                 DataSyncService dataSyncService;
-
-                //using (unitOfWorkManager.Current.SetTenantId(1))
-                //{
-                //}
-
-                //var query = dataSyncServiceRepository.GetAllIncluding(t => t.AccessTokenInfo);
-                //List<DataSyncService> ds = query.ToList();
-
-                //var q = from t in ds
-                //where t.ErpId == serivceCode && t.AccessTokenInfo.MemberId == memberId
-                //select t;
-
-                // dataSyncService = q.First();
-
                 dataSyncService = dataSyncServiceRepository.GetDataServiceInforByCodeAndMemberId(serviceCode, memberId).Result;
-
-                //query = query.Where(t => t.IsActive == true && t.ErpId == serivceCode && t.AccessTokenInfo.MemberId == memberId);
-                //dataSyncService = query.First();
 
                 // Step 1: get the order from alibaba.
                 AlibabaOpenplatformTradeModelTradeInfo tradeInfo;
@@ -188,7 +171,8 @@ namespace XTOPMS.Alibaba
                         else
                         {
                             // Salesforce interface throw error.
-                            msgEntity.Comment = resp;                               // Write response for error detail info.
+                            Console.WriteLine("Salesforce response: " + resp);
+                            msgEntity.Comment = resp;                                               // Write response for error detail info.
                             msgEntity.Status = (int)CallbackMessageStatus.InterfaceThrowError;      // Salesforce throw error
                             Console.WriteLine("Salesforce interface return error: " + resp);
                         }

@@ -78,8 +78,10 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
             return list;
         }
 
-        public async Task<DataSyncService> GetDataServiceInforByCodeAndMemberId(string serviceCode, string memberId)
+        public virtual async Task<DataSyncService> GetDataServiceInforByCodeAndMemberId(string serviceCode, string memberId)
         {
+            this.UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant);
+
             var query = from m in this.GetAllIncluding(t=>t.AccessTokenInfo)
                         where true
                             && m.IsActive == true       // 激活的

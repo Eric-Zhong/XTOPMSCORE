@@ -19,7 +19,9 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Abp.Domain.Uow;
 using Abp.EntityFrameworkCore;
 using XTOPMS.Alibaba;
 
@@ -42,7 +44,10 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
 
         public override IQueryable<ProductCategory> GetAll()
         {
+            // 用于显示当前可配置的产品货号，不加 Tenant 还不行！
+            this.UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant);
             return base.GetAll();
         }
+
     }
 }

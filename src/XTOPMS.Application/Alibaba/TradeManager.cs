@@ -168,10 +168,14 @@ namespace XTOPMS.Alibaba
 
         public AlibabaOpenplatformTradeModelTradeInfo GetTradeInfor(string appKey, string memberId, long orderId)
         {
-            // var token = accessTokenRepository.Single(t => t.App_Key == appKey && t.MemberId == memberId && t.IsActive == true && t.IsDeleted == false);
+            var token = accessTokenRepository.Single(
+                t => t.App_Key == appKey && 
+                t.MemberId == memberId && 
+                t.IsActive == true && 
+                t.IsDeleted == false);
 
-            // SyncAPIClient client = new SyncAPIClient(token.App_Key, token.App_Secret);
-            SyncAPIClient client = new SyncAPIClient("3259943", "t6MpyARzzv");
+            SyncAPIClient client = new SyncAPIClient(token.App_Key, token.App_Secret);
+            // SyncAPIClient client = new SyncAPIClient("3259943", "t6MpyARzzv");
 
             AlibabaTradeGetSellerViewParam param
                 = new AlibabaTradeGetSellerViewParam();
@@ -180,8 +184,7 @@ namespace XTOPMS.Alibaba
 
             param.setOrderId(orderId);
 
-            // AlibabaTradeGetSellerViewResult response = client.execute<AlibabaTradeGetSellerViewResult>(param, token.Access_Token);
-            AlibabaTradeGetSellerViewResult response = client.execute<AlibabaTradeGetSellerViewResult>(param, "30ef3548-9ebb-4730-9c48-a8bfe6fea683");
+            AlibabaTradeGetSellerViewResult response = client.execute<AlibabaTradeGetSellerViewResult>(param, token.Access_Token);
 
             return response.getResult();
         }

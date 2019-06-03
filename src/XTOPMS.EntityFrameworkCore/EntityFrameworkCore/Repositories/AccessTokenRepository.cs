@@ -28,6 +28,7 @@ using Abp.Linq.Extensions;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using System.Linq.Expressions;
 
 namespace XTOPMS.EntityFrameworkCore.Repositories
 {
@@ -88,6 +89,13 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
                         ;
             var list = await Task.FromResult(query.ToList());
             return list;
+        }
+
+
+        public override AccessToken Single(Expression<Func<AccessToken, bool>> predicate)
+        {
+            this.UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant);
+            return base.Single(predicate);
         }
     }
 }
