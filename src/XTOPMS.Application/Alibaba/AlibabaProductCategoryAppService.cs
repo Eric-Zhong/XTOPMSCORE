@@ -19,7 +19,10 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using System.Linq;
+using Abp.Linq.Extensions;
 using XTOPMS.Alibaba.Dto;
+using XTOPMS.Application.Dto;
 using XTOPMS.EntityFrameworkCore.Repositories;
 
 namespace XTOPMS.Alibaba
@@ -28,7 +31,7 @@ namespace XTOPMS.Alibaba
         : IXTOPMSAsyncCrudAppService<
             ProductCategoryDto,
             long,
-            MessageQueryDto,
+            QueryBaseDto,
             ProductCategoryCreateUpdateDto,
             ProductCategoryCreateUpdateDto,
             ProductCategoryCreateUpdateDto,
@@ -42,7 +45,7 @@ namespace XTOPMS.Alibaba
             ProductCategory, 
             ProductCategoryDto,
             long,
-            MessageQueryDto,
+            QueryBaseDto,
             ProductCategoryCreateUpdateDto,
             ProductCategoryCreateUpdateDto,
             ProductCategoryCreateUpdateDto,
@@ -51,5 +54,20 @@ namespace XTOPMS.Alibaba
         public AlibabaProductCategoryAppService(IAlibabaProductCategoryRepository repository) : base(repository)
         {
         }
+
+        protected override IQueryable<ProductCategory> CreateFilteredQuery(QueryBaseDto input)
+        {
+            var query = base.CreateFilteredQuery(input);
+
+            if (input.Filters != null)
+            {
+                var filter = input.Filters;
+                query = query.WhereIf(filter.IsActive.Count > 0 && filter.IsActive[0] == true, t => t.IsActive);
+                query = query.WhereIf(filter.IsActive.Count > 0 && filter.IsActive[0] == false, t => !t.IsActive);
+            }
+
+            return query;
+        }
+
     }
 }
