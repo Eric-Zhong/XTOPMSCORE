@@ -72,3 +72,4 @@ debug
 /update_files/*
 /App_Data/*
 appsettings.json
+*.user

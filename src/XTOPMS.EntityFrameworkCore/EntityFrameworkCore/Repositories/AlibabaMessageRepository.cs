@@ -24,6 +24,7 @@ using XTOPMS.Alibaba;
 using System.Linq;
 using Abp.Linq.Extensions;
 using System.Collections.Generic;
+using Abp.Domain.Uow;
 
 namespace XTOPMS.EntityFrameworkCore.Repositories
 {
@@ -43,8 +44,10 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
         {
         }
 
-        public List<Message> GetAllMessageNeedToTrigger()
+        public virtual List<Message> GetAllMessageNeedToTrigger()
         {
+            // 因为是后台服务，无法拿到用户信息，这里只能过滤掉 Tenant 功能。
+            this.UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant);
             var query = from m in this.GetAll()
                         where m.Status == (int)CallbackMessageStatus.New || (m.Status == (int)CallbackMessageStatus.Failed && m.RetryCount < 10)
                         select m;
