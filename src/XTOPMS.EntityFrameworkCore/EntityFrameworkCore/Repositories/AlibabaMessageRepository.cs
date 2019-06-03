@@ -54,5 +54,11 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
 
             return query.ToList();
         }
+
+        public override Message Get(long id)
+        {
+            this.UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant);
+            return base.Get(id);
+        }
     }
 }
