@@ -83,7 +83,7 @@ namespace XTOPMS.Alibaba
             {
                 var entity = this.Repository.Get(item.Id);
                 entity.Status = (int)CallbackMessageStatus.New;
-                entity.Comment = "设置成 Retry";
+                entity.Comment = "Waiting for resend to salesforce.";
                 entity.RetryCount = 0;
                 this.Repository.Update(entity);
             }

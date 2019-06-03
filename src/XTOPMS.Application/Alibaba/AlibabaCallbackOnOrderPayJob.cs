@@ -34,6 +34,7 @@ using Abp.Domain.Entities;
 using XTOPMS.Henkel.Salesforce;
 using Abp.Domain.Uow;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace XTOPMS.Alibaba
 {
@@ -121,7 +122,7 @@ namespace XTOPMS.Alibaba
 
                 if (filters == null || filters.Count == 0)
                 {
-                    Console.WriteLine("None filter option.");
+                    Console.WriteLine("Tenant's product category is empty.");
                     isMatched = true;   // None filter mean all data will be send to salesforce.
                 }
                 else
@@ -162,19 +163,35 @@ namespace XTOPMS.Alibaba
 
                         string resp = orderManager.Create(salesforceUri, order);    // Call API and cretae order in salesforce.
 
-                        if (string.IsNullOrEmpty(resp))
+                        // 2019-06-03 Salesforce change it's interface.
+                        // Response change to JSON. such as: { "status" : "200", "message" : "success" }
+                        if (false == string.IsNullOrEmpty(resp))
                         {
-                            msgEntity.Status = (int)CallbackMessageStatus.Success;  // Set status as success
-                            msgEntity.Comment = orderJson;
-                            Console.WriteLine("Salesforce interface return success: (HTTP 200)");
+                            JObject responseJson = JObject.Parse(resp);
+                            var status = responseJson["status"].ToString();
+                            var message = responseJson["message"].ToString();
+
+                            Console.WriteLine("Salesforce response: " + resp);
+
+                            // Save the http status code to entitie's code field.
+                            msgEntity.Code = status;
+
+                            if(status == "200") // return success
+                            {
+                                msgEntity.Status = (int)CallbackMessageStatus.Success;  // Set status as success
+                                msgEntity.Comment = orderJson;
+                            }
+                            else                // return failed
+                            {
+                                msgEntity.Comment = "Salesforce Interface: " + message + "\r\n" + orderJson; // Write response for error detail info.
+                                msgEntity.Status = (int)CallbackMessageStatus.InterfaceThrowError;      // Salesforce throw error
+                            }
                         }
                         else
                         {
-                            // Salesforce interface throw error.
-                            Console.WriteLine("Salesforce response: " + resp);
-                            msgEntity.Comment = resp;                                               // Write response for error detail info.
-                            msgEntity.Status = (int)CallbackMessageStatus.InterfaceThrowError;      // Salesforce throw error
-                            Console.WriteLine("Salesforce interface return error: " + resp);
+                            // Nothing return from salesforce.
+                            msgEntity.Comment = "HTTP response body is none.";
+                            msgEntity.Status = (int)CallbackMessageStatus.InterfaceThrowError;
                         }
                     }
                     catch (Exception err)
@@ -191,6 +208,7 @@ namespace XTOPMS.Alibaba
                 else
                 {
                     Console.WriteLine("Ignored");
+                    msgEntity.Comment = "None product were matched, so this order not need send to salesforce.";
                     msgEntity.Status = (int)CallbackMessageStatus.Ignored;
                 }
             }
