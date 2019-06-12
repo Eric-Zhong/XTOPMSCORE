@@ -49,7 +49,10 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
             // 因为是后台服务，无法拿到用户信息，这里只能过滤掉 Tenant 功能。
             this.UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant);
             var query = from m in this.GetAll()
-                        where m.Status == (int)CallbackMessageStatus.New || (m.Status == (int)CallbackMessageStatus.Failed && m.RetryCount < 10)
+                        where 
+                            m.Status == (int)CallbackMessageStatus.New || 
+                            m.Status == (int)CallbackMessageStatus.Resend ||
+                            (m.Status == (int)CallbackMessageStatus.Failed && m.RetryCount < 10)
                         select m;
 
             return query.ToList();

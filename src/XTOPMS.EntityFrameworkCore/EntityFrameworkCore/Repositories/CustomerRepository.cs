@@ -31,7 +31,7 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
 {
     public interface ICustomerRepository : IXTOPMSFullAuditedBaseRepository<Customer, long>
     {
-        void UpdateCategory(long id, List<string> ids);
+        void UpdateCategory(long id, List<long> ids);
     }
 
     public class CustomerRepository : XTOPMSFullAuditedBaseRepository<Customer, long>, ICustomerRepository
@@ -67,15 +67,17 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
         }
 
 
-        public void UpdateCategory(long id, List<string> ids)
+        public void UpdateCategory(long id, List<long> ids)
         {
-            List<long> categoryIds = new List<long>();
+            List<long> categoryIds = ids;
+
+            /* TODO: 验证了一下下面的写法，结果删除上有问题
+
+           
             foreach (var key in ids)
             {
                 categoryIds.Add(long.Parse(key));
             }
-
-            /* TODO: 验证了一下下面的写法，结果删除上有问题
 
             // Delete all setting
             customerCategorySettingRepository.Delete(t => t.CustomerId == id);
@@ -123,10 +125,12 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
                 }
                 else
                 {
+                    // If old item is not exist, delete it from database.
                     customerCategorySettingRepository.Delete(item);
                 }
             }
 
+            // categoryIds will only exist new creation items, add them to database.
             foreach(var item in categoryIds)
             {
                 customerCategorySettingRepository.Insert(new CustomerCategorySetting
@@ -135,8 +139,6 @@ namespace XTOPMS.EntityFrameworkCore.Repositories
                     CustomerCategoryId = item
                 });
             }
-
-
         }
     }
 }

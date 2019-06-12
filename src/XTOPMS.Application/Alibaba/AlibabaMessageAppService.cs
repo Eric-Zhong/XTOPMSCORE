@@ -82,7 +82,7 @@ namespace XTOPMS.Alibaba
             foreach(var item in entities)
             {
                 var entity = this.Repository.Get(item.Id);
-                entity.Status = (int)CallbackMessageStatus.New;
+                entity.Status = (int)CallbackMessageStatus.Resend;
                 entity.Comment = "Waiting for resend to salesforce.";
                 entity.RetryCount = 0;
                 this.Repository.Update(entity);
