@@ -44,14 +44,37 @@ namespace XTOPMS.Henkel.Salesforce
 
         public OrderDto(AlibabaOpenplatformTradeModelTradeInfo trade): this()
         {
+            // Order information
             this.OrderNumber = trade.getBaseInfo().getIdOfStr();
             this.OrderDate = trade.getBaseInfo().getPayTime().Value.ToString("yyyy/MM/dd");
-            this.Name = trade.getBaseInfo().getBuyerContact().getName();
-            this.Mobile = trade.getBaseInfo().getBuyerContact().getMobile() == null ? "" : trade.getBaseInfo().getBuyerContact().getMobile();
+
+            // Customer information
+            // 20190612 Change there logic for fix the buyer's mobile is empty, it will make salesforce can not process.
+            /*
+                @Eric – as per alignment today, please update with the below logic. Please re-push the orders once update is done so we can compare the data again.                 
+                If there is a mobile number for the purchaser (采购人), use the purchaser’s details for Salesforce push
+                If the purchaser doesn’t have a mobile number, use the recipient’s (收件人) details instead
+            */
+            var buyer = trade.getBaseInfo().getBuyerContact();
+            var receiver = trade.getBaseInfo().getReceiverInfo();
+
+            if (false == string.IsNullOrEmpty(buyer.getMobile()))
+            {
+                this.Name = buyer.getName();
+                this.Mobile = buyer.getMobile();
+            }
+            else
+            {
+                this.Name = receiver.getToFullName();
+                this.Mobile = receiver.getToMobile();
+            }
+
+            // Logistic information
             this.Province = trade.getNativeLogistics().getProvince();
             this.City = trade.getNativeLogistics().getCity();
             this.Address = trade.getNativeLogistics().getAddress();
 
+            // Product detail information
             this.ProductDetails = new List<ProductDto>();
 
             foreach(var p in trade.getProductItems())

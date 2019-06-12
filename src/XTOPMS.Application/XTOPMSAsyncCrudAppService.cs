@@ -155,64 +155,64 @@ namespace XTOPMS
             Repository = repository;
         }
 
-        protected override Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)
-        {
-            return Repository.GetAsync(id);
-        }
+        //protected override Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)
+        //{
+        //    return Repository.GetAsync(id);
+        //}
 
 
-        public override async Task<TEntityDto> Get(TGetInput input)
-        {
-            CheckGetPermission();
-            var entity = await GetEntityByIdAsync(input.Id);
-            return MapToEntityDto(entity);
-        }
+        //public override async Task<TEntityDto> Get(TGetInput input)
+        //{
+        //    CheckGetPermission();
+        //    var entity = await GetEntityByIdAsync(input.Id);
+        //    return MapToEntityDto(entity);
+        //}
 
-        protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
-        {
-            var query = base.CreateFilteredQuery(input)
-                // .WhereIf(input)
-                ;
-            return query;
-        }
+        //protected override IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
+        //{
+        //    var query = base.CreateFilteredQuery(input)
+        //        // .WhereIf(input)
+        //        ;
+        //    return query;
+        //}
 
-        public override async Task<PagedResultDto<TEntityDto>> GetAll(TGetAllInput input)
-        {
-            CheckGetAllPermission();
+        //public override async Task<PagedResultDto<TEntityDto>> GetAll(TGetAllInput input)
+        //{
+        //    CheckGetAllPermission();
 
-            var query = this.CreateFilteredQuery(input);
+        //    var query = this.CreateFilteredQuery(input);
 
-            var totalCount = await AsyncQueryableExecuter.CountAsync(query);
+        //    var totalCount = await AsyncQueryableExecuter.CountAsync(query);
 
-            query = ApplySorting(query, input);
-            query = ApplyPaging(query, input);
+        //    query = ApplySorting(query, input);
+        //    query = ApplyPaging(query, input);
 
-            var entities = await AsyncQueryableExecuter.ToListAsync(query);
+        //    var entities = await AsyncQueryableExecuter.ToListAsync(query);
 
-            var output = new PagedResultDto<TEntityDto>(
-                totalCount,
-                entities.Select(MapToEntityDto).ToList()
-            );
+        //    var output = new PagedResultDto<TEntityDto>(
+        //        totalCount,
+        //        entities.Select(MapToEntityDto).ToList()
+        //    );
 
-            return output;
-        }
-
-
-        public override async Task<TEntityDto> Create(TCreateInput input)
-        {
-            return await base.Create(input);
-        }
+        //    return output;
+        //}
 
 
-        public override async Task<TEntityDto> Update(TUpdateInput input)
-        {
-            return await base.Update(input);
-        }
+        //public override async Task<TEntityDto> Create(TCreateInput input)
+        //{
+        //    return await base.Create(input);
+        //}
 
-        public override Task Delete(TDeleteInput input)
-        {
-            return base.Delete(input);
-        }
+
+        //public override async Task<TEntityDto> Update(TUpdateInput input)
+        //{
+        //    return await base.Update(input);
+        //}
+
+        //public override Task Delete(TDeleteInput input)
+        //{
+        //    return base.Delete(input);
+        //}
 
         public Task Remove(TPrimaryKey id)
         {

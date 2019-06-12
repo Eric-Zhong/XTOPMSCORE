@@ -28,7 +28,7 @@ namespace XTOPMS.Customers
 
     public interface ICustomerManager: IDomainService
     {
-        void UpdateCustomerCategory(long customerId, List<string> categoryCodes);
+        void UpdateCustomerCategory(long customerId, List<long> categoryCodes);
     }
 
     /// Represents an application domain, which is an isolated environment where applications execute. This class cannot be inherited.
@@ -36,17 +36,20 @@ namespace XTOPMS.Customers
     {
 
         ICustomerRepository customerRepository;
+        ICustomerCategoryRepository customerCategoryRepository;
 
 
         public CustomerManager(
-            ICustomerRepository _customerRepository
+            ICustomerRepository _customerRepository,
+            ICustomerCategoryRepository _customerCategoryRepository
             ) : base()
         {
             customerRepository = _customerRepository;
+            customerCategoryRepository = _customerCategoryRepository;
         }
 
 
-        public void UpdateCustomerCategory(long customerId, List<string> categoryCodes)
+        public virtual void UpdateCustomerCategory(long customerId, List<long> categoryCodes)
         {
             customerRepository.UpdateCategory(customerId, categoryCodes);
         }

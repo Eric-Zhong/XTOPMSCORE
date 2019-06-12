@@ -31,7 +31,10 @@ using XTOPMS.EntityFrameworkCore.Repositories;
 using XTOPMS.Application.Dto;
 using Abp.Application.Services;
 using Abp.Linq.Extensions;
+using AutoMapper;
 using XTOPMS.Dto;
+using Abp.AutoMapper;
+using XTOPMS.Metadata;
 
 namespace XTOPMS.Customers
 {
@@ -61,10 +64,14 @@ namespace XTOPMS.Customers
     {
         private ICustomerRepository repository;
         private ICustomerManager customerManager;
+        private ICustomerCategoryRepository customerCategoryRepository;
+        private ICustomerCategorySettingRepository customerCategorySettingRepository;
 
         public CustomerAppService(
             ICustomerRepository _repository
             , ICustomerManager _customerManager
+            , ICustomerCategoryRepository _customerCategoryRepository
+            , ICustomerCategorySettingRepository _customerCategorySettingRepository
             ) : base(_repository)
         {
             this.CreatePermissionName = PermissionNames.API_Customer_Create;
@@ -73,6 +80,8 @@ namespace XTOPMS.Customers
             this.UpdatePermissionName = PermissionNames.API_Customer_Update;
             repository = _repository;
             customerManager = _customerManager;
+            customerCategoryRepository = _customerCategoryRepository;
+            customerCategorySettingRepository = _customerCategorySettingRepository;
         }
 
         protected override IQueryable<Customer> CreateFilteredQuery(CustomerQueryDto input)
@@ -146,11 +155,103 @@ namespace XTOPMS.Customers
             return items;
         }
 
+        protected override Customer MapToEntity(CustomerUpdateDto createInput)
+        {
+            var entity = base.MapToEntity(createInput);
+
+            // Assemble category.
+            entity.CustomerCategorySettings = new List<CustomerCategorySetting>();
+
+            // 1. Get old category.
+            List<CustomerCategorySetting> settings
+                = customerCategorySettingRepository.GetAll()
+                .Where(t => t.CustomerId == createInput.Id)
+                .ToList();
+
+            foreach(var item in settings)
+            {
+                if (createInput.CategorySettings.Contains(item.CategoryCode))
+                {
+                    // this category still alive. and ignore it for add.
+                    createInput.CategorySettings.Remove(item.CategoryCode);
+                } 
+                else
+                {
+                    settings.Remove(item);
+                }
+            }
+
+            foreach(var code in createInput.CategorySettings)
+            {
+                CustomerCategory category
+                    = customerCategoryRepository.FirstOrDefault(t => t.Code == code);
+                entity.CustomerCategorySettings.Add(new CustomerCategorySetting
+                {
+                    Customer = entity,
+                    CustomerCategory = category
+                });
+            }
+
+            return entity;
+        }
+
         public override async Task<CustomerDto> Update(CustomerUpdateDto input)
         {
-            customerManager.UpdateCustomerCategory(input.Id, input.CategorySettings);
-            var output = await base.Update(input);
-            return output;
+            //var output = await base.Update(input);
+            //return output;
+
+            CheckUpdatePermission();
+            var entity = await GetEntityByIdAsync(input.Id);
+            MapToEntity(input, entity);
+
+            #region Customer Category Setting
+            // Assemble category.
+            entity.CustomerCategorySettings = new List<CustomerCategorySetting>();
+
+            // 1. Get old category.
+            List<CustomerCategorySetting> settings
+                = customerCategorySettingRepository.GetAll()
+                .Where(t => t.CustomerId == input.Id)
+                .ToList();
+
+            // Get the category from database that had already existed.
+            foreach (var item in settings)
+            {
+                if (input.CategorySettings.Contains(item.CategoryCode))
+                {
+                    // this category still alive. and ignore it for add.
+                    input.CategorySettings.Remove(item.CategoryCode);
+                }
+                else
+                {
+                    // remove from local list object.
+                    // xx settings.Remove(item);
+                    // remove from database.
+                    customerCategorySettingRepository.Delete(item.Id);
+                }
+            }
+
+            // Get the surplus category from input, that need to be added in database.
+            foreach (var code in input.CategorySettings)
+            {
+                CustomerCategory category
+                    = customerCategoryRepository.FirstOrDefault(t => t.Code == code);
+
+                customerCategorySettingRepository.Insert(new CustomerCategorySetting { 
+                     CustomerCategoryId = category.Id,
+                     CustomerId = entity.Id,
+                     TenantId = this.AbpSession.TenantId,
+                     CreatorUserId = this.AbpSession.UserId,
+                     IsActive = true,
+                     Status = 0
+                });
+            }
+
+            #endregion
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+            return MapToEntityDto(entity);
+
         }
     }
 }

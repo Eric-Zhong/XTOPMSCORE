@@ -181,6 +181,11 @@ namespace XTOPMS.Alibaba
                                 msgEntity.Status = (int)CallbackMessageStatus.Success;  // Set status as success
                                 msgEntity.Comment = orderJson;
                             }
+                            else if(status == "201")
+                            {
+                                msgEntity.Status = (int)CallbackMessageStatus.Reduplicative;  // Set status as reduplicative.
+                                msgEntity.Comment = orderJson;
+                            }
                             else                // return failed
                             {
                                 msgEntity.Comment = "Salesforce Interface: " + message + "\r\n" + orderJson; // Write response for error detail info.
